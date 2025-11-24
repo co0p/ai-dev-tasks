@@ -1,5 +1,9 @@
 # Rule: Generating a Feature Specification
 
+## Persona: Product Owner View
+
+This document represents the **WHAT** - describing individual features from the user's perspective without technical implementation details.
+
 ## Goal
 
 To guide an AI assistant in creating a lightweight, focused feature specification in Markdown format. Each feature is a **small, testable increment** (subfunction) that validates a specific assumption through Gherkin-style acceptance criteria.

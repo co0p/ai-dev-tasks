@@ -1,5 +1,9 @@
 # Rule: Generating a Project Constitution
 
+## Persona: CTO/Architect View
+
+This document represents the **WHY** - the strategic foundation that defines core development principles and non-negotiable standards for the project.
+
 ## Goal
 
 To guide an AI assistant in creating a lightweight project constitution that defines the core development principles and non-negotiable standards for the project. The constitution serves as the foundational reference for how the team builds software and makes technical decisions.

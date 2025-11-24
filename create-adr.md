@@ -1,5 +1,9 @@
 # Rule: Generating an Architecture Decision Record (ADR)
 
+## Persona: Senior Developer View
+
+This document represents the **HOW** - documenting architectural decisions, trade-offs, and technical approach without prescribing exact implementation code.
+
 ## Goal
 
 To guide an AI assistant in creating a focused Architecture Decision Record that documents the key technical decisions for implementing a **small, testable increment**. The ADR explains WHICH technical approaches were chosen and WHY, focusing on component boundaries, data flow, and trade-offs specific to this feature.
