@@ -54,8 +54,11 @@ Before generating tasks, verify that all prerequisite files exist:
     - **Read `CONSTITUTION.md`** to understand testing philosophy, deployment approach, and technical constraints
     - **Read `[feature-name]/feature.md`** to understand acceptance criteria (Given/When/Then scenarios)
     - **Read `[feature-name]/adr.md`** to understand component boundaries, data flow, and technical decisions
-3.  **Generate Tasks:** Create minimal, incremental tasks that implement the ADR's technical decisions to satisfy the feature's acceptance criteria
-4.  **Save Task List:** Save as `[feature-name]/tasks.md`
+3.  **Survey Existing Codebase:**
+    - Identify which files already exist and which need to be created or edited for this feature
+    - Report a changeset table in your output showing status for each file (add/edit/unchanged/delete)
+4.  **Generate Tasks:** Create minimal, incremental tasks that implement the ADR's technical decisions to satisfy the feature's acceptance criteria
+5.  **Save Task List:** Save as `[feature-name]/tasks.md`
 
 **Note:** Tasks are generated in one pass—no two-phase approval needed. Keep them minimal and focused.
 
@@ -66,15 +69,24 @@ The generated task list should follow this structure:
 ```markdown
 # Tasks: [Feature Name]
 
-## Relevant Files
+## Changeset Survey
 
-List files that will be created or modified for this feature. This scopes the work and prevents unintended changes.
+Survey the codebase to identify which files already exist and which need to be created or edited for this feature. This scopes the work and prevents unintended changes.
 
-- `path/to/component.tsx` - Brief description (e.g., Upload form component)
-- `path/to/component.test.tsx` - Unit tests for component
-- `api/profile/picture.ts` - Brief description (e.g., Upload endpoint)
-- `api/profile/picture.test.ts` - Unit tests for endpoint
-- `lib/utils/validation.ts` - Brief description (e.g., File validation helpers)
+| Path                              | Status    | Description                        |
+|-----------------------------------|-----------|----------------------------------- |
+| `path/to/component.tsx`           | add       | Upload form component              |
+| `path/to/component.test.tsx`      | add       | Unit tests for component           |
+| `api/profile/picture.ts`          | add       | Upload endpoint                    |
+| `api/profile/picture.test.ts`     | add       | Unit tests for endpoint            |
+| `lib/utils/validation.ts`         | edit      | Add file validation helpers        |
+| `lib/storage/helper.ts`           | unchanged | Existing helper functions          |
+
+**Status Markers:**
+- `add` - File will be created (does not currently exist)
+- `edit` - File will be modified (already exists)
+- `unchanged` - File is relevant but won't be modified
+- `delete` - File will be removed
 
 **Note:** Only list files directly related to this increment. Don't include framework files or unrelated code.
 
@@ -119,14 +131,22 @@ Update after completing each task to track progress.
 ```markdown
 # Tasks: Upload Profile Picture
 
-## Relevant Files
+## Changeset Survey
 
-- `components/profile/UploadPhoto.tsx` - Upload form component with file input and preview
-- `components/profile/UploadPhoto.test.tsx` - Unit tests for upload component
-- `pages/api/profile/picture.ts` - POST endpoint for image upload
-- `pages/api/profile/picture.test.ts` - Unit tests for upload endpoint
-- `lib/storage/s3.ts` - S3 upload helper functions
-- `components/profile/ProfileImage.tsx` - Component to display profile image
+| Path                                    | Status    | Description                                |
+|-----------------------------------------|-----------|------------------------------------------- |
+| `components/profile/UploadPhoto.tsx`    | add       | Upload form component with file input     |
+| `components/profile/UploadPhoto.test.tsx` | add     | Unit tests for upload component           |
+| `pages/api/profile/picture.ts`          | add       | POST endpoint for image upload            |
+| `pages/api/profile/picture.test.ts`     | add       | Unit tests for upload endpoint            |
+| `lib/storage/s3.ts`                     | edit      | Add S3 upload helper functions            |
+| `components/profile/ProfileImage.tsx`   | edit      | Update to display uploaded image          |
+
+**Status Markers:**
+- `add` - File will be created (does not currently exist)
+- `edit` - File will be modified (already exists)
+- `unchanged` - File is relevant but won't be modified
+- `delete` - File will be removed
 
 ## Progress Tracking
 
