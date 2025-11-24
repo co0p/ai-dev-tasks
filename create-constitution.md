@@ -260,7 +260,7 @@ Specific technology choices with rationale (languages, frameworks, deployment).
 
 **Rationale**
 
-A primary goal of the constitution is to ensure long-term maintainability, auditability, and safety. Human review and explicit readability standards reduce risk (misinterpretation, security issues, regressions), speed audits and post‑mortems, and improve the ability of future contributors and automated agents to reason about and reuse the code.
+A primary goal of the constitution is to ensure long-term maintainability, auditability, and safety. Human review and explicit readability standards reduce risk (misinterpretation, security issues, regressions), speed audits and post-mortems, and improve the ability of future contributors and automated agents to reason about and reuse the code.
 
 **Mandatory policy**
 
@@ -318,7 +318,7 @@ When generating a constitution, include a section that mandates human review for
 
 [4-5 if needed...]
 
-## Technical Decicions
+## Technical Decisions
 
 ### Languages
 - [Declarative statement]: [Why we chose this]
