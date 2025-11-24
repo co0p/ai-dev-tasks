@@ -10,25 +10,25 @@ Before generating an ADR, verify that both prerequisite files exist:
 
 **Required:**
 1. **`CONSTITUTION.md`** - Defines technical decisions, frameworks, and development principles
-2. **`[feature-name]/usecase.md`** - Defines WHAT the user wants to accomplish
+2. **`[feature-name]/feature.md`** - Defines WHAT the user wants to accomplish
 
 **If either file does not exist:**
 - Inform the user which prerequisite is missing
 - Suggest creating the constitution first (using `create-constitution.md`)
-- Then creating the use case (using `create-usecase.md`)
+- Then creating the feature (using `create-feature.md`)
 - Do not proceed until both files exist
 
 **If both files exist:**
 - Read and understand the constitution's technical decisions and principles
-- Read the use case to understand user goals and acceptance criteria
-- Document decisions that fulfill the use case while respecting the constitution
+- Read the feature to understand user goals and acceptance criteria
+- Document decisions that fulfill the feature while respecting the constitution
 
 ## Process
 
-1.  **Verify Prerequisites:** Check for `CONSTITUTION.md` and the relevant `usecase.md`.
+1.  **Verify Prerequisites:** Check for `CONSTITUTION.md` and the relevant `feature.md`.
 2.  **Receive Initial Prompt:** The user requests an ADR for a specific feature increment.
-3.  **Analyze Context:** Review constitution and use case to understand constraints and requirements.
-4.  **Ask Clarifying Questions:** Ask only 2-3 essential technical questions not answered by constitution or use case.
+3.  **Analyze Context:** Review constitution and feature to understand constraints and requirements.
+4.  **Ask Clarifying Questions:** Ask only 2-3 essential technical questions not answered by constitution or feature.
 5.  **Generate ADR:** Create a focused decision record for this small increment.
 6.  **Save ADR:** Save as `[feature-name]/adr.md`.
 
@@ -206,7 +206,7 @@ Keep ADRs **technical and tactical**—focused on this specific increment's arch
 
 ## Final Instructions
 
-1. **Verify `CONSTITUTION.md` and `usecase.md` exist** before proceeding
+1. **Verify `CONSTITUTION.md` and `feature.md` exist** before proceeding
 2. **Read both documents** to understand principles and requirements
 3. **Focus on this increment's technical decisions** - not the entire system
 4. **Ask 2-3 clarifying questions** only about architectural gaps

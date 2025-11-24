@@ -10,7 +10,7 @@ Before generating tasks, verify that all prerequisite files exist:
 
 **Required:**
 1. **`CONSTITUTION.md`** - Defines technical decisions, frameworks, and development principles
-2. **`[feature-name]/usecase.md`** - Defines WHAT to build and acceptance criteria
+2. **`[feature-name]/feature.md`** - Defines WHAT to build and acceptance criteria
 3. **`[feature-name]/adr.md`** - Defines HOW to build it (technical decisions)
 
 **If any file does not exist:**
@@ -19,16 +19,16 @@ Before generating tasks, verify that all prerequisite files exist:
 
 **If all files exist:**
 - Read the constitution to understand testing philosophy, deployment approach, and technical constraints
-- Read the use case to understand acceptance criteria (Given/When/Then)
+- Read the feature to understand acceptance criteria (Given/When/Then)
 - Read the ADR to understand component boundaries, data flow, and technical decisions
-- Generate tasks that implement the ADR's decisions to satisfy the use case's acceptance criteria
+- Generate tasks that implement the ADR's decisions to satisfy the feature's acceptance criteria
 
 ## Task Structure Guidelines
 
 **Keep tasks minimal and incremental:**
 - Each task should be completable in **15-30 minutes**
 - Each task should deliver **testable progress**
-- Tasks should map to **acceptance criteria** from the use case
+- Tasks should map to **acceptance criteria** from the feature
 - Tasks should implement **technical decisions** from the ADR
 - Focus on **behavior** (what works), not files (what changes)
 
@@ -41,12 +41,12 @@ Before generating tasks, verify that all prerequisite files exist:
 **Definition of Done for each task:**
 - Code written
 - Locally verified (manual or automated test)
-- Meets acceptance criteria from use case
+- Meets acceptance criteria from feature
 
 ## Process
 
-1.  **Verify Prerequisites:** Check for `CONSTITUTION.md`, `[feature-name]/usecase.md`, and `[feature-name]/adr.md`
-2.  **Read Context:** Understand constitution principles, use case acceptance criteria, and ADR technical decisions
+1.  **Verify Prerequisites:** Check for `CONSTITUTION.md`, `[feature-name]/feature.md`, and `[feature-name]/adr.md`
+2.  **Read Context:** Understand constitution principles, feature acceptance criteria, and ADR technical decisions
 3.  **Generate Tasks:** Create minimal, incremental tasks that implement the feature
 4.  **Save Task List:** Save as `[feature-name]/tasks.md`
 
@@ -95,6 +95,12 @@ Update after completing each task to track progress.
   - [ ] [Integration step if needed]
   - [ ] Verify all acceptance criteria pass
   - [ ] [Manual testing step if per constitution]
+
+- [ ] **Verify ADR Compliance**
+  - [ ] Review implementation against ADR technical decisions
+  - [ ] Confirm data structures match ADR choices
+  - [ ] Verify architectural patterns align with ADR
+  - [ ] Remove any dead code or unused components not specified in ADR
 
 - [ ] **Deploy**
   - [ ] Commit changes with clear message
@@ -153,6 +159,12 @@ Update after completing each task to track progress.
   - [ ] Verify acceptance criteria: under 5MB works, over 5MB fails, image persists
   - [ ] Manual test: Upload actual image via UI
 
+- [ ] **Verify ADR Compliance**
+  - [ ] Review implementation against ADR technical decisions
+  - [ ] Confirm data structures match ADR choices (e.g., S3 storage, not database)
+  - [ ] Verify architectural patterns align with ADR (e.g., backend validation pattern)
+  - [ ] Remove any dead code or unused components not specified in ADR
+
 - [ ] **Deploy**
   - [ ] Commit: "Add profile picture upload feature"
   - [ ] Push to branch, create PR (per constitution CI/CD)
@@ -166,11 +178,11 @@ Update after completing each task to track progress.
 
 ## Final Instructions
 
-1. **Verify all prerequisites exist** (`CONSTITUTION.md`, `usecase.md`, `adr.md`)
+1. **Verify all prerequisites exist** (`CONSTITUTION.md`, `feature.md`, `adr.md`)
 2. **Read all three documents** to understand principles, requirements, and technical decisions
 3. **Generate behavior-focused tasks** that map to acceptance criteria
 4. **Keep tasks small** (15-30 min each, testable progress)
 5. **Include verification steps** for each capability
 6. **Follow constitutional principles** for testing and deployment
-7. **No explicit references** to constitution/usecase/adr in the generated tasks—just implement them
+7. **No explicit references** to constitution/feature/adr in the generated tasks—just implement them
 8. **Focus on what works**, not what files change

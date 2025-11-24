@@ -1,34 +1,34 @@
-# Rule: Generating a Use Case Specification
+# Rule: Generating a Feature Specification
 
 ## Goal
 
-To guide an AI assistant in creating a lightweight, focused use case specification in Markdown format. Each use case is a **small, testable increment** (subfunction) that validates a specific assumption through Gherkin-style acceptance criteria.
+To guide an AI assistant in creating a lightweight, focused feature specification in Markdown format. Each feature is a **small, testable increment** (subfunction) that validates a specific assumption through Gherkin-style acceptance criteria.
 
 ## Prerequisites
 
-Before generating a use case, verify that a `CONSTITUTION.md` file exists in the project root. The constitution defines the project's core principles, technical decisions, and development philosophy.
+Before generating a feature, verify that a `CONSTITUTION.md` file exists in the project root. The constitution defines the project's core principles, technical decisions, and development philosophy.
 
 **If `CONSTITUTION.md` does not exist:**
 - Inform the user that a constitution is required first
 - Suggest using `create-constitution.md` to generate one
-- Do not proceed with use case generation until the constitution exists
+- Do not proceed with feature generation until the constitution exists
 
 **If `CONSTITUTION.md` exists:**
 - Read and understand the project's core principles
 - Use the constitution to guide technical approach and implementation decisions
-- Ensure the use case aligns with the project's stated values and constraints
+- Ensure the feature aligns with the project's stated values and constraints
 
 ## Process
 
 1.  **Verify Prerequisites:** Check for `CONSTITUTION.md` and read it if present.
 2.  **Receive Initial Prompt:** The user provides a brief description of a feature or capability.
 3.  **Ask Clarifying Questions:** Ask only 2-3 essential questions. Provide options in letter/number lists for easy selection.
-4.  **Generate Use Case:** Create a small, testable increment with Gherkin-style acceptance criteria.
-5.  **Save Use Case:** Save as `[feature-name]/usecase.md`.
+4.  **Generate Feature:** Create a small, testable increment with Gherkin-style acceptance criteria.
+5.  **Save Feature:** Save as `[feature-name]/feature.md`.
 
 ## Clarifying Questions (Guidelines)
 
-Ask only 2-3 critical questions to write a clear, testable use case.
+Ask only 2-3 critical questions to write a clear, testable feature.
 
 ### Focus Areas:
 - What specific capability/action?
@@ -65,9 +65,9 @@ Ask only 2-3 critical questions to write a clear, testable use case.
    X. Skip this question / I don't know yet
 ```
 
-## Use Case Structure
+## Feature Structure
 
-Use this structure for all use cases—small, testable increments with Gherkin-style acceptance criteria.
+Use this structure for all features—small, testable increments with Gherkin-style acceptance criteria.
 
 ```markdown
 # [Feature Title]
@@ -140,30 +140,30 @@ So I can build trust with other users before my first consultation
 
 ## Important: Separation of Concerns
 
-**Use cases capture the WHAT, not the HOW:**
-- **Use Cases** define small, testable increments with Gherkin-style acceptance criteria
+**Features capture the WHAT, not the HOW:**
+- **Features** define small, testable increments with Gherkin-style acceptance criteria
 - **Architecture Decision Records (ADRs)** capture technical implementation decisions
 - **Tasks** break down implementation into actionable steps
 
-Keep use cases focused on user behavior and observable outcomes. Technical implementation details belong in ADRs and tasks.
+Keep features focused on user behavior and observable outcomes. Technical implementation details belong in ADRs and tasks.
 
 **Example structure:**
 ```
 /upload-profile-picture/
-  usecase.md           # WHAT: User capability (Gherkin)
+  feature.md           # WHAT: User capability (Gherkin)
   adr.md               # HOW: Technical decisions
   tasks.md             # HOW: Implementation steps
 ```
 
 ## Target Audience
 
-Use cases are read by developers and testers who need clear, testable acceptance criteria for incremental work. They should be understandable without technical jargon, focusing on observable user behavior and outcomes.
+Features are read by developers and testers who need clear, testable acceptance criteria for incremental work. They should be understandable without technical jargon, focusing on observable user behavior and outcomes.
 
 ## Output
 
 *   **Format:** Markdown (`.md`)
 *   **Location:** `/tasks/[feature-name]/` or appropriate project directory
-*   **Filename:** `usecase.md`
+*   **Filename:** `feature.md`
 
 ## Final Instructions
 

@@ -19,8 +19,8 @@ This framework creates four types of documents that work together to guide devel
 
 **Role:** Sets the guardrails. All other documents must align with constitutional principles.
 
-### 2. Use Cases (WHAT) - Product Owner View
-**Files:** `[feature-name]/usecase.md`
+### 2. Features (WHAT) - Product Owner View
+**Files:** `[feature-name]/feature.md`
 
 **Purpose:** Describes individual features/capabilities from the user's perspective without technical implementation details.
 
@@ -67,7 +67,7 @@ This framework creates four types of documents that work together to guide devel
 ```
 Constitution (WHY - Strategic)
     ↓
-Use Case (WHAT - Requirements)
+Feature (WHAT - Requirements)
     ↓
 ADR (HOW - Architecture)
     ↓
@@ -77,9 +77,9 @@ Tasks (HOW - Implementation)
 ## Workflow
 
 1. **Create Constitution** - Define your project's technical foundation and principles
-2. **Write Use Case** - Describe the feature from the user's perspective (references Constitution)
-3. **Generate ADR** - Document architectural decisions for the use case (references Constitution + Use Case)
-4. **Generate Tasks** - Break down implementation steps (references ADR + Use Case)
+2. **Write Feature** - Describe the feature from the user's perspective (references Constitution)
+3. **Generate ADR** - Document architectural decisions for the feature (references Constitution + Feature)
+4. **Generate Tasks** - Break down implementation steps (references ADR + Feature)
 5. **Implement** - Follow the tasks, checking them off as you go
 
 ## Templates
@@ -87,7 +87,7 @@ Tasks (HOW - Implementation)
 Each document type has a template to guide AI generation:
 
 - `create-constitution.md` - Guide for creating project constitutions
-- `create-usecase.md` - Guide for generating use cases
+- `create-feature.md` - Guide for generating features
 - `create-adr.md` - Guide for generating architecture decision records
 - `create-tasks.md` - Guide for generating task lists
 
@@ -96,21 +96,21 @@ Each document type has a template to guide AI generation:
 See the `examples/` directory for a complete example:
 
 - `examples/CONSTITUTION.md` - mediaid medical transcription project
-- `examples/transcribe-consultation/usecase.md` - Two-phase transcription feature
+- `examples/transcribe-consultation/feature.md` - Two-phase transcription feature
 - `examples/transcribe-consultation/adr.md` - Architectural decisions for the feature
 - `examples/transcribe-consultation/tasks.md` - Implementation task breakdown
 
 ## Key Principles
 
 **Separation of Concerns:**
-- Use Cases capture WHAT (user goals, acceptance criteria)
+- Features capture WHAT (user goals, acceptance criteria)
 - ADRs capture HOW (technical decisions, architecture)
 - Constitution captures WHY (principles, strategic choices)
 - Tasks capture implementation steps (actionable work)
 
 **Constitutional Alignment:**
 - Every ADR decision must reference constitutional principles
-- Use Cases must respect constitutional constraints
+- Features must respect constitutional constraints
 - Tasks implement the ADR while adhering to the constitution
 
 **No Code in ADRs:**
