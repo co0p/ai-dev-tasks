@@ -294,7 +294,7 @@ Each principle should include:
 
 [4-5 if needed...]
 
-## Technical Decicions
+## Technical Decisions
 
 ### Languages
 - [Declarative statement]: [Why we chose this]
