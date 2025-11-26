@@ -1,7 +1,7 @@
 ---
 name: breakdown
-description: Break down feature implementation into actionable tasks
-argument-hint: feature name
+description: Break down increment implementation into actionable tasks
+argument-hint: increment name
 ---
 
 # Rule: Generating a Task List
@@ -20,8 +20,8 @@ Before generating tasks, verify that all prerequisite files exist:
 
 **Required:**
 1. **`CONSTITUTION.md`** - Defines technical decisions, frameworks, and development principles
-2. **`[feature-name]/feature.md`** - Defines WHAT to build and acceptance criteria
-3. **`[feature-name]/design.md`** - Suggests initial approach (technical starting point)
+2. **`[increment-name]/increment.md`** - Defines WHAT to build and acceptance criteria
+3. **`[increment-name]/design.md`** - Suggests initial approach (technical starting point)
 
 **If any file does not exist:**
 - Inform the user which prerequisite is missing
@@ -29,8 +29,8 @@ Before generating tasks, verify that all prerequisite files exist:
 
 **If all files exist:**
 - Read `CONSTITUTION.md` to understand the broad technical foundation, testing philosophy, and deployment constraints
-- Read `[feature-name]/feature.md` to understand what to build (acceptance criteria)
-- Read `[feature-name]/design.md` to understand initial approach (starting point that complies with constitution)
+- Read `[increment-name]/increment.md` to understand what to build (acceptance criteria)
+- Read `[increment-name]/design.md` to understand initial approach (starting point that complies with constitution)
 - Generate tasks that implement the feature following the design's initial approach, staying flexible to adjust as needed
 
 ## Task Structure Guidelines
@@ -56,20 +56,20 @@ Before generating tasks, verify that all prerequisite files exist:
 
 ## Process
 
-1.  **Verify Prerequisites:** Check for `CONSTITUTION.md`, `[feature-name]/feature.md`, and `[feature-name]/design.md`
+1.  **Verify Prerequisites:** Check for `CONSTITUTION.md`, `[increment-name]/increment.md`, and `[increment-name]/design.md`
 2.  **Read Context:**
     - **Read `CONSTITUTION.md`** to understand testing philosophy, deployment approach, and technical constraints
-    - **Read `[feature-name]/feature.md`** to understand acceptance criteria (Given/When/Then scenarios)
-    - **Read `[feature-name]/design.md`** to understand initial approach, component boundaries, and data flow
-3.  **Generate Tasks:** Create minimal, incremental tasks that follow the design's initial approach to satisfy the feature's acceptance criteria ("make it work" first)
-4.  **Save Task List:** Save as `[feature-name]/breakdown.md`
+    - **Read `[increment-name]/increment.md`** to understand acceptance criteria (Given/When/Then scenarios)
+    - **Read `[increment-name]/design.md`** to understand initial approach, component boundaries, and data flow
+3.  **Generate Tasks:** Create minimal, incremental tasks that follow the design's initial approach to satisfy the increment's acceptance criteria ("make it work" first)
+4.  **Save Task List:** Save as `[increment-name]/breakdown.md`
 
 ## Before Generating Tasks - Self Check
 
 Ask yourself:
 - [ ] Did I verify all three prerequisite files exist?
 - [ ] Did I read CONSTITUTION.md for principles and constraints?
-- [ ] Did I read feature.md for acceptance criteria?
+- [ ] Did I read increment.md for acceptance criteria?
 - [ ] Did I read design.md for technical approach?
 
 If any checkbox is unchecked, STOP and complete that step first.
@@ -106,7 +106,7 @@ Update after completing each task to track progress.
 ## Implementation Tasks
 
 - [ ] **Setup**
-  - [ ] Create feature branch: `git checkout -b feature/[feature-name]`
+  - [ ] Create feature branch: `git checkout -b feature/[increment-name]`
   - [ ] [Any dependencies or configuration needed]
 
 - [ ] **[Behavior/Capability 1]** (maps to acceptance criteria)
@@ -207,12 +207,12 @@ If any checkbox is unchecked, DO NOT PROCEED. These tasks represent work to be d
 ## Output
 
 - **Format:** Markdown (`.md`)
-- **Location:** `[feature-name]/` directory
+- **Location:** `[increment-name]/` directory
 - **Filename:** `breakdown.md`
 
 ## Final Instructions
 
-1. **Verify all prerequisites exist** (`CONSTITUTION.md`, `feature.md`, `design.md`)
+1. **Verify all prerequisites exist** (`CONSTITUTION.md`, `increment.md`, `design.md`)
 2. **Read all three documents** to understand principles, requirements, and initial approach
 3. **Generate behavior-focused tasks** that map to acceptance criteria
 4. **Keep tasks small** (15-30 min each, testable progress)

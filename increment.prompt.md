@@ -1,18 +1,18 @@
 ---
-name: new-increment
-description: Create a feature specification with Gherkin acceptance criteria
-argument-hint: feature name or user capability
+name: increment
+description: Create an increment specification with Gherkin acceptance criteria
+argument-hint: increment name or user capability
 ---
 
-# Rule: Generating a Feature Specification
+# Rule: Generating an Increment Specification
 
 ## Persona: Product Owner View
 
-This document represents the **WHAT** - describing individual features from the user's perspective without technical implementation details.
+This document represents the **WHAT** - describing individual increments from the user's perspective without technical implementation details.
 
 ## Goal
 
-To guide an AI assistant in creating a lightweight, focused feature specification in Markdown format. Each feature is a **small, testable increment** (subfunction) that validates a specific assumption through Gherkin-style acceptance criteria.
+To guide an AI assistant in creating a lightweight, focused increment specification in Markdown format. Each increment is a **small, testable addition** (subfunction) that validates a specific assumption through Gherkin-style acceptance criteria.
 
 ## Prerequisites
 
@@ -39,7 +39,7 @@ Before generating a feature, verify that a `CONSTITUTION.md` file exists in the 
     Ask only 2-3 essential questions. Provide options in letter/number lists for easy selection. Wait for user answers.
     
 4.  **Generate Feature:** (Only after receiving user's answers) Create a small, testable increment with Gherkin-style acceptance criteria.
-5.  **Save Feature:** Save as `[feature-name]/feature.md`.
+5.  **Save Feature:** Save as `[increment-name]/increment.md`.
 
 ## Before Generating Feature - Self Check
 
@@ -90,12 +90,12 @@ Ask only 2-3 critical questions to write a clear, testable feature.
    X. Skip this question / I don't know yet
 ```
 
-## Feature Structure
+## Increment Structure
 
-Use this structure for all features—small, testable increments with Gherkin-style acceptance criteria.
+Use this structure for all increments—small, testable additions with Gherkin-style acceptance criteria.
 
 ```markdown
-# [Feature Title]
+# [Increment Title]
 
 ## Job Story
 **When** [situation]  
@@ -175,7 +175,7 @@ Keep features focused on user behavior and observable outcomes. Technical implem
 **Example structure:**
 ```
 /upload-profile-picture/
-  feature.md           # WHAT: User capability (Gherkin)
+  increment.md           # WHAT: User capability (Gherkin)
   design.md            # HOW (Initial): Starting approach
   breakdown.md         # HOW (Detailed): Implementation steps
   improve.md           # Make it good: Clean up after it works
@@ -188,8 +188,8 @@ Features are read by developers and testers who need clear, testable acceptance 
 ## Output
 
 *   **Format:** Markdown (`.md`)
-*   **Location:** `/tasks/[feature-name]/` or appropriate project directory
-*   **Filename:** `feature.md`
+*   **Location:** `/tasks/[increment-name]/` or appropriate project directory
+*   **Filename:** `increment.md`
 
 ## Final Instructions
 

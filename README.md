@@ -10,19 +10,19 @@ The system captures decisions at two levels:
 - **Constitution (WHY):** Foundational principles and technology choices made upfront
 - **Design Records (HOW Patterns):** Architecture patterns that **emerge during implementation** and should guide future work
 
-This creates a **learning system** where each feature contributes to the project's architectural knowledge:
-1. Build features that work
+This creates a **learning system** where each increment contributes to the project's architectural knowledge:
+1. Build increments that work
 2. Refactor to identify patterns
 3. Codify patterns as ADRs for consistency
-4. Future features reference both Constitution and accumulated design wisdom
+4. Future increments reference both Constitution and accumulated design wisdom
 
 ## Why This Structure?
 
 Traditional development mixes strategic decisions, user requirements, technical design, and implementation details into scattered docs, comments, and tribal knowledge. This creates confusion: Should this be tested? Which framework? Does this align with our principles?
 
 **The four-document cascade solves this by:**
-- **Establishing constraints first** (Constitution) - No revisiting "should we use TypeScript?" mid-feature
-- **Separating user value from technical details** (Feature vs ADR) - Product owners focus on "what," developers on "how"
+- **Establishing constraints first** (Constitution) - No revisiting "should we use TypeScript?" mid-increment
+- **Separating user value from technical details** (Increment vs ADR) - Product owners focus on "what," developers on "how"
 - **Making trade-offs explicit** (ADR) - Future developers understand *why* decisions were made
 - **Enabling autonomous execution** (Tasks) - Developers or AI can implement without constant clarification
 
@@ -36,16 +36,16 @@ Establishes the foundational principles and technology choices made upfront.
 **File:** `CONSTITUTION.md`  
 **Command:** `/create-constitution`
 
-### 2. Feature (WHAT) - Product Owner
+### 2. Increment (WHAT) - Product Owner
 Describes what to build from the user's perspective, respecting constitutional constraints.
 
-**Files:** `[feature-name]/feature.md`  
-**Command:** `/new-increment`
+**Files:** `[increment-name]/increment.md`  
+**Command:** `/increment`
 
 ### 3. Design (HOW - Initial Sketch) - Developer
 Sketches initial technical approach without committing to final decisions.
 
-**Files:** `[feature-name]/design.md`  
+**Files:** `[increment-name]/design.md`  
 **Command:** `/design`
 
 ### 4. Breakdown (HOW - Detailed) - Developer
@@ -55,7 +55,7 @@ Breaks down implementation into small, verifiable tasks.
 ```
 Constitution (WHY - Foundational)
     ↓ constrains
-Feature (WHAT - User Value)
+Increment (WHAT - User Value)
     ↓ guides
 Design (HOW - Initial Sketch)
     ↓ directs
@@ -65,7 +65,7 @@ Working Code
 ## Workflow
 
 1. **Constitution** → Define foundational principles and tech choices (once per project)
-2. **Feature** → Describe user need (respects constitution)
+2. **Increment** → Describe user need (respects constitution)
 3. **Design** → Sketch initial approach (not final decisions)
 4. **Breakdown** → Create small, verifiable tasks
 5. **Implement** → Build until acceptance criteria pass
@@ -75,7 +75,7 @@ Working Code
 The root directory contains [VS Code Copilot prompt files](https://code.visualstudio.com/docs/copilot/customization/prompt-files) for the 4DC workflow:
 
 - `create-constitution.prompt.md` → `/create-constitution`
-- `new-increment.prompt.md` → `/new-increment`
+- `increment.prompt.md` → `/increment`
 - `design.prompt.md` → `/design`
 - `breakdown.prompt.md` → `/breakdown`
 - `improve.prompt.md` → `/improve`
@@ -89,7 +89,7 @@ Each prompt file includes:
 **Usage in VS Code:**
 ```
 @workspace /create-constitution
-@workspace /new-increment add todo item
+@workspace /increment add todo item
 @workspace /design
 @workspace /breakdown
 @workspace /improve
@@ -104,9 +104,9 @@ design/
 ```
 
 **When to create an ADR:**
-- A pattern appears across multiple features
+- A pattern appears across multiple increments
 - An architectural decision has project-wide implications
-- A convention emerged that future features should follow
+- A convention emerged that future increments should follow
 - A trade-off was made that needs to be consistently applied
 
 **ADR Format:**
@@ -122,13 +122,13 @@ Complete workflow in `examples/todo/`:
 **Project Setup:**
 - `examples/todo/CONSTITUTION.md` - Principles: Zero Build Complexity, Browser-Native First
 
-**Feature Implementation:**
-- `examples/todo/add-todo-item/feature.md` - User story with Gherkin acceptance criteria
+**Increment Implementation:**
+- `examples/todo/add-todo-item/increment.md` - User story with Gherkin acceptance criteria
 ## Key Principles
 
 **Separation of Concerns:**
 - Constitution = WHY (principles, foundational tech)
-- Feature = WHAT (user value, acceptance criteria)
+- Increment = WHAT (user value, acceptance criteria)
 - Design = HOW Initial (sketch, not commitment)
 - Breakdown = HOW Detailed (small verifiable steps)
 - Improve = Make It Good (refactor, discover patterns)
@@ -141,7 +141,7 @@ Complete workflow in `examples/todo/`:
 - ✅ Codify when validated: After 2-3 uses, document pattern as ADR
 
 **Learning System:**
-Each feature contributes architectural knowledge. Early features establish patterns. Later features benefit from accumulated wisdom. The system gets smarter over time.
+Each increment contributes architectural knowledge. Early increments establish patterns. Later increments benefit from accumulated wisdom. The system gets smarter over time.
 
 ## Benefits
 

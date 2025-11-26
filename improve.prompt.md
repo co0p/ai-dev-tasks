@@ -1,7 +1,7 @@
 ---
 name: improve
-description: Create a refactor plan to improve code after feature works
-argument-hint: feature name
+description: Create a refactor plan to improve code after increment works
+argument-hint: increment name
 ---
 
 # Rule: Generating a Refactor Plan
@@ -20,8 +20,8 @@ Before generating a refactor plan, verify that the feature is working:
 
 **Required:**
 1. **`CONSTITUTION.md`** - Defines technical decisions, frameworks, and development principles
-2. **`[feature-name]/feature.md`** - Defines acceptance criteria
-3. **`[feature-name]/breakdown.md`** - Implementation tasks (should be completed)
+2. **`[increment-name]/increment.md`** - Defines acceptance criteria
+3. **`[increment-name]/breakdown.md`** - Implementation tasks (should be completed)
 4. **Working implementation** - All acceptance criteria passing
 
 **If prerequisites don't exist or feature isn't working:**

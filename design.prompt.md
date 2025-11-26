@@ -1,7 +1,7 @@
 ---
 name: design
 description: Sketch an initial design approach for a feature increment
-argument-hint: feature name or brief description
+argument-hint: increment name or brief description
 ---
 
 # Rule: Generating an Initial Design Document
@@ -20,7 +20,7 @@ Before generating an ADR, verify that both prerequisite files exist:
 
 **Required:**
 1. **`CONSTITUTION.md`** - Defines technical decisions, frameworks, and development principles
-2. **`[feature-name]/feature.md`** - Defines WHAT the user wants to accomplish
+2. **`[increment-name]/increment.md`** - Defines WHAT the user wants to accomplish
 
 **If either file does not exist:**
 - Inform the user which prerequisite is missing
@@ -35,9 +35,9 @@ Before generating an ADR, verify that both prerequisite files exist:
 
 ## Process
 
-1.  **Verify Prerequisites:** Check for `CONSTITUTION.md` and the relevant `feature.md`.
-2.  **Receive Initial Prompt:** The user requests a design for a specific feature increment.
-3.  **Analyze Context:** Review constitution and feature to understand constraints and requirements.
+1.  **Verify Prerequisites:** Check for `CONSTITUTION.md` and the relevant `increment.md`.
+2.  **Receive Initial Prompt:** The user requests a design for a specific increment.
+3.  **Analyze Context:** Review constitution and increment to understand constraints and requirements.
 4.  **STOP - Ask Clarifying Questions:**
     
     **DO NOT GENERATE THE DESIGN YET.**
@@ -45,12 +45,12 @@ Before generating an ADR, verify that both prerequisite files exist:
     Ask only 2-3 essential technical questions not answered by constitution or feature. Wait for user answers.
     
 5.  **Generate Design:** (Only after receiving answers) Create a lightweight design sketch for this small increment.
-6.  **Save Design:** Save as `[feature-name]/design.md`.
+6.  **Save Design:** Save as `[increment-name]/design.md`.
 
 ## Before Generating Design - Self Check
 
 Ask yourself:
-- [ ] Did I verify CONSTITUTION.md and feature.md exist?
+- [ ] Did I verify CONSTITUTION.md and increment.md exist?
 - [ ] Did I read both documents to understand constraints and requirements?
 - [ ] Did I ask 2-3 technical clarifying questions?
 - [ ] Did I receive user's answers?
@@ -234,12 +234,12 @@ Keep designs **lightweight and flexible**—focused on getting started, not fina
 ## Output
 
 *   **Format:** Markdown (`.md`)
-*   **Location:** `[feature-name]/` directory
+*   **Location:** `[increment-name]/` directory
 *   **Filename:** `design.md`
 
 ## Final Instructions
 
-1. **Verify `CONSTITUTION.md` and `feature.md` exist** before proceeding
+1. **Verify `CONSTITUTION.md` and `increment.md` exist** before proceeding
 2. **Read both documents** to understand principles and requirements
 3. **Focus on initial approach for this increment** - not the entire system
 4. **Ask 2-3 clarifying questions** only about architectural uncertainties
