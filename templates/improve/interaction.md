@@ -1,6 +1,6 @@
 # LLM-Human Interaction: Improve Step Questioning Style Reference
 
-When initializing the improve step, ask the following numbered questions about patterns, trade-offs, and decisions. Answers should use letters, with X to skip and _ to enter a custom text answer.
+When initializing the improve step, ask the following numbered questions about patterns, trade-offs, and decisions. Answers should use letters, with X to skip and _ to enter a custom text answer. Mention briefly the relevance about each question using findings in the codebase.
 
 ## Example Question Format
 

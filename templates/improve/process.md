@@ -1,17 +1,14 @@
-
-
-# Improvement Process
-1. Receive improvement request for a specific increment or area.
+# Improvement Process (Codebase-Wide)
+1. Receive improvement request for the codebase (not just a specific increment).
 2. MANDATORY: Create and switch to a new feature branch before making any improvement changes. Example:
-	"Run: git checkout -b improve/<increment-or-area>"
-	- All improvement work and commits must happen on this feature branch.
-	- Do not proceed with any code changes until you are on the feature branch.
-3. Verify prerequisites: CONSTITUTION.md, increment.md, and design.md exist.
+   "Run: git checkout -b improve/codebase"
+   - All improvement work and commits must happen on this feature branch.
+   - Do not proceed with any code changes until you are on the feature branch.
+3. Verify prerequisites: CONSTITUTION.md, recent increments, and design.md exist.
 4. Analyze context:
-	- Read CONSTITUTION.md for principles, testing philosophy, and constraints
-	- Read increment.md for acceptance criteria
-	- Read design.md for initial approach, component boundaries, and data flow
-	- Review implementation for code quality, patterns, and improvement opportunities
+   - Scan all project files for patterns, duplication, inconsistencies, and architectural opportunities
+   - Read CONSTITUTION.md for principles, testing philosophy, and constraints
+   - Review recent increments and designs for code quality, patterns, and improvement opportunities
 5. Ask clarifying questions about patterns, lessons, and improvement goals (STOP until answered).
 6. Generate a minimal, incremental improvement plan: actionable steps, modules, and interfaces, each completable in 15-30 minutes and delivering testable progress.
 7. Implement code improvements in small, testable increments, mapping tasks to assessment and lessons learned.

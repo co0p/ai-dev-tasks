@@ -3,15 +3,15 @@ The generated improvement should include the following sections:
 ## 1. Title
 Short, descriptive title for the improvement.
 ## 2. Assessment
-Evaluate the increment and implementation against Constitution and Design goals. List problems, risks, and lessons learned.
+Evaluate the codebase against Constitution and Design goals. List problems, risks, and lessons learned.
 ## 3. Lessons
 Summarize key architectural and implementation lessons.
 ## 4. ADRs
 For each new architectural decision, provide:
-	- Context
-	- Decision
-	- Consequences
-	- Alternatives considered
+   - Context
+   - Decision
+   - Consequences
+   - Alternatives considered
 ## 5. Improvement Tasks & Subtasks
 - Present a list of high-level improvement tasks first, derived from assessment and lessons.
 - For each high-level task, break it down into 2-5 atomic subtasks, each completable in 15-30 minutes.
@@ -51,12 +51,12 @@ How we know this improvement is successful—metric or observation.
 
 ## Improvement Tasks & Subtasks
 - [ ] **Refactor validation logic**
-	- [ ] Extract validation to shared module (verify module created)
-	- [ ] Update imports in affected files (verify imports)
-	- [ ] Manual test validation (verify output)
+   - [ ] Extract validation to shared module (verify module created)
+   - [ ] Update imports in affected files (verify imports)
+   - [ ] Manual test validation (verify output)
 - [ ] **Improve error handling**
-	- [ ] Centralize error messages (verify centralization)
-	- [ ] Add missing edge case tests (run tests, verify pass)
+   - [ ] Centralize error messages (verify centralization)
+   - [ ] Add missing edge case tests (run tests, verify pass)
 
 ## Code Implementation
 ```js
