@@ -9,7 +9,8 @@ Inform the user: "I will now review your project files (especially README.md and
 ### Summary of Findings
 After context analysis, provide a brief summary to the user outlining the project's purpose, tech stack, and any notable architectural patterns or constraints found.
 
-## 3. Ask Pillar Questions (STOP)
+
+## 3. Ask Pillar Questions & Increment Location (STOP)
 Inform the user: "Before we begin, I will ask you explicit questions about each of the 6 pillars to understand your priorities and philosophies."
 - What is your philosophy or priority for Delivery Velocity?
 - What is your approach to Test Strategy?
@@ -17,6 +18,8 @@ Inform the user: "Before we begin, I will ask you explicit questions about each 
 - How do you apply Simplicity First?
 - What are your boundaries for Technical Debt?
 - What is your Dependency Discipline?
+
+Additionally, please specify where increments should be stored in your project. The recommended location is `docs/increments/`. You may choose a different location if preferred.
 
 **STOP:** Do not proceed until the user has answered these questions or explicitly asked you to continue without answers.
 
@@ -30,7 +33,7 @@ After suggesting principles, provide a concise summary listing the proposed prin
 Inform the user: "If any critical information is missing or the suggested principles need refinement, I will ask targeted follow-up questions."
 
 ## 6. Generate Constitution
-Inform the user: "Once you confirm or provide additional answers, I will generate the constitution document following the output format."
+Inform the user: "Once you confirm or provide additional answers, I will generate the constitution document following the output format. The constitution will always include a section specifying where increments should be stored, using your answer or the recommended location (`docs/increments/`)."
 
 ## 7. Save Constitution
 Inform the user: "I will save the generated constitution as CONSTITUTION.md in the project root."
