@@ -7,8 +7,8 @@
 We will build a mobile-first catalog list screen for ShareIt using Svelte, loading sample data from a local JSON file, managing state within the component, and using URLs to placeholder images for each item. Svelte is chosen for its simplicity, minimal boilerplate, and suitability for junior developers. This approach aligns with the constitution's principles of rapid iteration, simplicity, and best practice design, and meets the increment's acceptance criteria for usability and responsiveness.
 
 ## Technical Decisions
-- **Framework/Library:** Svelte
-  - **Rationale:** Svelte offers a simple, readable syntax and compiles to efficient JavaScript, making it easy for junior developers to contribute. Minimal boilerplate and direct reactivity simplify implementation and maintenance.
+- **Framework/Library:** SvelteKit
+  - **Rationale:** SvelteKit offers a simple, readable syntax and compiles to efficient JavaScript, making it easy for junior developers to contribute. Minimal boilerplate and direct reactivity simplify implementation and maintenance.
   - **Trade-offs:** Smaller ecosystem and fewer UI libraries than Vue/React, but ideal for small, focused increments. May require more custom code for advanced features.
   - **Alternatives Considered:** React (too complex for this use case), Vue (more boilerplate, larger ecosystem), vanilla JS (less structure, harder to scale).
 - **Language:** JavaScript (ES6+)

@@ -3,6 +3,7 @@
 
 
 The implementation output must:
+* After each high-level task is completed (and before switching to the next), make an incremental commit to the feature branch. This must be done explicitly to ensure progress is tracked and changes can be reverted easily.
 - Present a list of high-level tasks to the user first. These are derived directly from the increment definition and design.
 - For each high-level task, break it down into 2-5 subtasks. Subtasks are atomic steps that, when all completed, make the parent task complete.
 - All technical details and steps must be derived from the increment definition and design documentation.
