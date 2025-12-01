@@ -49,11 +49,31 @@ The frontend will fetch catalog data from the backend via `/api/catalog` (proxy 
 3. **Access the app:**
 	Open [http://localhost:8080](http://localhost:8080) in your browser.
 
-The backend will serve both API endpoints and static frontend assets from the production build in `/frontend/dist`.
+The backend serves both API endpoints and the static frontend assets from the production build in `/frontend/build` (set via `@sveltejs/adapter-static`).
 
-## Project Documentation
+## Project Documentation & Workflow Clarification
 
-All documentation is now located in the `/docs` folder, including architectural decisions, increment plans, and technical designs.
+All documentation is in the `/docs` folder:
+
+- Increment plans: `increment.md` files per change initiative
+- Implementation details: `implement.md` where relevant
+- Design sketches (when needed): `design.md`
+- Improvements & analysis: `improve.md`
+- Architectural Decision Records (ADRs): `adr-*.md`
+
+### ADR Creation Source
+ADRs are produced during the **Improve** phase (via the Improve prompt) after implementation, not during the Design phase. The Improve prompt captures lessons learned, refactors, and promotes durable architectural decisions into ADRs.
+
+### Phase Summary (ShareIt)
+| Phase | Purpose | Primary Artifacts |
+|-------|---------|-------------------|
+| Constitution | Project principles & guardrails | `CONSTITUTION.md` |
+| Increment | Goal / scope for a change | `increment.md` |
+| Design (optional) | Rough approach if complexity warrants | `design.md` |
+| Implement | Execute tasks & code | Code, tests, updated files |
+| Improve | Reflect, refactor, record decisions | `improve.md`, `adr-*.md` |
+
+Front/back separation, static serving, and testing strategies are now governed by ADRs under `/docs`.
 
 ## Svelte Project Quick Reference
 
