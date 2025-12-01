@@ -1,15 +1,17 @@
-# How to Get Started
 
-1. **Install dependencies:**
-	```sh
-	npm install
-	```
+# ShareIt Project Structure & Getting Started
 
+## New Folder Structure
+
+- `/backend/` — Go backend code and API
+- `/frontend/` — Svelte frontend code
+- `/docs/` — Project documentation
 
 ## Development Workflow (Hot-Reload)
 
 1. **Install dependencies:**
 	```sh
+	cd frontend
 	npm install
 	```
 
@@ -21,6 +23,7 @@
 
 3. **Start the Svelte frontend (hot-reload):**
 	```sh
+	cd frontend
 	npm run dev
 	```
 
@@ -33,6 +36,7 @@ The frontend will fetch catalog data from the backend via `/api/catalog` (proxy 
 
 1. **Build the Svelte frontend:**
 	```sh
+	cd frontend
 	npm run build
 	```
 
@@ -45,29 +49,34 @@ The frontend will fetch catalog data from the backend via `/api/catalog` (proxy 
 3. **Access the app:**
 	Open [http://localhost:8080](http://localhost:8080) in your browser.
 
-The backend will serve both API endpoints and static frontend assets from the production build.
+The backend will serve both API endpoints and static frontend assets from the production build in `/frontend/dist`.
 
-# sv
+## Project Documentation
+
+All documentation is now located in the `/docs` folder, including architectural decisions, increment plans, and technical designs.
+
+## Svelte Project Quick Reference
 
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
-
-## Developing
+### Developing
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```sh
+cd frontend
 npm run dev
 
 # or start the server and open the app in a new browser tab
 npm run dev -- --open
 ```
 
-## Building
+### Building
 
 To create a production version of your app:
 
 ```sh
+cd frontend
 npm run build
 ```
 

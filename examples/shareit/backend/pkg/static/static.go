@@ -2,28 +2,18 @@
 package static
 
 import (
-	"log"
 	"net/http"
-	"os"
-	"path/filepath"
 )
 
-var StaticDir = "../../.svelte-kit/output/client"
+var StaticDir = "../../frontend/build"
 
-func StaticFileHandler(w http.ResponseWriter, r *http.Request) {
-	if len(r.URL.Path) >= 5 && r.URL.Path[:5] == "/api/" {
-		http.NotFound(w, r)
-		return
-	}
-	filePath := r.URL.Path
-	if filePath == "/" {
-		filePath = "/index.html"
-	}
-	fullPath := filepath.Join(StaticDir, filePath)
-	if _, err := os.Stat(fullPath); os.IsNotExist(err) {
-		log.Printf("Static file not found: %s", fullPath)
-		http.NotFound(w, r)
-		return
-	}
-	http.ServeFile(w, r, fullPath)
+func StaticFileHandler() http.Handler {
+	fs := http.FileServer(http.Dir(StaticDir))
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if len(r.URL.Path) >= 5 && r.URL.Path[:5] == "/api/" {
+			http.NotFound(w, r)
+			return
+		}
+		fs.ServeHTTP(w, r)
+	})
 }
