@@ -1,18 +1,30 @@
+# How to Get Started
+
+1. **Install dependencies:**
+	```sh
+	npm install
+	```
+
+2. **Start the Go backend:**
+	```sh
+	cd backend
+	go run main.go
+	```
+
+3. **Start the Svelte frontend:**
+	```sh
+	npm run dev
+	```
+
+4. **Access the app:**
+	Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+The frontend will fetch catalog data from the backend via `/api/catalog` (proxy is configured in Vite).
+
 # sv
 
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```sh
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
 
 ## Developing
 
