@@ -1,6 +1,6 @@
 ---
 name: increment
-description: Generate a project increment specification focused on user value and testable outcomes
+description: Generate a small, testable increment spec with STOP gates and internal JSON for automation
 argument-hint: optional increment name or capability
 ---
 
@@ -30,6 +30,7 @@ This goal ensures each increment is purposeful, bounded by the constitution, and
 - STOP gate at Step 4 until answered or waived.
 - Date format: YYYY-MM-DD.
 - JSON follows schemas exactly; no prose inside JSON.
+ - Scope containment: explicitly include Out of Scope; file-level planning happens later in Design/Implement.
 ## 1. Verify Prerequisites
 Check for `CONSTITUTION.md` and read principles/constraints.
 ## 2. Receive Initial Prompt
@@ -54,6 +55,13 @@ Save `increment.md` and confirm included sections.
 Internally emit Summary JSON with sections, path, date.
 ## 8. Final Validation
 Validate: job story, testable assumption, Gherkin criteria, success signal, out-of-scope. If missing, STOP and ask for fixes.
+
+## 9. Implementation Guardrails & Handoff (Declare Briefly)
+Include a short handoff note in the generated `increment.md`:
+- Branching: work on `feature/<increment-slug>`; no direct commits to default branch.
+- Planned Files Summary: will be proposed and confirmed in the Implement phase (STOP gate there).
+- Drift Policy: if implementation uncovers new files/scope, raise a DRIFT ALERT and request confirmation before proceeding.
+- Verification Expectation: test-first loop or explicit manual checks per task in Implement.
 
 # Interaction Style (Increment)
 Ask numbered questions; answers use letters. Include `X` to skip and `_` for custom text.
