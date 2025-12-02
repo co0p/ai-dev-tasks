@@ -10,7 +10,12 @@ VERSION_CMD := $(shell if [ -f VERSION ]; then cat VERSION; else git describe --
 VERSION ?= $(VERSION_CMD)
 ICONSET_DIR := build/icon.iconset
 
-.PHONY: bundle clean version open icon
+.PHONY: bundle clean version open icon build
+
+build:
+	@mkdir -p bin
+	@echo "Building cmd/pomodoro -> bin/pomodoro"
+	@$(GO) build -o bin/pomodoro ./cmd/pomodoro
 
 icon:
 	@if [ "$(UNAME_S)" != "Darwin" ]; then echo "icon: macOS only (skipping)"; exit 0; fi
