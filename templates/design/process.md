@@ -20,6 +20,12 @@ Note: Derive module names and boundaries from these answers during the design pr
 ## 5. Generate Technical Design
 Based on the answers and context, propose a lightweight, focused technical design for the increment. Document key technical decisions, trade-offs, and alternatives. Use terms like "initial technical design", "design outline", "design draft", or "design proposal" for clarity and robustness.
 
+Include Guardrails & Integration Plan:
+- Boundaries: list components/modules in-scope and explicitly out-of-scope for this increment.
+- Planned Files Summary (initial): draft a first-pass file list to guide implementation STOP gate.
+- Drift Policy: if implementation discovers new files/modules required, raise a DRIFT ALERT and request confirmation.
+- Branch Strategy: suggest a feature branch name (`feature/<increment-slug>`) and expected merge path.
+
 ## 6. Save Design
 Save under the increment’s folder, e.g., `docs/increments/<increment-folder>/design.md`.
 
@@ -30,6 +36,15 @@ Validate:
 - Documents 2–5 key technical considerations
 - States trade-offs and alternatives
 - Concise and focused (one screen max)
+
+## Operating Rules and Guardrails
+- Human-first interaction. JSON is internal-only (tooling/CI).
+- Align with `CONSTITUTION.md`; flag conflicts.
+- Design for small, testable steps; avoid over-engineering.
+- STOP gates at Clarification and at implementation’s Planned Files Summary.
+- Include explicit drift alert criteria; highlight any hotspots likely to cause scope expansion.
+- Date format: YYYY-MM-DD.
+- JSON follows schemas exactly; no prose inside JSON.
 
 ## Operating Rules and Guardrails
 - Human-first interaction. JSON is internal-only (tooling/CI).

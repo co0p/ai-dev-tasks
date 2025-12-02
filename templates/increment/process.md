@@ -45,6 +45,14 @@ Internally emit Summary JSON with sections, path, date.
 ## 8. Final Validation
 Validate: job story, testable assumption, Gherkin criteria, success signal, out-of-scope. If missing, STOP and ask for fixes.
 
+## 9. Implementation Guardrails (Declare Here)
+When generating the increment, include an "Implementation Guardrails & Branching" section that specifies:
+- Feature branch policy (`feature/<increment-slug>`); no direct commits to default branch.
+- Planned Files Summary STOP gate for the implementation phase.
+- Drift Alert policy (STOP and scope proposal on out-of-scope changes).
+- Verification expectations (test-first loop or explicit manual checks).
+- Post-implementation stabilization on the same branch before merge.
+
 ## Structured JSON Outputs
 
 Visibility: Internal-only for tooling/CI. Do not surface JSON unless explicitly requested.

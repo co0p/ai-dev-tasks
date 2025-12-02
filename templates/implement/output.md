@@ -9,6 +9,11 @@ The implementation output must:
 - Subtasks should be concise, completable in 5-15 minutes, and mapped directly to acceptance criteria and design details.
 - High-level tasks must include a formal verification method (manual check, unit test, code review, etc.). For subtasks, include a brief inline check parenthetically when helpful.
 
+## 0. Drift Guardrails (Declare Up Front)
+- State the initial scope: increment name, acceptance criteria, and the Planned Files Summary.
+- Include a DRIFT ALERT policy: if work requires touching files or modules outside scope, STOP and propose scope adjustment.
+- Include a rollback/containment note: prefer minimal scope updates, or split into a follow-up increment.
+
 ## 1. Planned Files Summary (Confirm Before Coding)
 - List files to add/modify/delete for this increment, each on one line:
 	- `path/to/file.ext` — new|modify|delete — 1-line purpose
@@ -39,6 +44,12 @@ Tasks can be high-level. Subtasks must be concise and human-first, yet unambiguo
 
 ## 7. Open Questions
 - List technical unknowns or deferred decisions to resolve during further development.
+
+## 8. Post-Implementation Stabilization & Merge
+- Hygiene: add `.gitignore` entries for build outputs; untrack committed artifacts.
+- Reproducibility: ensure `Makefile`/scripts can build from clean checkout; document prerequisites.
+- Packaging/Distribution: verify bundle/packaging tasks if part of acceptance criteria.
+- Branch Flow: rebase/merge into default branch, push, optionally tag, and delete feature branch.
 
 ---
 **Example Structure:**

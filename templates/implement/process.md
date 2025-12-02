@@ -18,6 +18,11 @@
 7. Before coding, propose a Planned Files Summary (paths + new/modify/delete + 1‑line purpose) and STOP for confirmation or edits.
 	- Only proceed once the Planned Files Summary is confirmed.
 
+7a. Drift Detection & Alert (continuous)
+	- If a task requires changes outside the confirmed Planned Files Summary, the increment scope, or unrelated modules, STOP and inform the user.
+	- Propose a minimal scope update (explicit file list + rationale). Do not proceed without confirmation.
+	- If acceptance criteria appear unattainable without scope expansion, raise a DRIFT ALERT and request a design update.
+
 8. For each high-level task, follow a test-first implementation cycle (Write Test → Implement → Validate → Commit):
 	- Write Test: Write a small, failing test (or explicit manual verification step) that expresses the next behavior.
 	- Implement: Add the minimum code to satisfy the behavior.
@@ -32,3 +37,16 @@
 12. Validate implementation against acceptance criteria, design, and constitution.
 13. If the user chose to continue or switch branch, add a final step to commit all changes to the branch for easy reversion.
 14. Document key decisions, trade-offs, and open questions.
+
+15. Post-Implementation Stabilization (same feature branch)
+	- Docs: update README/usage, increment docs (design/implement checkboxes), and ADRs if needed.
+	- Hygiene: add `.gitignore` entries for build artifacts; remove tracked artifacts from VCS.
+	- Reproducibility: ensure Makefile/scripts build cleanly from scratch; verify CI or local checks.
+	- Packaging: verify any bundling/packaging flows required by the increment.
+	- Sanity: run formatters/linters selectively for touched files.
+
+16. Merge & Cleanup
+	- Ensure branch is up to date with default branch; resolve conflicts on the feature branch.
+	- Merge the feature branch into the default branch (or open a PR if required by process).
+	- Push the default branch; optionally tag a version if applicable.
+	- Delete the feature branch locally and remotely once merged.
