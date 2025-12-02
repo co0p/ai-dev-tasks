@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Generate a living, traceable implementation plan and code for a 4DC increment.
+description: Generate a living, traceable implementation plan and minimal code for a 4DC increment.
 argument-hint: increment name or brief description
 ---
 
@@ -50,11 +50,16 @@ Produce and continuously refine a living, traceable implementation path that del
 15. Perform stabilization (docs, hygiene) before merge.
 
 # Implementation Interaction Style
+
 - Ask numbered clarifying questions about edge cases, error handling, and integration.
 - Always STOP after questions until user answers or asks to continue.
 - Document implementation steps and decisions clearly for both LLMs and humans.
 - Treat `implement.md` as living: update promptly; never batch large undisclosed changes.
-- Announce DRIFT ALERT immediately when scope change is needed.
+
+Drift & Scope Alignment:
+- If proposed changes exceed the increment scope or confirmed Planned Files Summary, announce a DRIFT ALERT and STOP.
+- Offer a concise scope-adjustment proposal (files to touch + why) and wait for confirmation.
+- If the increment’s acceptance criteria cannot be met as designed, request a design update before continuing.
 
 Answer format:
 - Reply per question using letters (e.g., `A,B`).
@@ -79,35 +84,36 @@ Guiding questions:
 	B. Direct integration for speed
 	C. Stub now, integrate later
 	X. Skip
+	_. Custom
 4. Safety and rollback?
 	A. Small commits every complete task
 	B. Squash at end
 	C. Commit per subtask
 	X. Skip
 	_. Custom
-5. Plan updates & drift handling?
-	A. Update after each high-level task
-	B. Batch updates (not recommended)
-	C. ADR for any drift
+5. Scope change if drift detected?
+	A. Pause and update design first
+	B. Expand Planned Files Summary minimally
+	C. Split into a follow-up increment
 	X. Skip
 	_. Custom
 
 # Implementation Output Format
 
 The implementation output must:
-* Present high-level tasks mapped to acceptance criteria.
+* After each high-level task is completed (and before switching to the next), make an incremental commit to the increment branch.
+* Present a list of high-level tasks mapped to acceptance criteria.
 * Provide a Planned Files Summary and obtain confirmation before coding.
-* Maintain Markdown checkboxes for tasks/subtasks (living plan).
+* Maintain Markdown checkboxes for tasks/subtasks (living plan) updated after each high-level task commit.
 * Include verification method per high-level task (test or manual check).
-* Keep code diffs minimal and scoped to increment.
+* Keep code diffs minimal and scoped to the increment.
 * Record final decisions in a lightweight Decision Log section (architectural changes → ADR instead).
 * STOP and raise DRIFT ALERT for out-of-scope additions.
 
-## 0. Drift & Living Plan Declaration
-- Scope: list increment name + acceptance criteria reference.
-- Planned Files Summary: confirmed set.
-- Drift Policy: announce DRIFT ALERT before touching unplanned files.
-- Plan Update Rule: update checkboxes + Decision Log immediately after commit.
+## 0. Drift Guardrails (Declare Up Front)
+- State the initial scope: increment name, acceptance criteria reference, and the Planned Files Summary.
+- DRIFT ALERT policy: if work requires touching files/modules outside confirmed scope, STOP and propose scope adjustment.
+- Rollback/containment: prefer minimal scope updates or split into a follow-up increment.
 
 ## 1. Planned Files Summary (Confirm Before Coding)
 - `path/to/file.ext` — new|modify|delete — purpose
@@ -115,32 +121,26 @@ The implementation output must:
 ## 2. Implementation Tasks & Subtasks
 - Use `- [ ]` / `- [x]` checkboxes.
 - 2–5 concise subtasks per high-level task.
-- Each subtask: imperative, one line, includes identifiers in backticks.
-- Inline verification hint where useful (e.g., “verify test fails”, “verify file exists”).
+- Each subtask one line, imperative, includes identifiers in backticks.
+- Inline verification hints where helpful.
 
 ## 3. Verification Methods
-- For each high-level task: specify test command or manual steps + expected outcome.
+- For each high-level task: test command or manual steps + expected outcome.
 
 ## 4. Code Implementation
-- Show only essential new/changed snippets.
-- Prefer minimal diffs; avoid full-file dumps unless necessary.
+- Only essential new/changed snippets; minimal diffs.
 
 ## 5. Validation
-- Map tasks → acceptance criteria; confirm all satisfied.
+- Map tasks → acceptance criteria; confirm satisfaction.
 
 ## 6. Decision Log (Final Decisions Only)
-Format per entry:
 `YYYY-MM-DD | Decision | Rationale | Scope Impact (none|minimal|requires ADR)`
 
 ## 7. Open Questions
-- Items requiring follow-up or ADR drafting.
+- Items needing follow-up or ADR.
 
-## 8. Stabilization & Merge Checklist
-- Docs updated (`README`, increment docs).
-- Hygiene done (.gitignore + untracked artifacts removed).
-- Repro build verified.
-- Packaging/bundle verified (if applicable).
-- Ready to merge feature branch.
+## 8. Post-Implementation Stabilization & Merge
+- Docs updated, hygiene applied, reproducible build verified, packaging checked, branch merged & cleaned.
 
 ---
 **Example (Abbreviated):**
@@ -153,48 +153,52 @@ Format per entry:
 
 ## Tasks & Subtasks
 - [ ] **Setup**
-  - [ ] Create branch `feature/tray-menu` (verify branch exists)
-  - [ ] Add skeleton `pkg/tray/menu.go` (verify compile)
+	- [ ] Create branch `feature/tray-menu` (verify branch exists)
+	- [ ] Add skeleton `pkg/tray/menu.go` (verify compile)
 - [ ] **Menu Logic**
-  - [ ] Define `Item` struct in `pkg/tray/menu.go` (verify compile)
-  - [ ] Implement click handler dispatch (verify manual test)
-  - [ ] Add unit test `menu_test.go` (run, verify fail)
-  - [ ] Implement logic to pass test (run, verify pass)
+	- [ ] Define `Item` struct in `pkg/tray/menu.go` (verify compile)
+	- [ ] Implement click handler dispatch (verify manual test)
+	- [ ] Add unit test `menu_test.go` (run, verify fail)
+	- [ ] Implement logic to pass test (run, verify pass)
 - [ ] **Integration**
-  - [ ] Wire adapter in `cmd/app/main.go` (verify tray appears)
-  - [ ] Manual test start/stop actions (observe stdout)
+	- [ ] Wire adapter in `cmd/app/main.go` (verify tray appears)
+	- [ ] Manual test start/stop actions (observe stdout)
 - [ ] **Stabilization**
-  - [ ] Update README usage section (verify updated)
-  - [ ] Commit & Decision Log entry
+	- [ ] Update README usage section (verify updated)
+	- [ ] Commit & Decision Log entry
 
 ## Decision Log
 2025-12-02 | Use adapter pattern | Enforces isolation from lib API | minimal
 ```
 
 # Style
-- Concise, pragmatic, imperative.
-- Living plan: update early, not late.
-- Only final decisions in Decision Log.
-- Larger architectural shifts → ADR before implementation continues.
+- Be concise, direct, pragmatic.
+- Prefer stepwise, verifiable tasks.
+- Clear imperative language.
+- Reference constitution/ADRs only when relevant.
+- Keep changes minimal and scoped.
 
 # Glossary
-- Living Plan: `implement.md` updated after each high-level task.
-- Drift Alert: STOP signal prompting scope review.
-- Decision Log: Lightweight record of final implementation-impacting decisions.
+- Increment: Small, deliverable change with clear acceptance criteria.
+- Feature: User-facing subtype of increment.
+- ADR: Architecture Decision Record (formal, significant decisions).
+- Increment branch: Dedicated branch (prefix `feature/`).
+- Drift Alert: STOP signal for unplanned scope.
+- Living Plan: Continuously updated `implement.md`.
 
 # Acceptance
-An acceptable output: confirmed file plan, tasks with verification, minimal diffs, Decision Log, drift contained, criteria satisfied.
+Valid output: confirmed file plan, tasks + verification, minimal diffs, Decision Log, drift contained, criteria satisfied.
 
 # JSON Schema Hints (Internal Only)
 ```json
 {
-  "paths": {
-    "constitution": "CONSTITUTION.md",
-    "increment": "docs/increments/<increment-folder>/increment.md",
-    "design": "docs/increments/<increment-folder>/design.md",
-    "implement": "docs/increments/<increment-folder>/implement.md"
-  },
-  "git": {"featureBranchPrefix": "feature/"}
+	"paths": {
+		"constitution": "CONSTITUTION.md",
+		"increment": "docs/increments/<increment-folder>/increment.md",
+		"design": "docs/increments/<increment-folder>/design.md",
+		"implement": "docs/increments/<increment-folder>/implement.md"
+	},
+	"git": {"featureBranchPrefix": "feature/"}
 }
 ```
 	---
