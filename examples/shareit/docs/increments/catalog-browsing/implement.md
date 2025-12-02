@@ -45,9 +45,9 @@ Note: Tailwind used via CDN; Vue via ESM CDN for this increment.
   - [ ] Note: Automated tests deferred to a follow-up increment.
 
 - [ ] Stabilization
-  - [ ] Update `CONSTITUTION.md` references if needed (verify not required)
-  - [ ] Document run steps in `README.md` (Shareit) (verify instructions added)
-  - [ ] Minimal formatting/linting on touched files (verify clean)
+  - [x] Update `CONSTITUTION.md` references if needed (not required)
+  - [x] Document run steps in `README.md` (Shareit) (Quickstart added)
+  - [x] Minimal formatting/linting on touched files (clean)
 
 ## 3. Verification Methods
 Manual-first for this increment:
