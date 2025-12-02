@@ -22,8 +22,8 @@ func (a SystrayAdapter) Show(title string, items []Item) {
 			systray.SetTooltip(title)
 		}
 
-		// Set a tiny generated pomodoro-style icon (16x16 red circle PNG)
-		systray.SetIcon(generatePomodoroIcon())
+		// Use a high-contrast monochrome template icon so macOS auto-inverts for the menu bar
+		systray.SetTemplateIcon(generateTemplateGlyph(), generateTemplateGlyph())
 
 		for _, it := range items {
 			m := systray.AddMenuItem(it.Title, "")
@@ -48,33 +48,44 @@ func (a SystrayAdapter) Show(title string, items []Item) {
 	})
 }
 
-// generatePomodoroIcon creates a 16x16 PNG with a red circle on transparent background.
-func generatePomodoroIcon() []byte {
+// generateTemplateGlyph creates an 18x18 monochrome PNG suitable as a macOS template icon.
+// It draws a bold circular glyph with a small stem to resemble a pomodoro tomato.
+func generateTemplateGlyph() []byte {
 	const (
-		w = 16
-		h = 16
+		w = 18
+		h = 18
 	)
-
 	img := image.NewRGBA(image.Rect(0, 0, w, h))
-	// Draw transparent background and a red filled circle centered at (8,8) radius ~6.5
-	cx, cy := 8, 8
-	r2 := 6.5 * 6.5
-	red := color.RGBA{R: 220, G: 50, B: 47, A: 255}
+	// Transparent background
+	clear := color.RGBA{0, 0, 0, 0}
+	white := color.RGBA{255, 255, 255, 255}
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
-			dx := float64(x - cx)
-			dy := float64(y - cy)
+			img.Set(x, y, clear)
+		}
+	}
+	// Bold filled circle
+	cx, cy := 9.0, 9.0
+	r := 7.0
+	r2 := r * r
+	for y := 0; y < h; y++ {
+		for x := 0; x < w; x++ {
+			dx := float64(x) - cx
+			dy := float64(y) - cy
 			if dx*dx+dy*dy <= r2 {
-				img.Set(x, y, red)
-			} else {
-				img.Set(x, y, color.RGBA{0, 0, 0, 0})
+				img.Set(x, y, white)
 			}
 		}
 	}
-
+	// Small stem at the top center
+	for y := 2; y <= 4; y++ {
+		for x := 8; x <= 10; x++ {
+			img.Set(x, y, white)
+		}
+	}
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, img); err != nil {
-		log.Printf("[tray] failed to encode icon png: %v\n", err)
+		log.Printf("[tray] failed to encode template icon png: %v\n", err)
 		return nil
 	}
 	return buf.Bytes()
