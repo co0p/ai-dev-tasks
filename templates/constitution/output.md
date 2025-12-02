@@ -26,6 +26,9 @@ Declarative statements about tech stack choices and rationale.
 ## 8. Last Updated
 Current date in YYYY-MM-DD format.
 
+## 9. Increments Location
+Explicit path policy for where increments live, using per-increment folders under the chosen base directory (e.g., `docs/increments/<increment-folder>/increment.md`).
+
 ---
 
 **Example Structure:**
@@ -69,7 +72,10 @@ Current date in YYYY-MM-DD format.
 - [Statement]: [Rationale]
 ### Deployment
 - [Statement]: [Rationale]
-
 ---
 **Last Updated:** [Current Date]
+
+## Increments Location
+- Base directory: `docs/increments/`
+- Per-increment folder structure: `docs/increments/<increment-folder>/increment.md`
 ```

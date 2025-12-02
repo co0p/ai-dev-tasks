@@ -28,6 +28,9 @@ List any technical constraints or limitations from these decisions.
 Reference constitution or ADRs for constraints if relevant.
 
 ## 5. Open Questions
+
+## 6. Save Location
+Specify the per-increment folder path where the design will be saved, e.g., `docs/increments/<increment-folder>/design.md`.
 Technical unknowns or deferred decisions to resolve during implementation.
 Reference constitution or ADRs for open questions or areas needing future decisions if applicable.
 
@@ -89,6 +92,9 @@ Reference constitution or ADRs for open questions or areas needing future decisi
 [Reference: Constitution Principle Z]
 
 ## Open Questions
+
+## Save Location
+`docs/increments/<increment-folder>/design.md`
 - [Technical unknown to resolve during implementation]
 - [Deferred decision with reason]
 [Reference: ADR-004]

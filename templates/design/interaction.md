@@ -1,29 +1,40 @@
 
-# LLM-Human Interaction: Design Step Questioning Style Reference
+# Interaction Style (Design)
 
-When initializing the design step, ask the following numbered technical questions about the increment. Answers should use letters, with X to skip and _ to enter a custom text answer.
+Ask guiding questions that elicit context for the design and inform the implementation plan that follows. Avoid assuming the user knows internal module names.
 
-## Example Question Format
+Number questions; offer lettered options when helpful. Include `X` to skip and `_` for custom text.
 
-1. How should data flow for this feature?
-   A. Client → API → Database → Client
-   B. Client → API (async job) → Client polls
-   C. Client → Third-party API directly
-   X. Skip this question / I don't know yet
+Answer format:
+- Reply per question using letters (e.g., `A,B`).
+- Use `X` to skip a question.
+- Use `_:` to add custom text (e.g., `_: prefer native menus`).
 
-2. Where should this feature's state live?
-   A. Client-side only (component state)
-   B. Backend session/cache
-   C. Database (persistent)
-   D. Hybrid (client + backend)
-   X. Skip this question / I don't know yet
+Guiding questions:
+1. What user flows or actions must this increment support?
+	A. Single click action from tray
+	B. Short form input
+	C. Background processing
+	X. Skip
+	_. Custom
 
-3. How should this integrate with external services?
-   A. Direct API calls
-   B. Queue-based async processing
-   C. Webhook callbacks
-   X. Skip this question / I don't know yet
+2. What constraints or preferences apply?
+	A. Keep UI minimal
+	B. Prefer adapter around external libs
+	C. Strict resource limits
+	X. Skip
+	_. Custom
 
----
+3. What external integrations are involved (if any)?
+	A. None
+	B. OS tray API via adapter
+	C. Third-party service
+	X. Skip
+	_. Custom
 
-Always number questions, use letters for answers, include X to skip, and _ for custom text answers.
+4. What makes this “done” and testable?
+	A. Observable behavior from a user action
+	B. Specific metric or success signal
+	C. Clear Given/When/Then scenarios
+	X. Skip
+	_. Custom

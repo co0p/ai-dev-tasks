@@ -2,31 +2,33 @@
 # Implementation Output Format
 
 The implementation output must:
-* After each high-level task is completed (and before switching to the next), make an incremental commit to the feature branch. This must be done explicitly to ensure progress is tracked and changes can be reverted easily.
+* After each high-level task is completed (and before switching to the next), make an incremental commit to the increment branch. This must be done explicitly to ensure progress is tracked and changes can be reverted easily.
 - Present a list of high-level tasks to the user first. These are derived directly from the increment definition and design.
 - For each high-level task, break it down into 2-5 subtasks. Subtasks are atomic steps that, when all completed, make the parent task complete.
 - All technical details and steps must be derived from the increment definition and design documentation.
 - Subtasks should be concise, completable in 5-15 minutes, and mapped directly to acceptance criteria and design details.
-- Only high-level tasks require a verification method (manual check, unit test, code review, etc.). Subtasks do not require individual verification.
+- High-level tasks must include a formal verification method (manual check, unit test, code review, etc.). For subtasks, include a brief inline check parenthetically when helpful.
 
-## 1. Relevant Files
-- List files that will be created or modified for this feature, with brief descriptions.
+## 1. Planned Files Summary (Confirm Before Coding)
+- List files to add/modify/delete for this increment, each on one line:
+	- `path/to/file.ext` — new|modify|delete — 1-line purpose
+- Present this list to the user and pause for confirmation or edits before starting implementation.
 
 ## 2. Implementation Tasks & Subtasks
 Use Markdown checkboxes (`- [ ]`) for each main task and subtask. Update to `- [x]` when completed.
-For each main implementation step, break it down into 2-5 specific subtasks:
-  - Each subtask should describe exactly what will be done, how it will be verified, and what the expected result is.
-  - Example: Instead of "Implement catalog list component," use:
-    - [ ] Create Svelte component file (verify file created)
-    - [ ] Define props and initial state (verify props/state in code)
-    - [ ] Render static list from sample data (verify output in browser)
-    - [ ] Add image rendering logic (verify images display)
-    - [ ] Write unit test for rendering (run test, verify pass)
-Each subtask must include a verification method (manual check, unit test, code review, etc.).
-Start with setup, proceed through implementation, integration, review, and deploy.
+Tasks can be high-level. Subtasks must be concise and human-first, yet unambiguous for LLMs:
+- 2–5 subtasks per task; each subtask is max one line, imperative, and uses plain language.
+- Include concrete identifiers in backticks for precision (file paths, commands, symbols).
+- Preferred pattern: `- [ ] <natural language> — include 
+  
+	backticked artifact(s) and a brief why (verify ...)`
+- Avoid cryptic shorthand (e.g., use "dependencies" not "deps").
+- Include brief inline checks where helpful (e.g., "verify file created").
+- Start with setup, proceed through implementation, integration, review, and deploy.
 
 ## 4. Code Implementation
-- Provide code for each subtask/module, with comments explaining logic and decisions.
+- Provide only the essential code needed for completed subtasks.
+- Prefer minimal diffs or final file snippets; keep commentary brief and human-oriented.
 - Ensure code is testable and maintainable.
 
 ## 5. Validation
@@ -44,27 +46,27 @@ Start with setup, proceed through implementation, integration, review, and deplo
 ```markdown
 # Implementation: [Increment Name]
 
-## Relevant Files
-- `src/component.svelte` - Catalog list component
-- `src/component.test.js` - Unit tests for catalog list
+## Planned Files Summary (Confirm Before Coding)
+- `src/component.svelte` — new — Catalog list component
+- `src/component.test.js` — new — Unit tests for catalog list
 
 ## Implementation Tasks & Subtasks
 - [ ] **Setup**
-	- [ ] Create feature branch: `git checkout -b feature/[increment-name]` (verify branch exists)
-	- [ ] Install dependencies (verify install success)
+	- [ ] Create increment branch: run `git checkout -b <prefix>[increment-name]` (verify branch exists)
+	- [ ] Install dependencies: run package manager (e.g., `npm install`) (verify install succeeds)
 - [ ] **Catalog List Component**
-	- [ ] Create Svelte component file (verify file created)
-	- [ ] Define props and initial state (verify props/state in code)
-	- [ ] Render static list from sample data (verify output in browser)
-	- [ ] Add image rendering logic (verify images display)
-	- [ ] Write unit test for rendering (run test, verify pass)
+	- [ ] Create `src/component.svelte` for the catalog list (verify file exists)
+	- [ ] Define props and initial state in `src/component.svelte` (verify props/state present)
+	- [ ] Render static list from sample data in `src/component.svelte` (verify output in app)
+	- [ ] Add image rendering to `src/component.svelte` (verify images display)
+	- [ ] Add unit test in `src/component.test.js` (run, verify pass)
 - [ ] **Integration & Verification**
-	- [ ] Integrate component into app (verify integration)
-	- [ ] Manual test in browser (verify all features work)
+	- [ ] Integrate the component in `src/app.svelte` (verify renders and events work)
+	- [ ] Manually test in browser: exercise all features (verify expected behavior)
 - [ ] **Quick Review & Deploy**
-	- [ ] Code review (verify standards)
-	- [ ] Remove dead code/debug (verify cleanup)
-	- [ ] Commit changes (verify commit)
+	- [ ] Review code for style/standards (verify guidelines met)
+	- [ ] Remove dead code and debug artifacts (verify cleanup)
+	- [ ] Commit changes to the increment branch (verify commit)
 
 ## Code Implementation
 ```js

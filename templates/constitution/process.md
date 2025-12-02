@@ -1,5 +1,16 @@
 # Prompt Process for Constitution Generation
 
+## Operating Rules and Guardrails
+- Act only with information provided or discovered in the repository. If context is missing, ask targeted questions instead of assuming.
+- Enforce the STOP gate at Step 3 until the user answers or explicitly waives.
+- Keep principles explicit, testable, and specific; avoid vague phrasing.
+- Use today’s date for "Last Updated" in YYYY-MM-DD format.
+- When requested in steps, emit JSON exactly as specified—no extra prose inside JSON blocks.
+- Avoid harmful, hateful, lewd, or violent content; refuse such requests.
+
+Human-first interaction: Always ask questions and present summaries in plain language. JSON emissions are internal-only for tooling and should not be shown to the user unless they explicitly request to see them.
+
+
 ## 1. Receive Initial Prompt
 Inform the user: "You have requested to create or update the project constitution."
 
@@ -19,15 +30,19 @@ Inform the user: "Before we begin, I will ask you explicit questions about each 
 - What are your boundaries for Technical Debt?
 - What is your Dependency Discipline?
 
-Additionally, please specify where increments should be stored in your project. The recommended location is `docs/increments/`. You may choose a different location if preferred.
+Additionally, please specify where increments should be stored in your project. The recommended location is `docs/increments/`, with each increment in its own folder (e.g., `docs/increments/tray-menu/increment.md`). You may choose a different location if preferred.
 
 **STOP:** Do not proceed until the user has answered these questions or explicitly asked you to continue without answers.
+
+Internally emit a ClarificationRequest JSON (see Output section for schema) to capture the questions and the increments location recommendation. Do not display this JSON to the user; only show human-friendly questions.
 
 ## 4. Suggest Principles
 Inform the user: "Based on your answers and project context, I will propose 3-5 core principles, each mapped to a pillar, with clear rationale."
 
 ### Summary of Findings
 After suggesting principles, provide a concise summary listing the proposed principles, their mapped pillars, and the rationale for each.
+
+Internally emit a PrinciplesProposal JSON (see Output section for schema). Do not display this JSON to the user; provide a concise human-readable summary instead.
 
 ## 5. Ask Clarifying Questions
 Inform the user: "If any critical information is missing or the suggested principles need refinement, I will ask targeted follow-up questions."
@@ -41,5 +56,71 @@ Inform the user: "I will save the generated constitution as CONSTITUTION.md in t
 ### Summary of Findings
 Provide a brief summary confirming the constitution was saved, listing the included sections and pillars covered.
 
+Internally emit a ConstitutionSummary JSON (see Output section for schema) confirming sections, coverage, counts, paths, and date. Do not display this JSON to the user; provide a human-readable confirmation.
+
 ## 8. Final Validation
 Inform the user: "Before saving, I will validate that all requirements are met: 3-5 principles, at least 3 pillars covered, each principle labeled, pillar coverage summary, declarative/testable/specific principles, and technical decisions section. If anything is missing, I will STOP and ask for clarification or fixes."
+
+---
+
+## Structured JSON Outputs
+
+To enable automation and validation, emit a concise JSON block at specific steps. Place each JSON in a fenced block marked with `json` and do not include non-JSON prose inside the block.
+
+Visibility: These JSON blocks are for internal tooling/CI only. Do not surface them to users unless explicitly requested.
+
+### Step 3 — ClarificationRequest JSON
+Emit when asking the pillar questions and the increments location. Do not proceed until answered.
+
+Schema (informal):
+```json
+{
+	"step": "questions",
+	"questions": [
+		{ "id": 1, "pillar": "Delivery Velocity", "question": "...", "options": [ {"key": "A", "label": "..."}, {"key": "B", "label": "..."}, {"key": "C", "label": "..."}, {"key": "X", "label": "Skip"}, {"key": "_", "label": "Custom"} ] },
+		{ "id": 2, "pillar": "Test Strategy", "question": "...", "options": [ ... ] },
+		{ "id": 3, "pillar": "Design Integrity", "question": "...", "options": [ ... ] },
+		{ "id": 4, "pillar": "Simplicity First", "question": "...", "options": [ ... ] },
+		{ "id": 5, "pillar": "Technical Debt Boundaries", "question": "...", "options": [ ... ] },
+		{ "id": 6, "pillar": "Dependency Discipline", "question": "...", "options": [ ... ] }
+	],
+	"increments_location_recommendation": "docs/increments/<increment-folder>/increment.md",
+	"instructions": "Answer with letter keys (A, B, C, ...), X to skip, _ for custom text. Provide increments location or accept the recommendation."
+}
+```
+
+### Step 4 — PrinciplesProposal JSON
+Emit when proposing 3–5 core principles mapped to pillars.
+
+Schema (informal):
+```json
+{
+	"step": "proposal",
+	"principles": [
+		{
+			"id": 1,
+			"name": "Short, Actionable Name",
+			"pillar": "Delivery Velocity",
+			"statement": "Declarative, testable, specific rule.",
+			"rationale": "Why this exists for this project.",
+			"implications": ["Notable consequence #1", "Notable consequence #2"]
+		}
+	],
+	"coverage": ["Delivery Velocity", "Test Strategy", "Design Integrity"]
+}
+```
+
+### Step 6/7 — ConstitutionSummary JSON
+Emit after generating and saving the constitution to confirm coverage and metadata.
+
+Schema (informal):
+```json
+{
+	"step": "summary",
+	"sections_included": ["Vision", "Mission", "Core Values", "Architectural Principles", "Update Process", "Pillar Coverage", "Technical Decisions", "Last Updated"],
+	"pillars_covered": ["Delivery Velocity", "Test Strategy", "Design Integrity"],
+	"counts": { "principles": 4, "pillars": 3 },
+	"paths": { "constitution": "CONSTITUTION.md", "increments": "docs/increments/<increment-folder>/increment.md" },
+	"last_updated": "YYYY-MM-DD"
+}
+```

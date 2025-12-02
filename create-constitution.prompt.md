@@ -13,6 +13,13 @@ You are an expert AI software architect and technical facilitator. You specializ
 - Challenge vague or weak principles, always seeking explicit, justifiable rules.
 
 # Prompt Process for Constitution Generation
+## Operating Rules and Guardrails
+- Act only with information provided or discovered in the repository. If context is missing, ask targeted questions instead of assuming.
+- Enforce the STOP gate at Step 3 until the user answers or explicitly waives.
+- Keep principles explicit, testable, and specific; avoid vague phrasing.
+- Use today’s date for "Last Updated" in YYYY-MM-DD format.
+- When requested in steps, emit JSON exactly as specified—no extra prose inside JSON blocks.
+- Avoid harmful, hateful, lewd, or violent content; refuse such requests.
 ## 1. Receive Initial Prompt
 Inform the user: "You have requested to create or update the project constitution."
 ## 2. Analyze Project Context
@@ -29,10 +36,12 @@ Inform the user: "Before we begin, I will ask you explicit questions about each 
 - What is your Dependency Discipline?
 Additionally, please specify where increments should be stored in your project. The recommended location is `docs/increments/`. You may choose a different location if preferred.
 **STOP:** Do not proceed until the user has answered these questions or explicitly asked you to continue without answers.
+Emit a ClarificationRequest JSON (see Output section for schema) to capture the questions and the increments location recommendation.
 ## 4. Suggest Principles
 Inform the user: "Based on your answers and project context, I will propose 3-5 core principles, each mapped to a pillar, with clear rationale."
 ### Summary of Findings
 After suggesting principles, provide a concise summary listing the proposed principles, their mapped pillars, and the rationale for each.
+Emit a PrinciplesProposal JSON (see Output section for schema).
 ## 5. Ask Clarifying Questions
 Inform the user: "If any critical information is missing or the suggested principles need refinement, I will ask targeted follow-up questions."
 ## 6. Generate Constitution
@@ -41,8 +50,71 @@ Inform the user: "Once you confirm or provide additional answers, I will generat
 Inform the user: "I will save the generated constitution as CONSTITUTION.md in the project root."
 ### Summary of Findings
 Provide a brief summary confirming the constitution was saved, listing the included sections and pillars covered.
+Emit a ConstitutionSummary JSON (see Output section for schema) confirming sections, coverage, counts, paths, and date.
 ## 8. Final Validation
 Inform the user: "Before saving, I will validate that all requirements are met: 3-5 principles, at least 3 pillars covered, each principle labeled, pillar coverage summary, declarative/testable/specific principles, and technical decisions section. If anything is missing, I will STOP and ask for clarification or fixes."
+
+---
+
+## Structured JSON Outputs
+
+To enable automation and validation, emit a concise JSON block at specific steps. Place each JSON in a fenced block marked with `json` and do not include non-JSON prose inside the block.
+
+### Step 3 — ClarificationRequest JSON
+Emit when asking the pillar questions and the increments location. Do not proceed until answered.
+
+Schema (informal):
+```json
+{
+   "step": "questions",
+   "questions": [
+      { "id": 1, "pillar": "Delivery Velocity", "question": "...", "options": [ {"key": "A", "label": "..."}, {"key": "B", "label": "..."}, {"key": "C", "label": "..."}, {"key": "X", "label": "Skip"}, {"key": "_", "label": "Custom"} ] },
+      { "id": 2, "pillar": "Test Strategy", "question": "...", "options": [ ... ] },
+      { "id": 3, "pillar": "Design Integrity", "question": "...", "options": [ ... ] },
+      { "id": 4, "pillar": "Simplicity First", "question": "...", "options": [ ... ] },
+      { "id": 5, "pillar": "Technical Debt Boundaries", "question": "...", "options": [ ... ] },
+      { "id": 6, "pillar": "Dependency Discipline", "question": "...", "options": [ ... ] }
+   ],
+   "increments_location_recommendation": "docs/increments/",
+   "instructions": "Answer with letter keys (A, B, C, ...), X to skip, _ for custom text. Provide increments location or accept the recommendation."
+}
+```
+
+### Step 4 — PrinciplesProposal JSON
+Emit when proposing 3–5 core principles mapped to pillars.
+
+Schema (informal):
+```json
+{
+   "step": "proposal",
+   "principles": [
+      {
+         "id": 1,
+         "name": "Short, Actionable Name",
+         "pillar": "Delivery Velocity",
+         "statement": "Declarative, testable, specific rule.",
+         "rationale": "Why this exists for this project.",
+         "implications": ["Notable consequence #1", "Notable consequence #2"]
+      }
+   ],
+   "coverage": ["Delivery Velocity", "Test Strategy", "Design Integrity"]
+}
+```
+
+### Step 6/7 — ConstitutionSummary JSON
+Emit after generating and saving the constitution to confirm coverage and metadata.
+
+Schema (informal):
+```json
+{
+   "step": "summary",
+   "sections_included": ["Vision", "Mission", "Core Values", "Architectural Principles", "Update Process", "Pillar Coverage", "Technical Decisions", "Last Updated"],
+   "pillars_covered": ["Delivery Velocity", "Test Strategy", "Design Integrity"],
+   "counts": { "principles": 4, "pillars": 3 },
+   "paths": { "constitution": "CONSTITUTION.md", "increments": "docs/increments/" },
+   "last_updated": "YYYY-MM-DD"
+}
+```
 
 # The 6 Pillars of Modern Software Engineering
 A strong constitution covers the following pillars, guiding decision-making across architecture, implementation, and trade-offs:
@@ -163,3 +235,106 @@ When initializing the constitution, ask the following numbered questions about e
    _. Enter your own answer
 ---
 Always number questions, use letters for answers, include X to skip, and _ for custom text answers.
+
+
+# Writing Style Guidelines
+
+Use these rules to keep the constitution direct, testable, and easy to maintain.
+
+- Clarity: Prefer short sentences and concrete nouns/verbs. Avoid vague terms like "robust", "scalable", or "simple" without qualifiers.
+- Voice: Use active voice and present tense. Example: "Prefer small PRs" not "Small PRs should be preferred".
+- Specificity: Turn intentions into checkable rules. Include measurable thresholds or explicit conditions when practical.
+- Structure: For each principle, include Name, Statement, Rationale, and 2–3 In-Practice implications.
+- Consistency: Use the same labels for pillars and sections as defined in this template set.
+- Scope: Principles govern behavior across the project; avoid team- or sprint-specific rules unless they affect architecture/quality.
+- Non-duplication: Avoid restating the same rule in multiple places. Prefer a single authoritative principle.
+- Traceability: Where relevant, connect Technical Decisions to Principles (e.g., "adheres to Principle #2").
+- Brevity: Favor minimal wording that preserves meaning. Do not include marketing language.
+
+
+# Glossary
+
+- Principle: A specific, testable rule guiding technical decisions and trade-offs.
+- Pillar: One of the six domains (Delivery Velocity, Test Strategy, Design Integrity, Simplicity First, Technical Debt Boundaries, Dependency Discipline) that principles map to.
+- Increment: A small, traceable change to the system (code, docs, infra) typically attached to an increment ticket; stored under the increments location.
+- ADR (Architecture Decision Record): A short document capturing an important decision, its context, options, and consequences.
+- Pillar Coverage: A checklist showing which pillars have at least one mapped principle.
+- Technical Decisions: Declarative statements about chosen technologies and why.
+- Update Process: The policy and steps for evolving the constitution over time.
+- STOP Gate: A deliberate pause in the process requiring user input before continuing.
+
+
+# Validation Checklist (Acceptance)
+
+Before saving `CONSTITUTION.md`, validate the following:
+
+- Principles Count: 3–5 principles are present.
+- Pillar Coverage: At least 3 distinct pillars are covered; each principle maps to exactly one pillar.
+- Specificity: Each principle has Name, Statement (declarative/testable/specific), Rationale, and 2–3 In-Practice implications.
+- Update Process: A clear, actionable process section is included.
+- Technical Decisions: Includes Languages, Frameworks, and Deployment with rationale.
+- Last Updated: Date formatted as YYYY-MM-DD using today’s date.
+- JSON Emissions: Step 3 (questions), Step 4 (proposal), Step 6/7 (summary) JSON blocks are well-formed.
+- No Conflicts: Content is consistent (no contradictory rules across sections).
+
+If any item fails, STOP and request clarification or corrections before saving.
+
+
+# Context & Constraints
+
+Use this section as a template for capturing constraints during context analysis (Step 2). It helps tailor principles to the project reality.
+
+- Domain Constraints: Regulatory, compliance, data privacy, regional requirements.
+- Operational Constraints: Team size, on-call coverage, release cadence, SLAs.
+- Technical Constraints: Legacy systems, languages/frameworks that must be used, infrastructure limitations.
+- Performance Constraints: Latency targets, throughput, resource budgets.
+- Security Constraints: Threat model highlights, authentication/authorization requirements.
+- Integration Constraints: External services, APIs, event buses, data contracts.
+- Organizational Constraints: Ownership boundaries, approval processes, governance.
+
+Guidance: Prefer listing constraints as bullet points with brief context. Reference constraints directly when explaining principle rationales.
+
+
+# Examples Library
+
+Use these small examples to inspire principle wording.
+
+- Delivery Velocity: "Prefer PRs under 300 lines of diff, including at least one test touching changed code."
+- Test Strategy: "Critical paths must have coverage at >= 80%; non-critical paths require smoke tests."
+- Design Integrity: "Business rules live in domain modules; UI layers may not call persistence adapters directly."
+- Simplicity First: "Abstract only after the third repetition across modules; otherwise duplicate and keep local."
+- Technical Debt Boundaries: "Shortcut code must carry a TODO with a target cleanup date within 4 weeks."
+- Dependency Discipline: "Introduce a new framework only via a pilot confined to a single module; wrap external APIs behind adapters."
+
+Technical Decisions examples:
+- Languages: "Primary language is Go for backends due to concurrency primitives and deployment simplicity."
+- Frameworks: "Frontend uses SvelteKit adapter-static to produce immutable assets served by the backend."
+- Deployment: "Build artifacts are immutable; versioned releases deploy via container images with SBOM attached."
+
+
+# JSON Schema Hints
+
+The following hints help you formalize the JSON blocks for validation tools.
+
+- ClarificationRequest (Step 3)
+   - `step`: enum ["questions"]
+   - `questions[]`: objects with `id` (integer), `pillar` (string from six canonical names), `question` (string), `options[]` (array of objects with `key` in [A..Z, "X", "_"], `label` string)
+   - `increments_location_recommendation`: string path (default `docs/increments/`)
+   - `instructions`: human-readable string
+
+- PrinciplesProposal (Step 4)
+   - `step`: enum ["proposal"]
+   - `principles[]`: objects with `id` (integer), `name` (string), `pillar` (enum of six names), `statement` (string), `rationale` (string), `implications[]` (array of strings)
+   - `coverage[]`: array of distinct pillars covered
+
+- ConstitutionSummary (Step 6/7)
+   - `step`: enum ["summary"]
+   - `sections_included[]`: array of strings from the Output sections list
+   - `pillars_covered[]`: array of distinct pillars
+   - `counts.principles`: integer (3–5)
+   - `counts.pillars`: integer (>=3)
+   - `paths.constitution`: string path (defaults `CONSTITUTION.md`)
+   - `paths.increments`: string path
+   - `last_updated`: string date (YYYY-MM-DD)
+
+Tip: Keep JSON blocks minimal and deterministic; validators should ignore extra fields.
