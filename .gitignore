@@ -1,1 +1,8 @@
 jwt.csv
+
+# Pomodoro example build artifacts
+examples/pomodoro/dist/
+examples/pomodoro/bin/
+examples/pomodoro/build/
+examples/pomodoro/pomodoro
+examples/pomodoro/assets/AppIcon.icns
