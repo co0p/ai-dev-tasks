@@ -1,36 +1,44 @@
-# Goal (Increment Prompt)
+## Goal
 
-Your goal is to help the team refine the **provided description or user story** into **one small, high-leverage increment** that:
+Define the **goal** of this increment as a **clear, outcome-oriented hypothesis**.
 
-- Is clearly tied to user or stakeholder value.
-- Tests a specific assumption (product, UX, technical, or business).
-- Has concrete, Gherkin-style acceptance criteria.
-- Has a clear success signal (metric or observable behavior).
-- Explicitly states what is **out of scope** for this increment.
-- Declares **product-level** implementation guardrails that keep implementation focused and safe, without prescribing branches or files.
+The LLM MUST:
 
-The increment spec you generate will be used to:
+1. **State the Outcome / Hypothesis**
 
-- Align product, design, and engineering on **what** we are doing and **why**.
-- Drive downstream design and implementation work.
-- Serve as a traceable record of decisions and assumptions for this change.
+   - Describe **what will be different for users or the business** after this increment.
+   - Phrase it in **product language**, for example:
+     - “Users can …”
+     - “Customers experience …”
+     - “The support team can …”
+     - “The business can see … in analytics.”
 
-You SHOULD:
+   - Where relevant, connect to system qualities:
+     - Performance, reliability, usability, security, etc.
+     - Still from an outcome perspective (e.g. “search feels fast enough under normal usage”).
 
-- Use the prompt argument as the starting point for the increment’s intent.
-- Use any available project-level guidance (such as `CONSTITUTION.md`, architecture docs, or conventions in the codebase) as **input**, when present.
-- Fall back to the project’s root `README.md` and the user’s answers if such guidance files are missing.
-- Keep the increment as small as reasonably possible while still meaningful.
-- Prefer increments that can be implemented and validated within a short time window (for example, a day or a few days).
-- Make trade-offs explicit (especially what is deliberately *out of scope* right now).
+2. **Keep the Scope Small and Focused**
 
-You MUST NOT:
+   - Ensure the goal is **narrow enough** that:
+     - It can be reasonably delivered and released soon.
+     - It does not require a broad re-architecture.
+   - If the provided description is too broad, the goal MUST:
+     - Pick **one coherent slice** to deliver now.
+     - Defer the rest to “Follow-up Increments.”
 
-- Ignore the prompt argument or change the direction of the increment without user confirmation.
-- Assume that a `CONSTITUTION.md` file exists.
-- Block or fail the prompt solely because a guidance document is missing (only the increment description/user story is mandatory).
-- Depend on any other specific prompt or document having been run before this one.
-- Prescribe or even mention concrete implementation mechanics such as:
-  - Branch names or git workflows,
-  - Specific file paths, modules, or dependencies,
-  - Detailed code-level steps.
+3. **Clarify Non-Goals**
+
+   - Explicitly list important things this increment **will not** address.
+   - This protects against scope creep and misaligned expectations.
+   - Examples:
+     - “We are not redesigning the full onboarding flow.”
+     - “We are not yet optimizing for edge case X.”
+     - “We are not committing to full multi-region support yet.”
+
+4. **Tie to DORA-style success (at the outcome level)**
+
+   Briefly explain why this is a good increment:
+
+   - It is **small and self-contained**.
+   - It can be **evaluated quickly** (we will be able to tell if the outcome happened).
+   - It can flow through the team’s **normal delivery pipeline** without special, risky processes.

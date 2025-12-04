@@ -1,166 +1,67 @@
-# Task (Increment)
+## Tasks
 
-Your task is to help the team turn the **provided description or user story** into **one small, high-leverage increment** that:
+Describe the **work items at the “WHAT” level**, not the technical “HOW”.
 
-- Is clearly tied to user or stakeholder value.
-- Tests a specific assumption (product, UX, technical, or business).
-- Has concrete, Gherkin-style acceptance criteria.
-- Has a clear success signal (metric or observable behavior).
-- Explicitly states what is **out of scope** for this increment.
-- Declares **product-level** implementation guardrails that keep implementation focused and safe, without specifying branches or files.
+Tasks should express **what needs to be true for this increment to be considered complete**, in terms that are clear to product, engineering, QA, and stakeholders.
 
-You MUST follow this high-level cycle **exactly**:
+The LLM MUST:
 
-1. **Verify argument and available context**
+1. **Express Tasks as Outcome-Oriented Work Items**
 
-   - Check the prompt argument:
-     - If it clearly describes a desired change or user story, treat it as the initial increment idea.
-     - If it is missing, empty, or not about a change:
-       - STOP and ask the user for a short description or user story for the increment.
-       - Do not continue until you have one.
-   - Look for the following, in this order, under the target project root:
-     - A project-level guidance document such as `CONSTITUTION.md` (if present).
-     - Architecture or principles docs (for example `ARCHITECTURE.md`, `PRINCIPLES.md`, or similar).
-     - The project’s root `README.md`.
-   - Use whatever is available to infer:
-     - Project purpose and target users.
-     - Existing principles, constraints, and non-negotiables.
-   - If none of these documents are present, ask the user to briefly describe:
-     - What the project is for.
-     - Who the users are.
-     - Any hard constraints (for example, performance, security, compliance).
+   - Each task should describe **what must change or exist** from a product/user/business point of view, for example:
+     - “The login screen offers a ‘Forgot password?’ entry point.”
+     - “Usage of the export feature is visible in analytics with basic volume metrics.”
+     - “Support has a documented way to explain the new behavior to customers.”
 
-2. **Review existing increments, PRDs, and UI design docs**
+   - Avoid:
+     - Low-level implementation details (e.g. database tables, functions, framework choices).
+     - Step-by-step instructions or technical plans (these belong in design/implement).
 
-   - Under the target project root, actively look for:
-     - Existing increment or PRD docs:
-       - `docs/increments/*/increment.md`
-       - Other `docs/*increment*.md`, `docs/prd-*.md`, or similar.
-     - UI / UX design docs:
-       - `docs/ui/`, `docs/ux/`, `docs/design/`
-       - Files named like `*-ui.md`, `*-ux.md`, `*-design.md`, `ui-spec*.md`.
-   - For any relevant documents you find:
-     - Check whether a similar capability has already been specified.
-     - Note dependencies or sequencing (for example “increment B depends on increment A”).
-     - Note any established UI flows or patterns this increment should follow.
-   - Summarize for the user:
-     - Any overlapping or related existing increments.
-     - Any obvious conflicts (for example a feature already defined differently).
-     - Any key design constraints implied by existing UI docs.
-   - If you detect a likely conflict (this increment tries to redefine an existing one):
-     - Call it out explicitly.
-     - Ask the user whether this is a revision of an existing increment or a new one.
+2. **Use a Simple, Consistent Structure**
 
-3. **Receive initial prompt (confirm and restate)**
+   Each task SHOULD include:
 
-   - Restate the increment description or user story in your own words.
-   - Confirm with the user that your restatement matches their intent, or ask for a quick correction.
-   - Clarify whether this is primarily a:
-     - Feature,
-     - Fix,
-     - Refactor,
-     - Chore, or
-     - Spike / exploration.
+   - **Task**: A short, action-oriented description of what will be true or available.
+   - **User/Stakeholder Impact**: Whose experience or workflow is affected and how.
+   - **Acceptance Clues**: How we might recognize that the task is “done” (from the WHAT perspective – e.g. behavior visible, outcome demonstrable – without prescribing tests or code).
 
-4. **Analyze context**
+   Example format:
 
-   - Combine:
-     - The argument and user clarifications.
-     - Project-level docs (`CONSTITUTION.md`, `README.md`, architecture/principles docs).
-     - Relevant existing increments and UI/PRD docs.
-   - From these, infer:
-     - Relevant principles (for example speed vs safety, simplicity vs flexibility).
-     - Technical or architectural constraints that obviously affect the increment.
-     - Any existing patterns you should align with (for example module boundaries, layering, UI patterns).
-   - Share a short, human-readable summary of these findings with the user, including:
-     - How this increment fits alongside existing increments.
-     - Any notable dependencies or constraints.
+   ```markdown
+   - Task: Short, outcome-level description
+     - User/Stakeholder Impact:
+     - Acceptance Clues:
+   ```
 
-5. **Ask clarifying questions (STOP)**
+3. **Keep Tasks Independent and Small (at the WHAT level)**
 
-   - Ask 2–3 targeted questions to refine the increment, focusing on:
-     - Capability / action:
-       - “What specific capability are we building in this increment?”
-     - Assumption under test:
-       - “What assumption or hypothesis are we testing with this change?”
-     - Success definition:
-       - “What does success look like for this increment (behavior or metric)?”
+   - Prefer more, smaller tasks rather than one huge catch-all.
+   - Each task should:
+     - Represent a **distinct observable aspect of the increment**.
+     - Be small enough that it can be confidently delivered within this increment.
 
-   **STOP here** until:
+4. **Cover Non-Feature Outcomes Where Relevant**
 
-   - The user has answered, or
-   - The user explicitly waives specific questions.
+   In addition to user-facing behavior, tasks MAY include:
 
-   Do not proceed silently past this point.
+   - **Discoverability & Communication**
+     - What needs to be discoverable in UI, docs, or help.
+     - What internal stakeholders (support, sales, ops) need to understand.
 
-6. **Suggest increment structure (STOP)**
+   - **Evidence & Learning**
+     - What must be observable so that we can later tell if the increment helped (e.g. “We can see basic usage numbers for X”).
+     - Any product-level follow-up checks (e.g. “Review metrics after N days to confirm adoption”).
 
-   - Propose a small, testable increment structure including:
-     - Title.
-     - Job story.
-     - Assumption being tested.
-     - 3–5 Gherkin-style acceptance criteria.
-     - Success signal (metric or observable behavior).
-     - Out-of-scope list (what is explicitly NOT included).
-     - Product-level Implementation Guardrails (behavioral guardrails, not branches/files).
+   These tasks MUST still describe **WHAT** should be true, not HOW to instrument or implement it.
 
-   - Ensure the structure:
-     - Respects project-level principles and constraints.
-     - Fits coherently alongside existing increments and PRDs.
-     - Does not silently contradict existing UI design docs without calling it out.
+5. **Defer Implementation Planning**
 
-   - Present this as a short, human-readable summary that a PO and engineers can easily review.
+   - Do **not**:
+     - Describe code changes.
+     - Specify test frameworks or CI details.
+     - Propose PR groupings or technical rollout mechanisms.
+   - Those belong in:
+     - `design.md` (technical HOW, guardrails, test and deployment strategy).
+     - `implement.md` (detailed steps, sequencing, and execution plan).
 
-   Then ask the user explicitly:
-
-   > I plan to generate and save an `increment.md` document for this increment, under `docs/increments/<increment-slug>/` in the target project root.  
-   > Would you like me to generate and save this increment now? (yes/no)
-
-   **STOP here**:
-
-   - If the user answers **no**:
-     - Revise the structure based on their feedback and re-present it.
-   - If the user answers **yes**:
-     - Proceed to generate and save the increment document.
-
-7. **Generate increment**
-
-   - After a **yes**, generate the final increment document following the **Increment Output Structure**.
-   - This document MUST remain product-only:
-     - No branches, git operations, or PR instructions.
-     - No lists of specific files, modules, or dependencies to add/modify/delete.
-     - No concrete code-level implementation steps.
-
-8. **Save increment (as repository files)**
-
-   When running in an environment that supports file edits (for example, Copilot in VS Code workspace or GitHub.com with editing capabilities), you MUST:
-
-   - Derive an **increment slug** from the increment title:
-     - Use a lowercase, hyphen-separated “slug” based on the title.
-     - Example: `"Export reports to CSV"` → `export-reports-to-csv`.
-   - Create (if needed) and write the increment document under the target project root:
-
-     - Folder: `docs/increments/<increment-slug>/`
-     - File:   `docs/increments/<increment-slug>/increment.md`
-
-   - If `docs/` or `docs/increments/` do not exist, treat them as directories that can be created under the target project root.
-   - Do **not** reuse the same folder for unrelated increments; each increment gets its own folder.
-   - If the user explicitly provides a different folder name or path for the increment, prefer that path but keep the rule “a dedicated folder per increment”.
-
-   After saving (when file edits are supported):
-
-   - Tell the user the exact path where `increment.md` was written (for example `docs/increments/export-reports-to-csv/increment.md`).
-   - If writing the file failed, ensure the chat response still contains the full increment document content as Markdown (so it can be reviewed or copied if needed).
-
-9. **Final validation**
-
-   - Check that the increment:
-     - Has a clear job story.
-     - Tests one explicit assumption.
-     - Has 3–5 Gherkin-style acceptance criteria.
-     - States a concrete success signal.
-     - Includes an Out-of-Scope section.
-     - Includes **product-level** Implementation Guardrails (no branches/files).
-   - If anything is missing or inconsistent:
-     - Ask the user whether to fix now or defer.
-     - If fixing now, adjust the increment and re-validate.
+The end result should be a **product-level checklist** of outcomes that, when all true, mean this increment’s goal has been achieved.

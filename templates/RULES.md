@@ -163,7 +163,7 @@ A typical pattern (to be adapted per template):
   - Block progress waiting on answers to trivial or non‑critical questions.
 - Prefer:
   - “I’m unsure about X vs Y; which is closer to your intent?”  
-  over  
+    over  
   - “Answer these 20 generic questions about your project.”
 
 ---
@@ -193,9 +193,27 @@ A typical pattern (to be adapted per template):
 
 ---
 
-## 8. File Operations (when applicable)
+## 8. Optimize for DORA & Modern Software Engineering
 
-### R15. Write/update files only after confirmation
+### R15. DORA‑aligned practices
+
+- Templates SHOULD encourage:
+  - Small, frequent, and reversible changes.
+  - Strong automated feedback loops (tests, CI, linting, type checks).
+  - Clear deployment and rollback paths.
+  - Good observability (logging, metrics, traces where appropriate).
+  - Continuous learning through structured improvement and ADRs.
+- Where there are trade‑offs, prefer approaches that:
+  - Reduce **lead time for changes**.
+  - Lower **change failure rate**.
+  - Improve **mean time to restore (MTTR)**.
+  - Enable **higher deployment frequency** with confidence.
+
+---
+
+## 9. File Operations (when applicable)
+
+### R16. Write/update files only after confirmation
 
 - When a template includes file operations (e.g., writing `CONSTITUTION.md`, ADRs, design docs), the LLM MUST:
   - Only create or update files **after**:
@@ -213,11 +231,11 @@ A typical pattern (to be adapted per template):
 ## How to Use These Rules
 
 - When editing or adding a template under `templates/`:
-  - Ensure the template enforces or aligns with rules **R1–R15**.
+  - Ensure the template enforces or aligns with rules **R1–R16**.
   - Use this file as a checklist during reviews.
 
 - When validating a template:
   - You can ask:  
-    > “Run the shared RULES checklist (R1–R15) against `templates/<name>/*.md` and tell me where it violates or omits any rules.”
+    > “Run the shared RULES checklist (R1–R16) against `templates/<name>/*.md` and tell me where it violates or omits any rules.”
 
-This keeps all prompts in the 4dc repo consistent in how they handle scope, flow, clarifications, file changes, and final outputs.
+This keeps all prompts in the 4dc repo consistent in how they handle scope, flow, clarifications, file changes, DORA alignment, and final outputs.

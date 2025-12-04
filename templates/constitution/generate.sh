@@ -1,34 +1,39 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Directory of this script
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="${SCRIPT_DIR}/../.."
+# Simple helper to assemble the constitution prompt from template fragments.
+# Usage (from repo root):
+#   ./templates/constitution/generate.sh > create-constitution.prompt.md
+#
+# Or:
+#   ./templates/constitution/generate.sh
 
-OUTPUT_FILE="${ROOT_DIR}/create-constitution.prompt.md"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+TEMPLATES_DIR="${ROOT_DIR}/templates/constitution"
+OUT_FILE="${ROOT_DIR}/create-constitution.prompt.md"
 
-PARTS=(
-  "00-header.md"
-  "01-persona.md"
-  "02-inputs.md"
-  "03-task.md"
-  "04-output-structure.md"
-  "05-footer.md"
-)
+# If you want to write to stdout instead of a file, set WRITE_TO_STDOUT=1
+WRITE_TO_STDOUT="${WRITE_TO_STDOUT:-0}"
 
-echo "Generating ${OUTPUT_FILE} from templates/constitution parts..."
+generate() {
+  cat "${TEMPLATES_DIR}/00-header.md"
+  echo
+  cat "${TEMPLATES_DIR}/01-persona.md"
+  echo
+  cat "${TEMPLATES_DIR}/02-inputs.md"
+  echo
+  cat "${TEMPLATES_DIR}/03-goal.md"
+  echo
+  cat "${TEMPLATES_DIR}/04-task.md"
+  echo
+  cat "${TEMPLATES_DIR}/05-output-structure.md"
+  echo
+  cat "${TEMPLATES_DIR}/06-footer.md"
+}
 
-: > "${OUTPUT_FILE}"  # truncate output file
-
-for part in "${PARTS[@]}"; do
-  PART_PATH="${SCRIPT_DIR}/${part}"
-  if [[ ! -f "${PART_PATH}" ]]; then
-    echo "Warning: missing part ${PART_PATH}, skipping"
-    continue
-  fi
-  echo "" >> "${OUTPUT_FILE}"
-  cat "${PART_PATH}" >> "${OUTPUT_FILE}"
-  echo "" >> "${OUTPUT_FILE}"
-done
-
-echo "Done."
+if [ "$WRITE_TO_STDOUT" = "1" ]; then
+  generate
+else
+  generate > "$OUT_FILE"
+  echo "Wrote constitution prompt to: $OUT_FILE"
+fi

@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Generate the self-contained design.prompt.md from the template fragments.
+#
+# Usage (from repo root):
+#   ./templates/design/generate.sh > design.prompt.md
+#
+# Or:
+#   ./templates/design/generate.sh
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+TEMPLATES_DIR="${ROOT_DIR}/templates/design"
+OUT_FILE="${ROOT_DIR}/design.prompt.md"
+
+WRITE_TO_STDOUT="${WRITE_TO_STDOUT:-0}"
+
+generate() {
+  cat "${TEMPLATES_DIR}/00-frontmatter.md"
+  echo
+  cat "${TEMPLATES_DIR}/01-persona.md"
+  echo
+  cat "${TEMPLATES_DIR}/02-goal.md"
+  echo
+  cat "${TEMPLATES_DIR}/03-process.md"
+  echo
+  cat "${TEMPLATES_DIR}/04-acceptance.md"
+  echo
+  cat "${TEMPLATES_DIR}/05-output-and-examples.md"
+  echo
+  cat "${TEMPLATES_DIR}/06-glossary.md"
+}
+
+if [ "$WRITE_TO_STDOUT" = "1" ]; then
+  generate
+else
+  generate > "$OUT_FILE"
+  echo "Wrote design prompt to: $OUT_FILE"
+fi

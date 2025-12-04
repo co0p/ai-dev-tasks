@@ -1,66 +1,73 @@
-# Output Structure (Increment)
+## Output Structure
 
-You MUST:
-
-- Output only the increment specification document in Markdown, using the structure defined in this file.
-- NOT include any meta commentary about what you (the assistant) could do next (for example, "If you'd like, I can also add...", "Next, I can create...", "I can generate a workflow").
-- NOT include suggestions for additional files, CI workflows, or other automation tasks inside the increment.
-- NOT mention branches, pull requests, or any git operations.
-- NOT list or propose specific files, modules, packages, or dependencies to add/modify/delete.
-
-Note: This increment document defines **product scope and intent only**. It must stay implementation-agnostic:
-
-- No branches.
-- No file paths.
-- No specific dependencies or code structures.
-
-Return the result as **Markdown** with the following structure:
+The generated increment definition MUST follow this structure:
 
 ```markdown
-# [Increment Title]
+# Increment: <Short, Product-Friendly Title>
 
-## Job Story
-**When** [situation]  
-**I want to** [action]  
-**So I can** [outcome]
+## Context
 
-**Assumption Being Tested:** [Specific hypothesis for this increment]
+- Brief description of the current situation or problem from a user/business perspective.
+- Any important background:
+  - Existing behavior or limitation.
+  - Links to relevant design docs, ADRs, or previous increments.
+- Key constraints or assumptions (time, scope, risk tolerance, etc.).
 
-## Acceptance Criteria
-- **Given** [precondition]  
-  **When** [action]  
-  **Then** [observable outcome]
-- **Given** [another precondition]  
-  **When** [action]  
-  **Then** [observable outcome]
-- **Given** [error condition]  
-  **When** [action]  
-  **Then** [error handling outcome]
-<!-- Additional scenarios as needed, keeping total criteria typically between 3–5. -->
+## Goal
 
-## Success Signal
-[How we know this increment works – a metric or concrete observation]
+- Outcome / hypothesis:
+  - What will be different for users, customers, or the business after this increment?
+- Scope:
+  - What this increment will do.
+- Non-goals:
+  - What this increment explicitly will *not* address.
+- Why this is a good, small increment:
+  - Small, coherent, and evaluable.
 
-## Out of Scope
-- [What this increment does NOT include to keep focus tight]
+## Tasks
 
-## Implementation Guardrails
+- A product-level checklist of tasks, each including:
+  - Task: outcome-level description (WHAT should be true).
+  - User/Stakeholder Impact: who is affected and how.
+  - Acceptance Clues: observable signs that this task is complete.
+- Tasks MUST describe **WHAT**, not technical HOW.
 
-[Short, product-level guidance for engineers implementing this increment.]
+## Risks & Assumptions
 
-- **Scope discipline:** If implementation work requires touching parts of the system clearly outside this increment’s acceptance criteria, STOP and:
-  - Call out the scope drift, and
-  - Propose either a small adjustment to this increment or a follow-up increment.
-- **Traceability:** Implementation work should map back clearly to:
-  - The job story,
-  - The assumption being tested, and
-  - The acceptance criteria defined above.
-- **Validation-first mindset:** Prefer implementation approaches that make it easy to:
-  - Observe whether the assumption holds, and
-  - Verify each acceptance criterion with tests or explicit manual checks.
+- Known risks (user impact, product fit, rollout concerns).
+- Key assumptions that, if wrong, could change the plan.
+- High-level mitigations where appropriate (still in outcome language).
 
-You MUST NOT in this section:
+## Success Criteria & Observability
 
-- Mention branches, pull requests, or any git workflow details.
-- List specific files, folders, modules, or external dependencies.
-- Describe concrete code-level implementation steps.
+- How we will know this increment is successful:
+  - Changes in metrics, events, or user behavior.
+  - Evidence we plan to look at after release.
+- What we will observe after release:
+  - Which dashboards, logs, or reports we’ll look at.
+  - Any simple checks in staging/production to confirm behavior.
+
+## Process Notes
+
+- High-level notes about **how this increment will move through the workflow**, without prescribing technical steps:
+  - It should be implemented via small, safe changes.
+  - It should go through the normal CI/CD pipeline.
+  - It should be rolled out in a way that allows quick recovery if needed.
+- Detailed technical planning and implementation belong in:
+  - `design.md` (technical approach).
+  - `implement.md` (execution plan).
+
+## Follow-up Increments (Optional)
+
+- Brief descriptions of potential future increments that:
+  - Extend this outcome.
+  - Address related but out-of-scope work.
+  - Further improve performance, reliability, or user experience.
+```
+
+The final output MUST:
+
+- Use the headings above in this order.
+- Fill each section with project-specific content based on the provided context and increment description.
+- Avoid references to prompts, LLMs, or assistants.
+- Keep “Tasks” focused on WHAT, leaving the HOW to later phases.

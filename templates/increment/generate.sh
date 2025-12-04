@@ -1,36 +1,40 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Generate a self-contained increment.prompt.md at the repo root
-# by concatenating the increment template parts in a defined order.
+# Generate the self-contained increment.prompt.md from the template fragments.
+#
+# Usage (from repo root):
+#   ./templates/increment/generate.sh > increment.prompt.md
+#
+# Or:
+#   ./templates/increment/generate.sh
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-TEMPLATES_DIR="$ROOT_DIR/templates/increment"
-OUT_FILE="$ROOT_DIR/increment.prompt.md"
+TEMPLATES_DIR="${ROOT_DIR}/templates/increment"
+OUT_FILE="${ROOT_DIR}/increment.prompt.md"
 
-echo "Generating $OUT_FILE from templates in $TEMPLATES_DIR"
+# If you want to write to stdout instead of a file, set WRITE_TO_STDOUT=1
+WRITE_TO_STDOUT="${WRITE_TO_STDOUT:-0}"
 
-PARTS=(
-  "00-header.md"   # optional: YAML frontmatter for IDEs
-  "01-persona.md"
-  "02-inputs.md"
-  "03-goal.md"
-  "04-task.md"
-  "05-process.md"
-  "06-output-structure.md"
-)
+generate() {
+  cat "${TEMPLATES_DIR}/00-header.md"
+  echo
+  cat "${TEMPLATES_DIR}/01-persona.md"
+  echo
+  cat "${TEMPLATES_DIR}/02-inputs.md"
+  echo
+  cat "${TEMPLATES_DIR}/03-goal.md"
+  echo
+  cat "${TEMPLATES_DIR}/04-task.md"
+  echo
+  cat "${TEMPLATES_DIR}/05-process.md"
+  echo
+  cat "${TEMPLATES_DIR}/06-output-structure.md"
+}
 
-: > "$OUT_FILE"  # truncate output file
-
-for part in "${PARTS[@]}"; do
-  PART_PATH="$TEMPLATES_DIR/$part"
-  if [[ -f "$PART_PATH" ]]; then
-    echo "Appending $part"
-    cat "$PART_PATH" >> "$OUT_FILE"
-    echo -e "\n" >> "$OUT_FILE"
-  else
-    echo "Skipping missing $part"
-  fi
-done
-
-echo "Done. Generated $OUT_FILE"
+if [ "$WRITE_TO_STDOUT" = "1" ]; then
+  generate
+else
+  generate > "$OUT_FILE"
+  echo "Wrote increment prompt to: $OUT_FILE"
+fi

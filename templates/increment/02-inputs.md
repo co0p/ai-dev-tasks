@@ -1,99 +1,72 @@
-# Inputs and Scope (Increment)
+## Inputs
 
-You will be given:
+The increment MUST be grounded in:
 
-- A **prompt argument** that MUST contain a short description or user story for the next increment.  
-  Examples:
-  - “As a user, I want to export my reports to CSV so I can analyze them offline.”
-  - “Add a breaks reminder after 4 completed Pomodoros.”
-- The repository contents as exposed by the tools that call you.
-- A **project root path argument** that identifies the TARGET project within this repository (for example `"."` or `"examples/pomodoro"`).
-- Any project-level guidance documents that exist in that target root (for example: `CONSTITUTION.md`, `ARCHITECTURE.md`, `PRINCIPLES.md`).
-- The project’s root `README.md`, if present.
-- Any answers the user provides during this interaction.
+1. **The project at the provided root path**
 
-## 1. Handling the prompt argument (mandatory)
+   The executing LLM MUST:
 
-- You MUST treat the prompt argument as required:
-  - If it clearly describes a desired change or user story, treat it as the **initial increment idea**.
-  - If it is missing, empty, or clearly not describing a change or story:
-    - STOP and ask the user for a one- or two-sentence description or user story for the desired increment.
-    - Do not proceed with the increment process until you have such a description.
+   - Treat the path argument as the **subject project root**.
+   - Within that scope, locate:
+     - `CONSTITUTION.md` (if present) – this is the primary “WHY” and quality bar.
+     - The main description artifact (e.g. `README.md`).
+     - Any existing `design.md`, `implement.md`, `improve.md`, ADRs, or similar docs.
+   - Infer:
+     - What the product currently does and for whom.
+     - Key constraints (technical, legal, operational).
+     - Existing delivery practices (e.g. CI/CD, testing, release cadence).
 
-- You SHOULD:
-  - Rephrase the argument into your own clear summary early in the interaction.
-  - Use clarifying questions later to refine details, not to invent a completely new direction.
+2. **The increment description from the user**
 
-## 2. Project root and high-level context
+   The user will provide a **short increment description** that may include:
 
-Use the project root path argument as the anchor for *this* project:
+   - A **problem statement** (what’s wrong or missing for users/business).
+   - A **desired outcome** (what should be possible after this change).
+   - Any **constraints** (timing, risk level, dependencies, etc.).
 
-- Look in the **project root directory** (the directory referenced by the project root path argument) for:
-  - `README.md` — high-level product and user context.
-  - `CONSTITUTION.md` — principles, constraints, trade-offs (when present).
-  - Architecture / principles docs (for example `ARCHITECTURE.md`, `PRINCIPLES.md`).
-- Use these documents to understand:
-  - What the project is for.
-  - Who it serves.
-  - Any stated principles, constraints, or non‑negotiables that should shape this increment.
+   The LLM MUST:
 
-If these documents are missing or incomplete, ask the user a small number of targeted questions to clarify only what you need to define a good increment.
+   - Treat this as **product intent**, not a fixed technical solution.
+   - Resolve ambiguity by:
+     - Asking targeted clarifying questions if critical information is missing.
+     - Narrowing or splitting the idea into **one primary outcome** for this increment, plus optional follow-ups.
 
-## 3. Existing increments, PRDs, and design docs
+3. **Alignment with the Constitution**
 
-You MUST actively look for **existing work that might shape this increment**, especially:
+   If `CONSTITUTION.md` is present, the LLM MUST:
 
-- **Increment specs / PRDs** such as:
-  - Files under `docs/increments/` (for example `docs/increments/*/increment.md`).
-  - Other increment-like documents under `docs/` that match the project’s conventions (for example `docs/*increment*.md`, `docs/prd-*.md`).
-- **UI / UX design docs** such as:
-  - `docs/ui/`, `docs/ux/`, `docs/design/` folders.
-  - Files with names like `*-ui.md`, `*-ux.md`, `*-design.md`, or `ui-spec*.md`.
+   - Respect:
+     - Values & principles (e.g. small changes, reliability, observability).
+     - Delivery & testing expectations.
+     - Any explicit “do not do” constraints.
+   - Ensure the increment:
+     - Does **not** contradict explicit values (e.g. no “big bang” if the constitution favors small steps).
+     - Moves the project **toward** the constitution’s ideal behaviors.
 
-You MUST:
+4. **Context from recent work (optional but recommended)**
 
-- Scan these locations relative to the project root:
-  - `docs/increments/` (all subfolders and `increment.md` files).
-  - Other `docs/` subdirectories that appear to hold PRDs or design artifacts.
-- Use these documents to answer questions such as:
-  - Has a similar increment already been defined?
-  - Are there conventions for how increments are named and structured?
-  - Are there existing UI flows or patterns this increment should follow?
+   If available, the LLM SHOULD consider:
 
-You MUST NOT:
+   - Recent increments and `improve.md` documents.
+   - ADRs relevant to the product area.
+   - Open issues or TODOs in the repo.
 
-- Duplicate an existing increment without calling out the overlap.
-- Redefine a feature that is already fully specified without highlighting the conflict.
-- Ignore obvious dependencies or sequencing implied by existing increments or design docs.
+   This helps avoid:
 
-## 4. Code and implementation structure
+   - Duplicating existing work.
+   - Proposing increments that conflict with recent decisions.
+   - Ignoring known risks or pitfalls.
 
-From subdirectories under the project root (for example `src/`, `lib/`, `app/`, `services/`, `tests/`):
+5. **DORA / Modern Software Engineering Orientation**
 
-- Treat code, tests, and internal docs as **implementation context**, not as product copy.
-- Use them to:
-  - Understand which modules or boundaries an increment might touch.
-  - See how similar capabilities are implemented and tested.
+   The increment MUST be designed so that it is:
 
-You MUST NOT:
-
-- Replace the product description with text from code comments.
-- Infer entirely new product directions from internal implementation details.
-- Extract or list specific file paths or modules as “planned changes” in this increment document.
-
-## 5. Files outside the project root
-
-- Files **outside** the project root path belong to other projects, tooling, or frameworks.
-- You may look at them to understand general engineering style and conventions, but you MUST NOT:
-  - Treat them as the subject of this increment.
-  - Copy their product descriptions into this project’s increment.
-  - Mention the host/framework repo name (for example `4dc`) in the increment, unless it is an explicit runtime dependency of this project.
-
-## 6. When context is missing or conflicting
-
-If important context is missing or conflicting (for example, no increments exist yet, UI docs are outdated, or multiple PRDs disagree):
-
-- Ask the user a **small number of targeted questions** to clarify:
-  - Whether similar work is already in progress.
-  - Whether there is an existing PRD or design they want this increment to follow.
-- Make your assumptions explicit in the increment when they materially affect scope or acceptance criteria.
+   - **Small** – something a team can realistically complete and ship soon.
+   - **Testable** – success can be checked via tests, metrics, or clear behaviors.
+   - **Releasable** – does not require special one-off processes or risky coordination.
+   - **Observable** – we can see its impact (or lack of impact) after release.
+   - **Aligned** with improving:
+     - Lead time from idea to production.
+     - Deployment frequency.
+     - Change failure rate.
+     - Mean time to recover (MTTR) when things go wrong.
