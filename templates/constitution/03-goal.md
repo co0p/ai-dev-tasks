@@ -1,66 +1,51 @@
 ## Goal
 
-Define the **goal of the Project Constitution**: why it exists and what it should achieve for this specific project.
+The goal of this prompt is to generate or update a **Project Constitution** for the subject project that:
 
-The LLM MUST:
+1. **Accurately Describes the Scoped Project**
 
-1. **Describe the Purpose of the Constitution**
+   - Is grounded in:
+     - The files and structure under the given directory path.
+     - Existing documentation found there (e.g. `README.md`, ADRs, design notes).
+     - Current CI/CD and operational practices visible there.
+   - Clearly explains:
+     - What the system or component is and who it serves.
+     - High-level constraints (technical, regulatory, operational) relevant to this scope.
 
-   - Explain, in project-specific terms:
-     - Why this project needs a constitution.
-     - What kinds of decisions and trade-offs it is meant to guide.
-     - How it will help the team build and operate the system over time.
+2. **Defines Values, Principles, and Guardrails**
 
-   - Emphasize that the constitution:
-     - Is the **source of shared values and principles** for the project.
-     - Sets the **quality bar** for design, implementation, and operations.
-     - Frames **how increments, designs, implementations, and improvements** should be shaped.
+   - Expresses a clear set of **values and principles** that guide:
+     - How changes are sized and delivered.
+     - How quality is maintained (testing and CI).
+     - How reliability and operability are treated.
+     - How architectural decisions are made and captured.
+   - Provides **guardrails**, not micromanagement:
+     - Boundaries for architecture and dependencies.
+     - Expectations for introducing new technologies or patterns.
+     - Guidelines for handling technical debt and refactoring.
 
-2. **Anchor the Constitution in Outcomes (DORA / Modern SE)**
+3. **Supports Modern Software Engineering and DORA Outcomes**
 
-   - State that the constitution aims to support **modern software engineering outcomes**, such as:
-     - **High deployment frequency** (we can ship often and safely).
-     - **Short lead time for changes** (ideas become running code quickly).
-     - **Low change failure rate** (changes rarely cause visible problems).
-     - **Fast mean time to recover (MTTR)** (when something goes wrong, we can restore service quickly).
+   - Encourages practices that lead to:
+     - **High deployment frequency**.
+     - **Short lead time for changes**.
+     - **Low change failure rate**.
+     - **Fast mean time to restore (MTTR)**.
+   - Does this in a way that is realistic for the scoped project’s current context and constraints.
 
-   - Connect these outcomes to:
-     - The project’s domain (why speed, safety, and learning matter here).
-     - The team’s ambitions and constraints.
+4. **Guides All Subsequent 4DC Phases**
 
-3. **Clarify the Scope of the Constitution**
+   - Serves as the **“WHY” and system of values** that:
+     - Increments (`increment.md`) must align with (WHAT to do next).
+     - Designs (`design.md`) must respect (HOW to change the system).
+     - Implementations (`implement.md`) must uphold (DO phase).
+     - Improvements (`improve.md`, ADRs) refer back to when adjusting practices.
+   - Is stable enough to be a reference, but can be revised deliberately when needed.
 
-   - Define what the constitution **does** and **does not** cover, for example:
-     - It **does** cover:
-       - Engineering values and principles.
-       - Expectations around testing, CI/CD, observability, and reliability.
-       - Architectural guardrails and decision-making habits (e.g. ADRs).
-     - It **does not** specify:
-       - Detailed technical designs for particular features.
-       - Day-to-day task breakdowns or sprint planning mechanics.
+5. **Is Concise, Readable, and Actionable**
 
-   - Make it clear that:
-     - The constitution informs **all subsequent artifacts** (increment, design, implement, improve).
-     - It is **not** a replacement for those artifacts.
+   - Can be read end‑to‑end in a few minutes.
+   - Uses concrete, evaluable statements (e.g. “we run tests before merging”).
+   - Avoids vague platitudes; teams should be able to say “yes” or “no” to whether they follow it.
 
-4. **Explain How the Constitution Will Be Used**
-
-   - Describe how the team is expected to:
-     - Refer to it when defining increments (WHAT).
-     - Use it as a constraint and reference when designing solutions (HOW).
-     - Treat it as a quality bar when implementing and deploying changes.
-     - Revisit it during improvement and learning activities.
-
-   - Emphasize that:
-     - The constitution should be **read and understood by the whole team**.
-     - It is intended to be **practical and actionable**, not just aspirational text.
-
-5. **Position It as Living but Stable**
-
-   - Clarify that:
-     - The constitution is **stable** enough to provide a consistent foundation.
-     - It can evolve **deliberately** when the system, team, or constraints change.
-   - Mention that:
-     - Significant changes to the constitution SHOULD be accompanied by:
-       - An ADR, or
-       - A clearly documented rationale.
+The **goal** is the existence of such a `CONSTITUTION.md` for the scoped project—accurate, DORA‑aligned, and practically useful in guiding daily decisions.

@@ -1,241 +1,116 @@
-# Shared Prompt Rules for 4dc Templates
+# 4dc Prompt Authoring Guide (Flat Rules)
 
-These rules apply to **all** 4dc templates (constitution, increment, design, implement, improve, etc.).  
-They describe how the executing LLM must use context, follow the defined flow, and shape its outputs.
+Use this file as a checklist when **authoring or editing prompts and templates** for 4dc.
 
-You can treat this file as a **checklist** when editing templates.
-
----
-
-## 1. Scope & Target Context
-
-### R1. Clearly define the target scope
-
-- The template MUST define a **target scope argument** (for example: project root path, service name, file path, or similar).
-- The executing LLM MUST:
-  - Treat this target scope as the **only subject** of the prompt.
-  - Use content **inside that scope** for:
-    - Problem or product description.
-    - Code / architecture understanding.
-    - Constraints and non‑negotiables.
-  - Treat content **outside that scope** as:
-    - Tooling, frameworks, or background material.
-    - NEVER as the primary subject of the prompt.
-
-### R2. Separate subject from host/framework
-
-- When the subject project/code lives **inside** a larger framework or mono‑repo, the LLM MUST:
-  - Treat the inner project as the **subject**.
-  - Treat the surrounding repo (framework, prompts, examples) as **tooling/background only**.
-- The final outputs MUST NOT:
-  - Describe or name the host/framework repo (e.g., “4dc”, prompt infrastructure) **unless**:
-    - It is an explicit runtime dependency of the subject, or
-    - It is a deliberate and relevant part of the subject’s architecture or domain.
+Each rule describes how prompts should be structured so that runtime LLMs behave consistently.  
+Prompts themselves MUST be **self-contained** (no dependency on this file at runtime).
 
 ---
 
-## 2. Context Inference
+1. **Each prompt must define a clear target scope.**  
+   - Prompts MUST take an explicit argument that identifies the subject project or component (e.g. a directory path).
+   - The instructions MUST say that this scope is the **subject** of the prompt.
 
-### R3. Primary description source
+2. **Prompts must constrain the LLM to that scope when reading files.**  
+   - Instructions MUST tell the LLM to:
+     - Read only files and directories **inside** the given path.
+     - NOT rely on content from parent directories, sibling projects, or other repositories as primary context.
+   - Surrounding repo content (frameworks, vendor dirs, examples) MAY be mentioned only as background, never as the subject.
 
-- The template MUST identify a **primary description artifact** (for example, a root `README.md`, main spec file, or top‑level doc for the scope).
-- The LLM MUST:
-  - Use this artifact as the **authoritative source** of:
-    - What the subject is.
-    - Who it serves.
-    - High‑level goals.
-  - NOT merge multiple unrelated descriptions (e.g., test/example READMEs) into a single product/system description.
+3. **Prompts must be self-contained.**  
+   - A generated `.prompt.md` MUST contain **all information the LLM needs at runtime**.
+   - It MUST NOT:
+     - Reference `RULES.md`.
+     - Assume knowledge of other prompts.
+     - Tell the LLM to “see another file” for essential rules.
 
-### R4. Supporting artifacts
+4. **No cross-prompt references for behavior.**  
+   - Prompts MUST NOT say:
+     - “Follow the same rules as the design prompt.”
+     - “See the constitution prompt for STOP behavior.”
+   - If shared behavior is needed (e.g., STOP gates, scoping), it MUST be restated briefly in each prompt that needs it.
 
-- Supporting artifacts (architecture docs, ADRs, workflows, tests, code) MAY be used to infer:
-  - Architecture and design intent.
-  - Engineering practices and conventions.
-  - Non‑functional constraints (performance, reliability, security, etc.).
-- They MUST be treated as **refinements** of the primary description, not as separate, competing products.
+5. **Every main-phase prompt must include a human-in-the-loop flow.**  
+   - Constitution, Increment, Design, Implement, and Improve prompts MUST:
+     - Include at least two explicit STOP points.
+     - STOP 1: After summarizing findings/context.
+     - STOP 2: After summarizing proposed decisions/plan or outline.
+   - The LLM MUST be instructed to:
+     - Wait for user feedback at STOP 1.
+     - Wait for explicit “yes” at STOP 2 before writing final artifacts.
 
----
+6. **Prompts must tell the LLM to write artifacts only after explicit confirmation.**  
+   - Instructions MUST say:
+     - Do NOT write or overwrite the target artifact before STOP 2 approval.
+     - Only generate the final document after an explicit “yes / go ahead / looks good”.
+   - If the user says “no” or asks for changes:
+     - The LLM must update the outline and re-ask for confirmation.
 
-## 3. Internal Notes & Reasoning
+7. **Final artifacts must not mention prompts or assistants.**  
+   - Prompts MUST instruct the LLM that:
+     - Output artifacts (e.g. `CONSTITUTION.md`, `increment.md`, `design.md`) MUST NOT:
+       - Mention prompts, LLMs, or assistants.
+       - Contain meta-comments about how they were generated.
+   - Artifacts must read as if written directly by the team.
 
-### R5. Maintain internal working notes
+8. **Final artifacts must follow a clear, fixed structure.**  
+   - Each prompt MUST define a specific output structure (headings/sections or a schema).
+   - Instructions MUST tell the LLM to:
+     - Produce all required sections.
+     - Not add unrelated top-level sections.
+   - Optional extensions must be explicitly allowed if needed.
 
-- The LLM SHOULD maintain internal notes such as:
-  - Subject context (domain, users, goals).
-  - Values/priorities and constraints.
-  - Existing practices & examples.
-  - Known non‑negotiables.
-- These notes MUST be used to:
-  - Drive clarifying questions.
-  - Shape the plan or outline.
-  - Inform the final output.
-- Unless a template explicitly asks to expose them, these notes MUST NOT be shown as raw placeholders or “internal note” sections in the final output.
+9. **Prompts may define acceptance criteria for the artifact.**  
+   - It is recommended to include an “Acceptance” section in templates that says:
+     - When an artifact is considered “good enough”.
+     - What must be true for scope, alignment with goals, and clarity.
+   - Acceptance criteria MUST be written in terms of the **artifact**, not the assistant.
 
----
+10. **Prompts must describe persona and style briefly and concretely.**  
+    - Each prompt SHOULD define:
+      - A clear persona (e.g. Principal Engineer, Product Manager).
+      - A concise style (direct, outcome-oriented, no fluff).
+    - Persona/style text SHOULD be short and specific, not pages of prose.
 
-## 4. Mandatory Execution Cycle
+11. **Prompts should separate goal (WHAT) from task/process (HOW).**  
+    - Each main-phase template SHOULD:
+      - Have a section that explains the **Goal** (what artifact we want and why).
+      - Have a section that explains the **Task/Process** (how the LLM should behave step-by-step).
+    - The Goal SHOULD be understandable without reading the Task; the Task SHOULD operationalize the Goal.
 
-### R6. Follow the defined cycle exactly
+12. **Prompts should require focused, minimal clarifying questions.**  
+    - Instructions SHOULD tell the LLM to:
+      - Ask **targeted** clarifying questions only when critical information is missing or ambiguous.
+      - Avoid long generic questionnaires.
+    - Questions SHOULD mostly appear between STOP 1 and STOP 2.
 
-Each template defines a specific cycle (for example, for constitution:  
-**infer → clarify → plan → confirm → write**).
+13. **Prompts must keep the focus on the subject project, not the framework.**  
+    - Instructions MUST emphasize:
+      - The subject is the project/component under the given path.
+      - The hosting repo, 4dc itself, or other tooling is NOT the subject unless explicitly part of the domain.
+    - Any mention of frameworks or 4dc should be minimal and only when relevant to the project’s architecture.
 
-- The LLM MUST:
-  - Identify the cycle steps defined in that template.
-  - Follow them **in the given order**.
-  - NOT reorder, fuse, or omit steps, **unless** the template explicitly allows it.
+14. **Prompts should be concise and opinionated, not verbose and vague.**  
+    - Templates SHOULD:
+      - Prefer concise, concrete rules over long, generic explanations.
+      - State clear defaults and recommended practices.
+    - Avoid:
+      - “It depends” without guidance.
+      - Huge walls of text for persona or style.
 
-A typical pattern (to be adapted per template):
-
-1. **Infer** – scan the allowed context and build internal understanding.
-2. **Clarify** – present a short summary; ask targeted questions if needed.
-3. **Plan** – propose a brief, human‑readable plan or outline.
-4. **Confirm (STOP)** – ask for explicit confirmation (`yes`/`no` or equivalent).
-5. **Execute** – after confirmation, perform the requested generation/change exactly as planned (accounting for any agreed adjustments).
-6. **Report** – confirm what was done (files written/updated, key decisions).
-
-### R7. Respect STOP gates and confirmations
-
-- Templates MAY define explicit **STOP** points.
-- At each STOP point, the LLM MUST:
-  - Present the requested summary/plan/outline.
-  - Ask the user for an explicit **yes/no** (or equivalent) confirmation.
-- If the user answers **no**:
-  - The LLM MUST ask what should be changed.
-  - Update the plan accordingly and re‑present it.
-- If the user answers **yes**:
-  - The LLM MUST proceed to the execution phase.
-- The LLM MUST NOT:
-  - Silently advance past a STOP gate without explicit confirmation.
-  - Perform file‑writing or irreversible changes before receiving a clear **yes**.
-
----
-
-## 5. Output Content Constraints
-
-### R8. No meta‑assistant chatter in final artifacts
-
-- Final artifacts (e.g., `CONSTITUTION.md`, increment definitions, design docs, ADRs) MUST:
-  - Read as standalone documents for humans.
-  - NOT refer to themselves as “generated by an assistant” or “this prompt”.
-- They MUST NOT contain:
-  - “If you’d like, I can also…”
-  - “Next, I can create…”
-  - “I can generate a workflow / ADR for you…”
-  - Any discussion of what the assistant *could* do next.
-
-### R9. No additional suggestions or tasks inside artifacts
-
-- The body of the artifact MUST NOT include:
-  - Assistant‑offered actions (e.g., “I can create CI for you now”).
-  - Proposals to create other files, workflows, or tickets.
-  - Checklists of tasks for the assistant itself.
-- It IS acceptable to describe **project responsibilities and processes** (e.g., “We record ADRs when…”), as long as they are framed as team/project behavior, not assistant behavior.
-
-### R10. Keep outputs within the defined structure
-
-- Each template defines an expected output structure (headings, sections, or JSON shape).
-- The final output MUST:
-  - Match this structure.
-  - Include all required sections/fields.
-- The LLM MUST NOT:
-  - Add new top‑level sections that the template did not ask for.
-  - Omit required sections.
-- If the template explicitly allows extensions, the LLM MAY extend only in those allowed places.
+15. **Prompts must not ask the LLM to perform file I/O beyond what the host can handle.**  
+    - If the environment supports file writes:
+      - Prompts MUST still respect STOP 2 before writing.
+    - If the environment is read-only:
+      - Prompts must talk about generating content, not actually writing files.
 
 ---
 
-## 6. Clarifying Questions
+When you (the human author) or a meta-assistant edits templates:
 
-### R11. Ask clarifying questions when needed
-
-- If critical information is missing, ambiguous, or conflicting, the LLM MUST:
-  - Ask **specific, targeted** clarifying questions.
-  - Use questions primarily for:
-    - Non‑negotiables and constraints.
-    - Priorities when trade‑offs conflict.
-    - Ambiguities in the subject description or goals.
-
-### R12. Don’t over‑ask
-
-- The LLM MUST NOT:
-  - Ask long, unfocused questionnaires.
-  - Block progress waiting on answers to trivial or non‑critical questions.
-- Prefer:
-  - “I’m unsure about X vs Y; which is closer to your intent?”  
-    over  
-  - “Answer these 20 generic questions about your project.”
-
----
-
-## 7. Style & Focus
-
-### R13. Subject‑focused, not tool‑focused
-
-- The LLM MUST keep the focus on **the project/problem/domain**, not on:
-  - The prompt system.
-  - The hosting framework repo.
-  - The assistant itself.
-- Tools/frameworks MAY be mentioned only when:
-  - They are important to the architecture or workflow, or
-  - The template explicitly requests such details.
-
-### R14. Opinionated but clear
-
-- Outputs SHOULD be:
-  - Clear and succinct.
-  - Explicit about trade‑offs and default choices (e.g., speed vs safety).
-- The LLM SHOULD avoid:
-  - Purely hedged answers like “it depends” without guidance.
-- Where appropriate, the LLM SHOULD provide:
-  - Concrete decision rules.
-  - Clear defaults and when to override them.
-
----
-
-## 8. Optimize for DORA & Modern Software Engineering
-
-### R15. DORA‑aligned practices
-
-- Templates SHOULD encourage:
-  - Small, frequent, and reversible changes.
-  - Strong automated feedback loops (tests, CI, linting, type checks).
-  - Clear deployment and rollback paths.
-  - Good observability (logging, metrics, traces where appropriate).
-  - Continuous learning through structured improvement and ADRs.
-- Where there are trade‑offs, prefer approaches that:
-  - Reduce **lead time for changes**.
-  - Lower **change failure rate**.
-  - Improve **mean time to restore (MTTR)**.
-  - Enable **higher deployment frequency** with confidence.
-
----
-
-## 9. File Operations (when applicable)
-
-### R16. Write/update files only after confirmation
-
-- When a template includes file operations (e.g., writing `CONSTITUTION.md`, ADRs, design docs), the LLM MUST:
-  - Only create or update files **after**:
-    - Presenting a plan/summary of what will be written.
-    - Receiving explicit user confirmation (e.g. “yes”).
-- Once confirmed, the LLM MUST:
-  - Use the exact target path defined by the template (such as project root or ADR directory).
-  - Create or overwrite files as specified.
-- After writing, the LLM MUST:
-  - Inform the user which files were written/updated.
-  - Include the exact paths.
-
----
-
-## How to Use These Rules
-
-- When editing or adding a template under `templates/`:
-  - Ensure the template enforces or aligns with rules **R1–R16**.
-  - Use this file as a checklist during reviews.
-
-- When validating a template:
-  - You can ask:  
-    > “Run the shared RULES checklist (R1–R16) against `templates/<name>/*.md` and tell me where it violates or omits any rules.”
-
-This keeps all prompts in the 4dc repo consistent in how they handle scope, flow, clarifications, file changes, DORA alignment, and final outputs.
+- Use this flat list as a **checklist**.
+- Ensure each `.prompt.md`:
+  - Has clear scoping instructions in its Inputs section (Rules 1–2).
+  - Is self-contained and stop-gated (Rules 3–7).
+  - Defines structure, persona, and goal/process cleanly (Rules 8–11).
+  - Encourages focused clarifications and subject focus (Rules 12–14).

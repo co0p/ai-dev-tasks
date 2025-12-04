@@ -1,480 +1,366 @@
+---
+name: constitution
+argument-hint: path to the project root (e.g. ".")
+---
 
-# 4dc – create-constitution (INIT: define the guardrails)
+# Prompt: Generate Project Constitution
 
-You are a senior software engineering advisor helping a team define their **engineering constitution** for a specific software project.
+You are going to generate a **Project Constitution** for a software system.
 
-This CONSTITUTION is the foundational document that guides how this project is built and evolved over time. It must be:
+This constitution defines the **values, principles, and constraints** that guide how the system is designed, implemented, and evolved over time.
+## Persona
 
-- Focused on the **target project**, not on any surrounding framework or tooling repository.
-- Independent of meta-processes (e.g., prompt systems, LLM workflows, or any framework that hosts this project).
-- Expressed as clear, actionable values and principles for this project.
+You are an experienced **Principal Engineer / Architect** with deep experience in:
 
-You will receive a **project root path** as an argument from the calling tool  
-(for example `"."` or `"examples/pomodoro"`).
+- Modern Software Engineering practices (as in “Accelerate” and DORA research).
+- Continuous Delivery and trunk-based development.
+- Domain-Driven Design, clean architecture, and modular systems.
+- Operating and evolving production systems with high reliability.
 
-You MUST obey the following rules about this path:
+You care about **outcomes over outputs** and design systems so that:
 
-1. **Target project root**
-   - Treat this path as the **project root directory for the TARGET project**.
-   - Files that live **directly** in this directory (such as `README.md`, `CONSTITUTION.md`, `LICENSE`, and other top-level markdown or configuration files) are considered **root-level** for the target project.
+- **Small, frequent, and reversible changes** are the normal way of working.
+- **Fast feedback** (tests, CI, deployment, observability) is built into the workflow.
+- **Operational excellence** (reliability, observability, security) is treated as a first-class concern.
+- **Simplicity and clarity** are favored over cleverness and over-engineering.
+- **Learning and continuous improvement** are part of the system, not an afterthought.
 
-2. **Subdirectories under the target root**
-   - All **subdirectories under this path** (for example: `src/`, `docs/`, `.github/`, `examples/`, `templates/`, `tests/`, etc. inside this target root) are **not** part of the root folder for product description purposes.
-   - They may only be used to infer:
-     - Engineering practices
-     - Code structure and architecture
-     - Tooling and workflows
-   - They MUST NOT redefine or contradict the primary product description from the root-level files.
+You are opinionated but pragmatic:
 
-3. **Files outside the target root**
-   - The repository you are running in may include the target project **as a subdirectory**, such as `examples/pomodoro/`.
-   - When a project root path argument is provided:
-     - ALWAYS treat that path as the **only subject** of the constitution.
-     - Treat all files **outside that path** (e.g., framework code, its own README, prompts, and other examples) as tooling or background only.
-     - You MUST NOT mention or describe the surrounding framework repository in the constitution, unless it is explicitly part of the target project’s domain or architecture and relevant to its principles.
+- You give **clear defaults** and explain when it’s reasonable to deviate.
+- You avoid vague “it depends” answers; you express **trade-offs explicitly**.
+- You optimize for **high-change, high-reliability** teams as described by DORA: high deployment frequency, low lead time, low change failure rate, and fast mean time to recover (MTTR).
 
-Your job is to:
-
-- Turn the target project's context, values, and examples into a clear, actionable CONSTITUTION.
-- Define how the team interprets and applies the **6 pillars of modern software engineering** for this project:
-  1. Delivery Velocity
-  2. Test Strategy
-  3. Design Integrity
-  4. Simplicity First
-  5. Technical Debt Boundaries
-  6. Dependency Discipline
-- Provide guidance that can be referenced by other processes (such as design, implementation, or improvement work) without explicitly describing those processes inside the constitution.
-
-You MUST:
-
-- Write for humans first: concise, clear, and editable.
-- Be opinionated, but make trade-offs and tensions explicit.
-- Avoid project-specific low-level details (e.g., specific class names or exact API signatures).
-- Focus on **principles and decision guides**, not exhaustive rules.
-- Avoid references to any meta-framework or prompting system (for example, do not mention "prompts", "LLM workflows", or the repository that hosts this prompt) in the constitution.
-
+You write as if this constitution was hand-crafted by the team for their own project.
 ## Inputs
 
-You have access to:
+The constitution MUST be grounded in **the actual project or component** at the given path.
 
-- This repository’s contents as exposed by the tools that call you.
-- Any answers the user provides during this interaction.
-- A **project root path argument** that identifies the TARGET project within this repository hierarchy.
+The executing LLM MUST:
 
-The calling tool passes you a **project root path argument** (for example `"."` or `"examples/pomodoro"`).
+1. **Treat the given path as the only subject**
 
-You MUST apply the following rules to this argument:
+   - Use the provided path argument as the **root of the subject** (for example: `.` or `services/auth`).
+   - Treat this directory and its subdirectories as the **only subject** of this prompt.
+   - The LLM MUST NOT:
+     - Read or rely on content **outside** this directory as authoritative context.
+     - Pull in READMEs, ADRs, or docs from parent directories, sibling projects, or other repositories as if they were part of this project.
 
-1. **Definition of project root folder**
+2. **Identify key artifacts within this path**
 
-   For the purpose of this prompt, the **project root folder** is defined as:
+   Within the given directory and its subdirectories, the LLM MUST look for:
 
-   - The directory at that project root path argument.
-   - Files that live **directly** in that directory, such as:
-     - `README.md`
-     - `CONSTITUTION.md`
-     - `LICENSE`
-     - Other top-level markdown or configuration files.
+   - A primary description artifact (e.g. `README.md` under that path).
+   - Any existing `CONSTITUTION.md` under that path (for revisions).
+   - Architecture docs, ADRs, contributing guidelines, or design notes under that path.
+   - CI/CD workflows, tests, and configuration that live under that path.
 
-2. **Scope of the constitution**
+   These are the **authoritative context** for:
 
-   - You are writing the constitution for the **project located at this project root path**, not for the repository as a whole.
-   - Files under this root path are the only files that may define the project’s product description and domain.
-   - Files outside this root path belong to other projects or tooling; they MUST NOT define the target project’s product description.
+   - What the system/component is.
+   - Who it serves.
+   - Current goals, constraints, and non‑negotiables.
 
-> Critical constraints:
-> - All **subdirectories under this project root** (for example: `src/`, `docs/`, `.github/`, `examples/`, `templates/`, `tests/`, etc. inside this target root) are **not** considered part of the root folder for product description purposes.
-> - You MUST NOT use files from subdirectories to override or define the primary product description.
-> - Files **outside** this project root path (for example, a parent framework repo’s README, prompts, or other example projects) may be used only to understand general engineering values and workflows, NOT as the subject project’s description.
-> - The generated constitution MUST NOT describe or name external framework repositories unless they are explicit runtime dependencies or architectural elements of the target project.
+3. **Infer current practices (only from inside the path)**
 
-When inferring context, you MUST respect this source hierarchy and scoping:
+   - Inspect, inside the given path:
+     - Code structure (modules, folders, services).
+     - Existing tests.
+     - CI/CD and automation (e.g. workflows, scripts).
+     - Configuration and deployment artifacts.
+   - Infer:
+     - Implicit architectural style.
+     - Current approaches to testing and quality.
+     - Any hints about observability (logging, metrics, tracing).
 
-1. **Primary project README in the TARGET root folder**
-   - Look for `README.md` that lives **directly** in the project root path.
-   - Use this file as the **authoritative source** of:
-     - Product description
-     - Target users
-     - High-level goals.
-   - Do NOT:
-     - Combine this with other READMEs from subdirectories under the project root.
-     - Mix example or sample project descriptions from outside the project root into the main product description.
-   - If there is no `README.md` at the project root, ask the user to describe the project in their own words instead of inferring from nested docs.
+4. **Respect what already works (within this path)**
 
-2. **Other root-level documents in the TARGET project**
-   - You may use other files directly in the project root folder (e.g., `CONSTITUTION.md`, `ARCHITECTURE.md`) to refine:
-     - High-level architecture
-     - Existing principles
-     - Non-negotiable constraints.
-   - These documents refine or extend the project root `README.md`; they do not describe separate products.
+   - If the scoped project/component already follows good practices:
+     - Capture and **reinforce** those practices in the constitution.
+   - If it shows gaps or inconsistencies:
+     - Gently **nudge** the constitution toward better practices (DORA-aligned, modern SE),
+       without pretending the project is something it is not.
 
-3. **Subdirectories under the TARGET project root (NOT for primary product description)**
-   - Treat all files under subdirectories of the project root (e.g., `src/`, `docs/`, `.github/`, `examples/`, `templates/`, `tests/`, etc. inside the project) as:
-     - Implementation details
-     - Engineering practices
-     - Internal tooling
-     - Examples or sample content.
-   - Use them ONLY to understand:
-     - Engineering practices (tests, CI, workflows, scripts)
-     - Code structure and architectural patterns
-     - Tooling and prompts used in this project.
-   - You MUST NOT:
-     - Treat docs, READMEs, or prompts under these subdirectories as the main product description.
-     - Merge their text into the root product description.
+5. **Ignore host/framework details as subject**
 
-4. **Files outside the TARGET project root**
-   - Treat files that live **outside** the project root path (for example, a parent framework repo’s `README.md`, `.github/prompts`, `templates/`, or other example projects) as:
-     - Tooling, frameworks, and general engineering philosophy.
-   - You may use them to:
-     - Infer preferred workflows or general engineering values.
-   - You MUST NOT:
-     - Treat any of these as the target project’s product description.
-     - Copy their text directly into the target project’s product narrative.
-     - Include their names in the constitution unless they are explicit runtime dependencies or architectural elements of the target project.
+   - If this project lives inside a larger mono-repo or framework:
+     - Treat the surrounding repo and other services as **background**, not as the subject.
+     - Only reference them if:
+       - They are clearly referenced from within the scoped directory, and
+       - Their role is relevant to describing dependencies or constraints.
+## Goal
 
-From these sources, you MUST build and maintain the following **internal notes**. You may show them to the user for confirmation and refinement:
+The goal of this prompt is to generate or update a **Project Constitution** for the subject project that:
 
-1. **Team / product context** (`team_and_product_context`)
-   - Explain:
-     - What this target project is about.
-     - Who it serves.
-     - The main problem space.
-   - **Derived ONLY from:**
-     - The target project’s root `README.md` (if present).
-     - Root-level constitution/architecture docs (e.g., `CONSTITUTION.md`, `ARCHITECTURE.md`) that live directly in the target project root folder.
-   - If these are missing or ambiguous, ask the user to clarify.
+1. **Accurately Describes the Scoped Project**
 
-2. **Team values, preferences, and constraints** (`team_values_and_constraints`)
-   - How the team appears to balance speed vs safety.
-   - Any explicit or implicit quality bars.
-   - **Derived from:**
-     - The target project’s root `README.md`
-     - Root-level `CONSTITUTION.md` (if present) in the target project
-     - ADRs (wherever stored for the target project)
-     - Tooling/workflow docs (e.g., CI config, `.github/` workflows, prompts) as additional evidence.
+   - Is grounded in:
+     - The files and structure under the given directory path.
+     - Existing documentation found there (e.g. `README.md`, ADRs, design notes).
+     - Current CI/CD and operational practices visible there.
+   - Clearly explains:
+     - What the system or component is and who it serves.
+     - High-level constraints (technical, regulatory, operational) relevant to this scope.
 
-3. **Existing engineering practices / examples** (`existing_practices_and_examples`)
-   - How the team currently reviews, tests, deploys, refactors, and documents.
-   - **Derived from:**
-     - CI/workflow files within or clearly associated with the target project
-     - `docs/` or `examples/` directories under the target project
-     - Folder structure and scripts under the target project root
-     - Conventions visible in the target project’s codebase and tests.
+2. **Defines Values, Principles, and Guardrails**
 
-4. **Inspirations / reference materials** (`inspirations_and_references`)
-   - Any frameworks, books, or methodologies explicitly referenced in the target project.
-   - Any implicit influences you can reasonably infer (e.g., hexagonal architecture, domain-driven design patterns).
+   - Expresses a clear set of **values and principles** that guide:
+     - How changes are sized and delivered.
+     - How quality is maintained (testing and CI).
+     - How reliability and operability are treated.
+     - How architectural decisions are made and captured.
+   - Provides **guardrails**, not micromanagement:
+     - Boundaries for architecture and dependencies.
+     - Expectations for introducing new technologies or patterns.
+     - Guidelines for handling technical debt and refactoring.
 
-5. **Known non-negotiables** (`non_negotiables`)
-   - Compliance, security, regulatory or uptime constraints, if discoverable in the target project’s docs.
-   - Otherwise, a list of questions you must ask the user to clarify.
+3. **Supports Modern Software Engineering and DORA Outcomes**
 
-## Task
+   - Encourages practices that lead to:
+     - **High deployment frequency**.
+     - **Short lead time for changes**.
+     - **Low change failure rate**.
+     - **Fast mean time to restore (MTTR)**.
+   - Does this in a way that is realistic for the scoped project’s current context and constraints.
 
-Create a CONSTITUTION that:
+4. **Guides All Subsequent 4DC Phases**
 
-- Describes how the team balances speed, safety, quality, and sustainability for **this project**.
-- Makes the 6 pillars concrete enough to guide everyday decisions on this project.
-- Can be used by people and tools as a stable reference when making engineering trade-offs.
+   - Serves as the **“WHY” and system of values** that:
+     - Increments (`increment.md`) must align with (WHAT to do next).
+     - Designs (`design.md`) must respect (HOW to change the system).
+     - Implementations (`implement.md`) must uphold (DO phase).
+     - Improvements (`improve.md`, ADRs) refer back to when adjusting practices.
+   - Is stable enough to be a reference, but can be revised deliberately when needed.
 
-You MUST:
+5. **Is Concise, Readable, and Actionable**
 
-- First infer as much context as possible from the **target project root path** and its files, with a strict separation between:
-  - Files in the target project root folder (for product description and high-level constraints), and
-  - Files in subdirectories or outside that path (for practices, tooling, and values only).
-- Then ask targeted clarifying questions where your inferences are uncertain or ambiguous.
-- Then propose a brief plan for the constitution and present it to the user.
-- Only after an explicit **yes** from the user, generate the full CONSTITUTION and write/update `CONSTITUTION.md` under the target project root.
-- You MUST follow this “infer → clarify → plan → confirm → write” sequence exactly. Do not skip the confirmation step before writing the file.
+   - Can be read end‑to‑end in a few minutes.
+   - Uses concrete, evaluable statements (e.g. “we run tests before merging”).
+   - Avoids vague platitudes; teams should be able to say “yes” or “no” to whether they follow it.
 
-Before writing your final answer, follow these steps **internally** (do NOT include these steps in your output):
+The **goal** is the existence of such a `CONSTITUTION.md` for the scoped project—accurate, DORA‑aligned, and practically useful in guiding daily decisions.
+## Acceptance Criteria for the Constitution
 
-1. **Infer project context from the TARGET root**
-   - Focus on files that live **directly** in the target project root folder, especially:
-     - `README.md` (authoritative for product description and users)
-     - `CONSTITUTION.md` (if present)
-     - Other root-level docs (e.g., `ARCHITECTURE.md`).
-   - Respect the scoping rules from the Inputs section:
-     - Use the target root `README.md` as the **only** source for the primary product description.
-     - Do NOT incorporate product descriptions from subdirectories, examples, or prompts inside or outside the target root.
-   - Populate internal notes:
-     - `team_and_product_context`
-     - Any obvious `non_negotiables` mentioned in root-level docs.
+A generated `CONSTITUTION.md` is considered **acceptable** when:
 
-2. **Infer engineering practices from subdirectories and external tooling**
-   - Look at subdirectories under the target project root such as `src/`, `docs/`, `.github/`, `examples/`, `templates/`, `tests/`, etc.
-   - Optionally, look at surrounding framework/tooling repos only to infer general engineering values.
-   - From these, enrich:
-     - `team_values_and_constraints`
-     - `existing_practices_and_examples`
-     - `inspirations_and_references`
-   - Treat any product-like descriptions here as *examples or supporting material*, not as the main product.
-   - Do **not** bring in names of meta-frameworks or hosting repositories into the final constitution text.
+1. **Scope and Context Are Correct**
 
-3. **Summarize and validate with the user**
-   - Present concise summaries of your internal notes, clearly labeled by source, for example:
-     - Product/Team context (from the target root `README.md` / root-level docs)
-     - Engineering practices (from CI, docs, code under the target root)
-     - Values and constraints (from constitution-like docs, ADRs, prompts).
-   - Ask the user to confirm or correct:
-     - The **project description** (what this project is and is not), based only on the target root understanding.
-     - The **main audience/users**.
-   - Highlight any assumptions or uncertainties.
-   - Ask a small number of targeted questions to:
-     - Confirm or correct your understanding.
-     - Fill obvious gaps (especially around non-negotiables and priorities across the 6 pillars).
-   - Incorporate the user’s answers back into your internal notes.
+   - It clearly describes the project or component **inside the directory path** given as the argument.
+   - It does **not**:
+     - Pull in unrelated READMEs, ADRs, or docs from outside that path as if they were part of this project.
+     - Confuse the subject project with the host repo or other services in a mono‑repo.
+   - Its “Context” section matches:
+     - The files and structure under the given path.
+     - Any clarifications provided by the user.
 
-4. **Plan the constitution and present a brief summary (STOP)**
-   - Based on your refined understanding, construct a **short, human-readable plan** for the constitution, including:
-     - Target project name and root path.
-     - Main themes for:
-       - Vision and Mission
-       - Core Values
-       - Architectural Principles (mapped to pillars)
-       - Update Process
-       - Pillar Coverage
-       - Technical Decisions
-       - Any notable non-negotiables.
-   - Present this plan to the user along with a checklist of sections you intend to include.
-   - Then ask the user for an explicit **yes/no** confirmation to proceed with generating and writing `CONSTITUTION.md` under the target project root. Example:
+2. **Alignment with the Goal**
 
-     > I plan to create or update `CONSTITUTION.md` under `<target-project-root>` with the sections and themes described above.  
-     > Would you like me to generate and write this constitution file now? (yes/no)
+   - It matches the goal described in `03-goal.md`:
+     - Reflects the real project context under the given path.
+     - Defines values, principles, and guardrails.
+     - Supports modern software engineering and DORA outcomes.
+     - Acts as a stable but revisable reference for increments, designs, implementations, and improvements.
+   - It follows the structure defined in `05-output-structure.md`.
 
-   - This is a **STOP** point:
-     - If the user answers **no**, adjust the plan based on their feedback and repeat this step.
-     - If the user answers **yes**, proceed to the next steps.
-     - You MUST NOT generate or write `CONSTITUTION.md` until the user answers **yes**.
+3. **Human-in-the-Middle Process Was Respected**
 
-5. **Anchor each pillar in this environment**
-   - For each of the 6 pillars, decide:
-     - What it means specifically for this project.
-     - How to tell when they are living up to it.
-     - How to recognize when they are violating it.
+   - The LLM:
+     - Summarized findings and paused at **STOP 1** for user confirmation or correction.
+     - Summarized proposed constitution decisions and paused at **STOP 2** for user approval.
+     - Only generated the final `CONSTITUTION.md` content **after** the user gave a clear “yes” to the outline at STOP 2.
+   - If the user requested changes at either STOP:
+     - The outline was updated.
+     - The final document reflects those updates.
 
-6. **Define trade-off rules**
-   - For common tensions (e.g., Delivery Velocity vs Design Integrity, Simplicity First vs Performance), define:
-     - Which side is usually favored.
-     - When and how to deliberately override the default.
+4. **DORA / Modern SE Readiness**
 
-7. **Make it operational for day-to-day work**
-   - Add practical guidance for:
-     - How to choose and slice work (e.g., what "small, safe changes" look like).
-     - How much design is expected up front vs evolved over time.
-     - Expectations around tests and verification before merging.
-     - When and how to refactor or pay down technical debt.
+   - The constitution includes values and expectations that support:
+     - Small, incremental changes instead of big‑bang efforts.
+     - Strong automated feedback loops (tests, CI, linting, type checks where applicable).
+     - Clear deployment and rollback paths.
+     - Observability basics (logging, metrics, traces where appropriate).
+     - Continuous learning through `improve.md` documents and ADRs.
+   - It expresses these in a way that is realistic for the project’s current state, but clearly nudges toward better practices.
 
-8. **Generate and write the CONSTITUTION after confirmation**
-   - Once the user has answered **yes** in step 4:
-     - Generate the full constitution document following the Output structure.
-     - Write or update a file named `CONSTITUTION.md` in the **target project root** (the exact path passed as the project root argument):
-       - If the file does not exist, create it.
-       - If it exists, overwrite its contents with the new constitution.
-     - Do NOT ask again whether the file should be created; the earlier **yes** confirmation already granted permission.
-     - Inform the user that `CONSTITUTION.md` has been written, including the target root path used.
+5. **Clarity and Actionability**
 
-9. **Keep it editable and extensible**
-   - Leave room for future amendments.
-   - Highlight open questions the team should refine over time.
+   - Engineering and product teams can read it and understand:
+     - How they are expected to size and ship changes.
+     - What “good enough” quality looks like (testing and CI).
+     - What reliability and operability mean for this system.
+     - How architectural decisions and tech debt are handled.
+   - Statements are:
+     - Concrete enough to test in real behavior (“Do we really do this?”).
+     - Avoiding vague platitudes.
 
-You MUST NOT:
+6. **No Meta-Assistant Content**
 
-- Show these steps or your intermediate reasoning in the final output.
-- Offer to perform additional actions (for example, "If you'd like, I can also add...", "I can create a workflow for you", or similar).
-- Include implementation tasks, checklists of what you (the assistant) could do next, or proposals for CI/CD setup in the constitution text itself.
+   - The document:
+     - Does not mention prompts, LLMs, or assistants.
+     - Does not describe what the assistant can or will do.
+   - It reads as if it were written directly by the team for their own project.
+## Task – Required LLM Behavior and Steps
 
-Your final output MUST consist only of:
+To achieve the goal described in `03-goal.md`, the LLM MUST follow this behavior and step sequence, keeping a human in the loop and staying strictly within the given directory.
 
-- The human-facing summaries and questions described above (when you are in the summarize/clarify/plan steps), and
-- The final constitution document itself, formatted exactly according to the Output structure, **without** extra commentary, offers, or follow-up actions.
+### 1. Understand the Goal
 
-## Output
+- Interpret the user’s intent:
+  - Is this a **new** constitution or a **revision** of an existing one under this path?
+  - Are there any explicit focuses (e.g., “align more with DORA”, “tighten quality bar”, “clarify architecture boundaries”)?
+- Internalize that the output should be:
+  - A single `CONSTITUTION.md` file under the scoped project.
+  - Matching the structure defined in the Output Structure template.
+  - Fit for use as a long‑lived reference.
 
-You MUST:
+### 2. Survey Environment & Supporting Documents (Within the Given Path)
 
-- Output only the constitution document in Markdown using the structure below.
-- NOT include any meta commentary about what you could do next (for example, "If you'd like, I can also add...", "Next, I can create...", "I can generate a workflow").
-- NOT include suggestions for additional files, CI workflows, or other automation tasks inside the constitution. Those may be implied by principles, but not offered as actions by you.
+Within the **directory passed as argument** and its subdirectories ONLY:
 
-Return the result as **Markdown** with the following structure:
+- Read the primary description artifact under that scope (e.g. `README.md` there).
+- If present under that scope, read:
+  - `CONSTITUTION.md` (existing).
+  - Architecture docs, ADRs, and design notes.
+  - CI/CD workflows, tests, and configuration files stored under that path.
+- The LLM MUST NOT:
+  - Read or rely on content from parent directories, sibling projects, or other repositories as authoritative context.
+- Maintain internal notes about:
+  - Domain, users, and goals as described **within this scope**.
+  - Current delivery practices, testing habits, and operational setup **visible in this scope**.
+  - Visible constraints and recurring patterns inside the directory.
+
+### 3. Summarize Findings → STOP 1
+
+- Produce a **concise findings summary** that explains:
+
+  - What the project appears to be and who it serves.
+  - How it seems to be built and deployed (topology, main technologies).
+  - How testing and CI/CD appear to function (roughly).
+  - Any hints about observability and operations.
+  - Key gaps, contradictions, or uncertainties.
+
+- Clearly label this as **STOP 1** and:
+
+  - Ask the user to confirm whether this summary is broadly correct.
+  - Invite corrections, additions, or important missing context.
+
+**Until the user responds at STOP 1, do not move on to proposing decisions or writing `CONSTITUTION.md`.**
+
+### 4. Ask Clarifying Questions (If Needed)
+
+- After presenting the findings, ask **targeted clarifying questions** only where critical, focusing on:
+
+  - Non‑negotiable constraints (e.g. compliance, uptime, data sensitivity).
+  - Preferred delivery style (e.g. trunk-based vs long-lived branches).
+  - Quality expectations (minimum acceptable test/CI bar).
+  - Operability expectations (logging, metrics, incident handling).
+
+- Keep questions minimal and specific; avoid broad questionnaires.
+- Incorporate the user’s answers into your internal understanding.
+
+### 5. Summarize Proposed Constitution Decisions → STOP 2
+
+- Before generating any full constitution text, present a **bullet-point outline** summarizing the proposed decisions, grouped roughly by:
+
+  - **Values & Principles**
+  - **Delivery & Flow of Change**
+  - **Testing & Quality**
+  - **Reliability & Operability**
+  - **Architecture & Design Guardrails**
+  - **Decision Capture & Continuous Improvement**
+
+- This outline should be:
+
+  - High-level and terse (no full prose yet).
+  - Aligned with the project context and the clarified intent.
+
+- Clearly label this as **STOP 2** and:
+
+  - Ask the user explicitly to answer **yes/no** (or equivalent) to confirm the outline.
+  - Invite them to ask for additions, removals, or changes.
+
+**Do not write or overwrite `CONSTITUTION.md` before the user has confirmed this outline.**
+
+### 6. Write the Constitution After Explicit YES
+
+- ONLY after the user gives a clear affirmative (e.g. “yes”, “go ahead”, “looks good”) at STOP 2:
+
+  - Generate the full `CONSTITUTION.md` that:
+
+    - Follows the structure defined in the Output Structure template.
+    - Implements the agreed outline, incorporating clarifications.
+    - Encodes values, principles, and guardrails in clear, actionable language.
+
+- While writing:
+
+  - Do NOT introduce new major decisions that were not present in the confirmed outline.
+  - Avoid references to prompts, assistants, or this process.
+  - Keep content consistent with the project’s reality and the constitution’s stated goal.
+
+- If the user responds “no” or requests changes at STOP 2:
+
+  - Update the outline accordingly.
+  - Re-present the updated outline.
+  - Wait for another explicit **yes** before generating the final document.
+
+### 7. (Optional but Recommended) Report After Writing
+
+- After generating `CONSTITUTION.md`, briefly report to the user:
+
+  - That the constitution has been written/updated.
+  - The path (typically `CONSTITUTION.md` at the scoped root, unless otherwise specified).
+  - Any notable highlights (e.g. number of sections, key changes if revising).
+## Output Structure
+
+The generated constitution MUST follow this structure:
 
 ```markdown
-# Engineering Constitution for {{team_or_product_name}}
-
-## Purpose
-
-Explain in 2–4 sentences:
-- Why this CONSTITUTION exists for this project.
-- How it should be used in everyday engineering work and decision-making.
+# Project Constitution
 
 ## Context
 
-Summarize the environment and constraints:
-- Product / domain:
-  - ...
-- Team:
-  - ...
-- Non-negotiables:
-  - ...
+- Short description of the system and its purpose.
+- Who it serves (primary users or stakeholders).
+- High-level constraints (technology, regulatory, operational, etc.).
 
-## Our Principles and Trade-offs
+## Values & Principles
 
-Explain the team’s overall philosophy and how it relates to:
-- Speed vs safety
-- Short-term delivery vs long-term maintainability
-- Experimentation vs stability
+- A concise list (5–10 items) of the core engineering values and principles.
+- Each item:
+  - Has a short title (e.g. “Small, Safe Changes”).
+  - Has a 2–5 sentence explanation.
+- The list MUST cover:
+  - Small, frequent, and reversible changes.
+  - Fast, automated feedback (tests, CI).
+  - Reliability and operability (including observability).
+  - Simplicity and changeability.
+  - Continuous learning and improvement.
 
-### Default Trade-off Rules
+## Delivery & Flow of Change
 
-- When in doubt between **shipping faster** and **polishing the design**, we usually:
-  - ...
-- When in doubt between **adding a dependency** and **building it ourselves**, we usually:
-  - ...
-- When in doubt between **adding tests now** and **moving on**, we usually:
-  - ...
+## Testing & Quality
 
----
+## Reliability & Operability
 
-## The 6 Pillars of Our Engineering
+## Architecture & Design Guardrails
 
-### 1. Delivery Velocity
+## Decision Capture (ADRs & Docs)
 
-Describe how the team thinks about:
-- Desired iteration speed.
-- Typical size of changes.
-- Release cadence and acceptable risk per release.
+## Continuous Improvement
 
-Include:
-
-- **We optimize for:**
-  - ...
-- **We accept the following risks:**
-  - ...
-- **We avoid:**
-  - ...
-
-### 2. Test Strategy
-
-Describe:
-- What must be tested.
-- How much coverage / confidence is “enough” for this project.
-- Preferred testing strategies (e.g., unit vs integration vs end-to-end).
-
-Include:
-
-- **Minimum expectations:**
-  - ...
-- **When moving fast, we are allowed to:**
-  - ...
-- **We never skip tests for:**
-  - ...
-
-### 3. Design Integrity
-
-Describe:
-- How the team structures code and architecture.
-- What “good boundaries” mean in this project.
-- How to think about modules, responsibilities, and dependencies.
-
-Include:
-
-- **We strive for:**
-  - ...
-- **We are okay with:**
-  - "...some messiness in leaf modules as long as boundaries remain clear."
-- **Red flags that trigger redesign or refactoring:**
-  - ...
-
-### 4. Simplicity First
-
-Describe:
-- How the team avoids premature abstraction and over-engineering.
-- How to decide when to introduce patterns, indirection, or generalization.
-
-Include:
-
-- **We prefer:**
-  - "The simplest thing that could possibly work, then iterate."
-- **We add abstraction only when:**
-  - ...
-- **We treat complexity as acceptable when:**
-  - ...
-
-### 5. Technical Debt Boundaries
-
-Describe:
-- When it is acceptable to take shortcuts.
-- How debt is recorded and prioritized.
-- How and when debt must be paid.
-
-Include:
-
-- **Allowed short-term shortcuts:**
-  - ...
-- **Debt must be recorded when:**
-  - ...
-- **We commit to paying down debt when:**
-  - ...
-
-### 6. Dependency Discipline
-
-Describe:
-- How the team chooses, isolates, and upgrades dependencies (libraries, frameworks, external services).
-- What “good” vs “bad” dependency use looks like.
-
-Include:
-
-- **We add a new dependency only when:**
-  - ...
-- **We isolate dependencies by:**
-  - ...
-- **We avoid:**
-  - "Frameworks bleeding into our domain model", etc.
-
----
-
-## How We Use This Constitution
-
-Explain briefly how this constitution should influence:
-
-- How work is chosen and sliced.
-- How designs are evaluated.
-- How implementation and testing decisions are made.
-- When to refactor, pay down debt, or revisit architecture.
-
-Keep this section high-level and project-focused. Do not mention specific tooling, frameworks, or meta-processes used to apply the constitution (such as prompt systems, LLM workflows, or framework names).
-
----
-
-## Amendments and Evolution
-
-Describe:
-- How this CONSTITUTION can be updated.
-- Under what circumstances you expect to revisit it (e.g., major product shift, team growth, repeated friction).
-- How amendments should be documented (e.g., dated changes, versioning).
-
----
-
-## References and Inspirations
-
-List key references that influenced this CONSTITUTION, such as:
-
-- Books, articles, or talks that inspired your engineering approach.
-- Internal documents or prior decisions that shaped these principles.
-
----
-
-## Open Questions
-
-List questions the team should explicitly revisit, for example:
-
-- "What’s our acceptable MTTR vs MTBF trade-off?"
-- "How strict should we be about mutation testing or coverage thresholds?"
-- "What performance budgets matter most for our users?"
-
-These should be concrete enough to guide future amendments.
+## Scope & Exceptions
 ```
 
-> This CONSTITUTION is a living document.
-> Use it actively in each 4dc loop, and amend it when you repeatedly feel friction between how you want to work and what is written here.
+The final output MUST:
+
+- Use the headings above in this order.
+- Fill each section with project-specific content based on the discovered context and approved outline.
+- Avoid references to prompts, LLMs, or assistants.
+- Be written in clear, human-friendly language.
+## Notes
+
+- This constitution is intended to **guide everyday decisions**
+- The constitution itself MAY evolve:
+  - When the system, team, or constraints change materially.
+  - After significant learning from incidents, experiments, or major redesigns.
+  - Changes to the constitution SHOULD be deliberate and documented (e.g. with an ADR or version history).

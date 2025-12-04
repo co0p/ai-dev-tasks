@@ -16,7 +16,7 @@ OUT_FILE="${ROOT_DIR}/design.prompt.md"
 WRITE_TO_STDOUT="${WRITE_TO_STDOUT:-0}"
 
 generate() {
-  cat "${TEMPLATES_DIR}/00-frontmatter.md"
+  cat "${TEMPLATES_DIR}/00-header.md"
   echo
   cat "${TEMPLATES_DIR}/01-persona.md"
   echo

@@ -31,289 +31,285 @@ You are opinionated but pragmatic:
 - You avoid vague “it depends” answers; you express **trade-offs explicitly**.
 - You optimize for **high-change, high-reliability** teams as described by DORA: high deployment frequency, low lead time, low change failure rate, and fast mean time to recover (MTTR).
 
-When generating the constitution, you:
-
-- Use **plain language** that the whole team (devs, ops, product, QA) can understand.
-- Avoid meta-references to prompts or assistants.
-- Write as if this constitution was hand-crafted by the team for their own project.
+You write as if this constitution was hand-crafted by the team for their own project.
 ## Inputs
 
-The constitution MUST be grounded in **the actual project** at the given path.
+The constitution MUST be grounded in **the actual project or component** at the given path.
 
 The executing LLM MUST:
 
-1. **Identify the subject project**
+1. **Treat the given path as the only subject**
 
-   - Use the provided project root path as the **target scope**.
-   - Within that scope, locate:
-     - A primary description artifact (e.g. `README.md`, a main doc, or similar).
-     - Any architecture docs, ADRs, contributing guidelines, or design notes.
-   - Treat these as the **authoritative context** for:
-     - What the system is.
-     - Who it serves.
-     - Current goals, constraints, and non-negotiables.
+   - Use the provided path argument as the **root of the subject** (for example: `.` or `services/auth`).
+   - Treat this directory and its subdirectories as the **only subject** of this prompt.
+   - The LLM MUST NOT:
+     - Read or rely on content **outside** this directory as authoritative context.
+     - Pull in READMEs, ADRs, or docs from parent directories, sibling projects, or other repositories as if they were part of this project.
 
-2. **Understand current practices**
+2. **Identify key artifacts within this path**
 
-   - Inspect:
+   Within the given directory and its subdirectories, the LLM MUST look for:
+
+   - A primary description artifact (e.g. `README.md` under that path).
+   - Any existing `CONSTITUTION.md` under that path (for revisions).
+   - Architecture docs, ADRs, contributing guidelines, or design notes under that path.
+   - CI/CD workflows, tests, and configuration that live under that path.
+
+   These are the **authoritative context** for:
+
+   - What the system/component is.
+   - Who it serves.
+   - Current goals, constraints, and non‑negotiables.
+
+3. **Infer current practices (only from inside the path)**
+
+   - Inspect, inside the given path:
      - Code structure (modules, folders, services).
      - Existing tests.
-     - CI/CD workflows (e.g. `.github/workflows/`).
-     - Configuration and deployment artifacts (Dockerfiles, Helm charts, scripts).
+     - CI/CD and automation (e.g. workflows, scripts).
+     - Configuration and deployment artifacts.
    - Infer:
-     - Implicit architectural style (layers, bounded contexts, etc.).
+     - Implicit architectural style.
      - Current approaches to testing and quality.
-     - Existing deployment model and environments.
      - Any hints about observability (logging, metrics, tracing).
 
-3. **Respect what already works**
+4. **Respect what already works (within this path)**
 
-   - If the project already follows good practices:
+   - If the scoped project/component already follows good practices:
      - Capture and **reinforce** those practices in the constitution.
    - If it shows gaps or inconsistencies:
      - Gently **nudge** the constitution toward better practices (DORA-aligned, modern SE),
        without pretending the project is something it is not.
-   - Avoid:
-     - Erasing or contradicting important domain realities.
-     - Proposing values totally incompatible with clear, explicit constraints
-       (e.g., if the project is offline-only, don’t define real-time observability as mandatory).
 
-4. **Align with DORA & Modern Software Engineering**
+5. **Ignore host/framework details as subject**
 
-   The constitution MUST explicitly address:
-
-   - **Change Flow & Delivery**
-     - Preference for **small, frequent, and reversible** changes.
-     - Expectations around **branching, pull requests, and merging** (e.g. trunk-based, short-lived branches).
-     - How the team wants to balance speed vs. risk.
-
-   - **Feedback Loops (Tests & CI/CD)**
-     - Expectations for **automated testing** (unit, integration, end-to-end).
-     - What must pass before code can be merged (CI checks, required reviews).
-     - Attitude toward **build / test flakiness** (e.g. zero tolerance).
-
-   - **Reliability & Operability**
-     - Baseline expectations for **availability, performance, and resilience**.
-     - Importance of **observability**:
-       - Logging (structured, contextual).
-       - Metrics (key business and technical indicators).
-       - Tracing (if applicable).
-     - Expectations for **incident handling** and **post-incident review**.
-
-   - **Architecture & Design**
-     - Preference for **simple, modular designs** that are easy to change.
-     - Encouragement of **clear boundaries** (e.g. domain vs. infrastructure).
-     - Guidance on **technical debt**:
-       - How it is tracked.
-       - When it is acceptable.
-       - When it must be addressed.
-
-   - **Continuous Improvement**
-     - How the team wants to use learning loops:
-       - `improve.md` documents.
-       - ADRs.
-       - Retrospectives.
-     - How to ensure that learning **changes behavior** (design, tests, code, process).
-
-5. **Accommodate different project types**
-
-   - Whether the project is a:
-     - Library.
-     - Service / backend.
-     - CLI tool.
-     - Frontend / UI.
-     - Multi-component system.
-   - The constitution SHOULD tailor expectations accordingly (e.g. canary releases may not make sense for a simple CLI, but tests and release discipline still do).
+   - If this project lives inside a larger mono-repo or framework:
+     - Treat the surrounding repo and other services as **background**, not as the subject.
+     - Only reference them if:
+       - They are clearly referenced from within the scoped directory, and
+       - Their role is relevant to describing dependencies or constraints.
 ## Goal
 
-Define the **goal of the Project Constitution**: why it exists and what it should achieve for this specific project.
+The goal of this prompt is to generate or update a **Project Constitution** for the subject project that:
 
-The LLM MUST:
+1. **Accurately Describes the Scoped Project**
 
-1. **Describe the Purpose of the Constitution**
+   - Is grounded in:
+     - The files and structure under the given directory path.
+     - Existing documentation found there (e.g. `README.md`, ADRs, design notes).
+     - Current CI/CD and operational practices visible there.
+   - Clearly explains:
+     - What the system or component is and who it serves.
+     - High-level constraints (technical, regulatory, operational) relevant to this scope.
 
-   - Explain, in project-specific terms:
-     - Why this project needs a constitution.
-     - What kinds of decisions and trade-offs it is meant to guide.
-     - How it will help the team build and operate the system over time.
+2. **Defines Values, Principles, and Guardrails**
 
-   - Emphasize that the constitution:
-     - Is the **source of shared values and principles** for the project.
-     - Sets the **quality bar** for design, implementation, and operations.
-     - Frames **how increments, designs, implementations, and improvements** should be shaped.
+   - Expresses a clear set of **values and principles** that guide:
+     - How changes are sized and delivered.
+     - How quality is maintained (testing and CI).
+     - How reliability and operability are treated.
+     - How architectural decisions are made and captured.
+   - Provides **guardrails**, not micromanagement:
+     - Boundaries for architecture and dependencies.
+     - Expectations for introducing new technologies or patterns.
+     - Guidelines for handling technical debt and refactoring.
 
-2. **Anchor the Constitution in Outcomes (DORA / Modern SE)**
+3. **Supports Modern Software Engineering and DORA Outcomes**
 
-   - State that the constitution aims to support **modern software engineering outcomes**, such as:
-     - **High deployment frequency** (we can ship often and safely).
-     - **Short lead time for changes** (ideas become running code quickly).
-     - **Low change failure rate** (changes rarely cause visible problems).
-     - **Fast mean time to recover (MTTR)** (when something goes wrong, we can restore service quickly).
+   - Encourages practices that lead to:
+     - **High deployment frequency**.
+     - **Short lead time for changes**.
+     - **Low change failure rate**.
+     - **Fast mean time to restore (MTTR)**.
+   - Does this in a way that is realistic for the scoped project’s current context and constraints.
 
-   - Connect these outcomes to:
-     - The project’s domain (why speed, safety, and learning matter here).
-     - The team’s ambitions and constraints.
+4. **Guides All Subsequent 4DC Phases**
 
-3. **Clarify the Scope of the Constitution**
+   - Serves as the **“WHY” and system of values** that:
+     - Increments (`increment.md`) must align with (WHAT to do next).
+     - Designs (`design.md`) must respect (HOW to change the system).
+     - Implementations (`implement.md`) must uphold (DO phase).
+     - Improvements (`improve.md`, ADRs) refer back to when adjusting practices.
+   - Is stable enough to be a reference, but can be revised deliberately when needed.
 
-   - Define what the constitution **does** and **does not** cover, for example:
-     - It **does** cover:
-       - Engineering values and principles.
-       - Expectations around testing, CI/CD, observability, and reliability.
-       - Architectural guardrails and decision-making habits (e.g. ADRs).
-     - It **does not** specify:
-       - Detailed technical designs for particular features.
-       - Day-to-day task breakdowns or sprint planning mechanics.
+5. **Is Concise, Readable, and Actionable**
 
-   - Make it clear that:
-     - The constitution informs **all subsequent artifacts** (increment, design, implement, improve).
-     - It is **not** a replacement for those artifacts.
+   - Can be read end‑to‑end in a few minutes.
+   - Uses concrete, evaluable statements (e.g. “we run tests before merging”).
+   - Avoids vague platitudes; teams should be able to say “yes” or “no” to whether they follow it.
 
-4. **Explain How the Constitution Will Be Used**
+The **goal** is the existence of such a `CONSTITUTION.md` for the scoped project—accurate, DORA‑aligned, and practically useful in guiding daily decisions.
+## Acceptance Criteria for the Constitution
 
-   - Describe how the team is expected to:
-     - Refer to it when defining increments (WHAT).
-     - Use it as a constraint and reference when designing solutions (HOW).
-     - Treat it as a quality bar when implementing and deploying changes.
-     - Revisit it during improvement and learning activities.
+A generated `CONSTITUTION.md` is considered **acceptable** when:
 
-   - Emphasize that:
-     - The constitution should be **read and understood by the whole team**.
-     - It is intended to be **practical and actionable**, not just aspirational text.
+1. **Scope and Context Are Correct**
 
-5. **Position It as Living but Stable**
+   - It clearly describes the project or component **inside the directory path** given as the argument.
+   - It does **not**:
+     - Pull in unrelated READMEs, ADRs, or docs from outside that path as if they were part of this project.
+     - Confuse the subject project with the host repo or other services in a mono‑repo.
+   - Its “Context” section matches:
+     - The files and structure under the given path.
+     - Any clarifications provided by the user.
 
-   - Clarify that:
-     - The constitution is **stable** enough to provide a consistent foundation.
-     - It can evolve **deliberately** when the system, team, or constraints change.
-   - Mention that:
-     - Significant changes to the constitution SHOULD be accompanied by:
-       - An ADR, or
-       - A clearly documented rationale.
-## Task
+2. **Alignment with the Goal**
 
-Generate a **Project Constitution** for the subject project at the given path, aligned with the **Goal** described above.
+   - It matches the goal described in `03-goal.md`:
+     - Reflects the real project context under the given path.
+     - Defines values, principles, and guardrails.
+     - Supports modern software engineering and DORA outcomes.
+     - Acts as a stable but revisable reference for increments, designs, implementations, and improvements.
+   - It follows the structure defined in `05-output-structure.md`.
 
-The constitution MUST:
+3. **Human-in-the-Middle Process Was Respected**
 
-1. **Express Core Values & Principles**
+   - The LLM:
+     - Summarized findings and paused at **STOP 1** for user confirmation or correction.
+     - Summarized proposed constitution decisions and paused at **STOP 2** for user approval.
+     - Only generated the final `CONSTITUTION.md` content **after** the user gave a clear “yes” to the outline at STOP 2.
+   - If the user requested changes at either STOP:
+     - The outline was updated.
+     - The final document reflects those updates.
 
-   Define a concise set of **values and principles** that will guide all future increments, designs, implementations, and improvements.
+4. **DORA / Modern SE Readiness**
 
-   At minimum, include the following themes:
+   - The constitution includes values and expectations that support:
+     - Small, incremental changes instead of big‑bang efforts.
+     - Strong automated feedback loops (tests, CI, linting, type checks where applicable).
+     - Clear deployment and rollback paths.
+     - Observability basics (logging, metrics, traces where appropriate).
+     - Continuous learning through `improve.md` documents and ADRs.
+   - It expresses these in a way that is realistic for the project’s current state, but clearly nudges toward better practices.
 
-   - **Flow of Small, Safe Changes**
-     - Prefer small, incremental changes over large, risky ones.
-     - Encourage short-lived branches and frequent merges to the mainline.
-     - Avoid big-bang releases and long-running feature branches.
+5. **Clarity and Actionability**
 
-   - **Fast, Automated Feedback**
-     - Treat **automated tests and CI** as non-negotiable for any change.
-     - Define a minimal set of checks that MUST pass before merge:
-       - Linting / formatting.
-       - Unit tests and key integration tests.
-       - Type checks / static analysis (where applicable).
-     - Value **fast feedback**: slow or flaky pipelines are problems to fix, not to tolerate.
+   - Engineering and product teams can read it and understand:
+     - How they are expected to size and ship changes.
+     - What “good enough” quality looks like (testing and CI).
+     - What reliability and operability mean for this system.
+     - How architectural decisions and tech debt are handled.
+   - Statements are:
+     - Concrete enough to test in real behavior (“Do we really do this?”).
+     - Avoiding vague platitudes.
 
-   - **Reliability and Operability**
-     - Recognize that operating the system in production is part of engineering, not an afterthought.
-     - Encourage:
-       - Clear error handling and failure modes.
-       - Structured logging with enough context for debugging.
-       - Metrics that reflect both user-facing and system health.
-     - Define expectations around:
-       - Incident response.
-       - Post-incident learning.
-       - Reasonable on-call / support practices (if applicable).
+6. **No Meta-Assistant Content**
 
-   - **Test-first / Test-alongside Mindset**
-     - Every meaningful change SHOULD be accompanied by tests:
-       - Unit tests for new or changed logic.
-       - Integration tests for critical flows.
-       - Regression tests for fixed bugs.
-     - Treat missing tests or failing tests as blockers.
+   - The document:
+     - Does not mention prompts, LLMs, or assistants.
+     - Does not describe what the assistant can or will do.
+   - It reads as if it were written directly by the team for their own project.
+## Task – Required LLM Behavior and Steps
 
-   - **Simplicity & Changeability**
-     - Favor simple, explicit designs over clever abstractions.
-     - Prefer “boring” technology that is well-understood by the team.
-     - Design modules and services so they can be **changed safely**:
-       - Clear boundaries.
-       - Limited implicit coupling.
-       - Well-defined interfaces.
+To achieve the goal described in `03-goal.md`, the LLM MUST follow this behavior and step sequence, keeping a human in the loop and staying strictly within the given directory.
 
-   - **Continuous Learning & Improvement**
-     - Encourage regular use of:
-       - `improve.md` documents.
-       - ADRs for important decisions.
-       - Retrospectives or improvement loops.
-     - Normalize changing course when evidence shows a better path.
-     - Treat refactoring and tech debt reduction as part of the work, not optional extras.
+### 1. Understand the Goal
 
-2. **Define Delivery & Operations Expectations**
+- Interpret the user’s intent:
+  - Is this a **new** constitution or a **revision** of an existing one under this path?
+  - Are there any explicit focuses (e.g., “align more with DORA”, “tighten quality bar”, “clarify architecture boundaries”)?
+- Internalize that the output should be:
+  - A single `CONSTITUTION.md` file under the scoped project.
+  - Matching the structure defined in the Output Structure template.
+  - Fit for use as a long‑lived reference.
 
-   Include a section that describes **how the team prefers to deliver and operate** the system:
+### 2. Survey Environment & Supporting Documents (Within the Given Path)
 
-   - **Branching and Release Strategy**
-     - E.g.:
-       - Trunk-based development with small feature branches.
-       - How often the team intends to release.
-       - How releases are tagged and traced back to changes.
+Within the **directory passed as argument** and its subdirectories ONLY:
 
-   - **CI/CD Requirements**
-     - Which checks are mandatory for merge.
-     - How the team treats failing or flaky builds.
-     - When it is acceptable to bypass or manually intervene (ideally: almost never).
+- Read the primary description artifact under that scope (e.g. `README.md` there).
+- If present under that scope, read:
+  - `CONSTITUTION.md` (existing).
+  - Architecture docs, ADRs, and design notes.
+  - CI/CD workflows, tests, and configuration files stored under that path.
+- The LLM MUST NOT:
+  - Read or rely on content from parent directories, sibling projects, or other repositories as authoritative context.
+- Maintain internal notes about:
+  - Domain, users, and goals as described **within this scope**.
+  - Current delivery practices, testing habits, and operational setup **visible in this scope**.
+  - Visible constraints and recurring patterns inside the directory.
 
-   - **Deployment & Rollback**
-     - Expected deployment mechanisms (pipelines, scripts, tools).
-     - Safe rollback strategies:
-       - Revert commits.
-       - Configuration switches.
-       - Feature flags (where appropriate).
+### 3. Summarize Findings → STOP 1
 
-   - **Observability Basics**
-     - Minimal expectations for:
-       - Logging (structured, severity levels, correlation IDs).
-       - Metrics (key indicators, aggregation).
-       - Tracing (if applicable).
-     - High-level approach to:
-       - Incident management.
-       - Post-incident reviews and learning.
+- Produce a **concise findings summary** that explains:
 
-3. **Clarify Architectural Guardrails**
+  - What the project appears to be and who it serves.
+  - How it seems to be built and deployed (topology, main technologies).
+  - How testing and CI/CD appear to function (roughly).
+  - Any hints about observability and operations.
+  - Key gaps, contradictions, or uncertainties.
 
-   Include a section that sets **architecture guardrails**, for example:
+- Clearly label this as **STOP 1** and:
 
-   - Layering or modularity rules:
-     - Domain/core code MUST NOT depend on UI or framework details.
-     - Infrastructure concerns (DB, message brokers, APIs) are behind interfaces or adapters.
-   - Data ownership and boundaries:
-     - What belongs to which module/service.
-     - Patterns for changes across boundaries (APIs, events, contracts).
+  - Ask the user to confirm whether this summary is broadly correct.
+  - Invite corrections, additions, or important missing context.
 
-   Guardrails should be **strong enough to avoid chaos**, but not so rigid that they block reasonable evolution.
+**Until the user responds at STOP 1, do not move on to proposing decisions or writing `CONSTITUTION.md`.**
 
-4. **Describe How Decisions Are Captured**
+### 4. Ask Clarifying Questions (If Needed)
 
-   The constitution MUST describe how the team captures and maintains decisions, including:
+- After presenting the findings, ask **targeted clarifying questions** only where critical, focusing on:
 
-   - When to create or update an **ADR**.
-   - Where ADRs live (e.g. `docs/adr/`).
-   - How ADRs are referenced from other artifacts (design docs, code comments, increment docs).
-   - How old ADRs may be superseded or revised.
+  - Non‑negotiable constraints (e.g. compliance, uptime, data sensitivity).
+  - Preferred delivery style (e.g. trunk-based vs long-lived branches).
+  - Quality expectations (minimum acceptable test/CI bar).
+  - Operability expectations (logging, metrics, incident handling).
 
-5. **Remain Concise and Actionable**
+- Keep questions minimal and specific; avoid broad questionnaires.
+- Incorporate the user’s answers into your internal understanding.
 
-   - The constitution SHOULD be:
-     - Short enough to be read end-to-end in a few minutes.
-     - Specific enough to drive concrete behavior (e.g. “we run tests before merging” vs. “we care about quality”).
-   - Avoid generic platitudes; prefer statements that a team could plausibly say “yes” or “no” to when evaluating their behavior.
+### 5. Summarize Proposed Constitution Decisions → STOP 2
 
-The final document MUST:
+- Before generating any full constitution text, present a **bullet-point outline** summarizing the proposed decisions, grouped roughly by:
 
-- Read as a coherent, standalone `CONSTITUTION.md` for this project.
-- Not mention prompts, assistants, or 4DC explicitly.
-- Be written in a tone appropriate for a real project’s engineering team.
+  - **Values & Principles**
+  - **Delivery & Flow of Change**
+  - **Testing & Quality**
+  - **Reliability & Operability**
+  - **Architecture & Design Guardrails**
+  - **Decision Capture & Continuous Improvement**
+
+- This outline should be:
+
+  - High-level and terse (no full prose yet).
+  - Aligned with the project context and the clarified intent.
+
+- Clearly label this as **STOP 2** and:
+
+  - Ask the user explicitly to answer **yes/no** (or equivalent) to confirm the outline.
+  - Invite them to ask for additions, removals, or changes.
+
+**Do not write or overwrite `CONSTITUTION.md` before the user has confirmed this outline.**
+
+### 6. Write the Constitution After Explicit YES
+
+- ONLY after the user gives a clear affirmative (e.g. “yes”, “go ahead”, “looks good”) at STOP 2:
+
+  - Generate the full `CONSTITUTION.md` that:
+
+    - Follows the structure defined in the Output Structure template.
+    - Implements the agreed outline, incorporating clarifications.
+    - Encodes values, principles, and guardrails in clear, actionable language.
+
+- While writing:
+
+  - Do NOT introduce new major decisions that were not present in the confirmed outline.
+  - Avoid references to prompts, assistants, or this process.
+  - Keep content consistent with the project’s reality and the constitution’s stated goal.
+
+- If the user responds “no” or requests changes at STOP 2:
+
+  - Update the outline accordingly.
+  - Re-present the updated outline.
+  - Wait for another explicit **yes** before generating the final document.
+
+### 7. (Optional but Recommended) Report After Writing
+
+- After generating `CONSTITUTION.md`, briefly report to the user:
+
+  - That the constitution has been written/updated.
+  - The path (typically `CONSTITUTION.md` at the scoped root, unless otherwise specified).
+  - Any notable highlights (e.g. number of sections, key changes if revising).
 ## Output Structure
 
 The generated constitution MUST follow this structure:
@@ -342,76 +338,25 @@ The generated constitution MUST follow this structure:
 
 ## Delivery & Flow of Change
 
-- Branching and integration strategy (e.g. trunk-based, feature branches).
-- Expectations for:
-  - How often changes should merge to the mainline.
-  - How often releases should happen.
-- Non-negotiable rules for:
-  - What has to be true before a change can be merged.
-  - Acceptable and unacceptable deployment practices.
-
 ## Testing & Quality
-
-- Types of tests expected (unit, integration, end-to-end, property-based, etc. as relevant).
-- What “good enough” testing means for this project.
-- Policies, such as:
-  - No merging with failing tests.
-  - How to handle flaky tests.
-- Expectations for:
-  - Test ownership.
-  - Adding regression tests for bugs.
 
 ## Reliability & Operability
 
-- Baseline reliability expectations (e.g. “no data loss”, “fast recovery over perfect uptime”).
-- Observability expectations:
-  - Logging (what, how structured, minimum context).
-  - Metrics (key indicators, aggregation).
-  - Tracing (if applicable).
-- High-level approach to:
-  - Incident management.
-  - Post-incident reviews and learning.
-
 ## Architecture & Design Guardrails
-
-- Preferred architectural style / modular structure (layers, hexagonal, microservices vs monolith, etc.).
-- Boundaries that should not be crossed (e.g. who can depend on whom).
-- Guidelines for:
-  - Introducing new technologies.
-  - Managing technical debt.
-  - Refactoring and simplification.
 
 ## Decision Capture (ADRs & Docs)
 
-- When to create or update ADRs.
-- Where ADRs live and how they are named.
-- How design docs, ADRs, and code reference each other.
-- How to revise or supersede decisions in a controlled way.
-
 ## Continuous Improvement
 
-- How the team expects to:
-  - Use `improve.md` documents.
-  - Run retrospectives or improvement reviews.
-  - Turn incidents, surprises, and friction into better design, tests, and processes.
-- Expectations for:
-  - Regularly revisiting this constitution.
-  - Adjusting practices as the system and team evolve.
-
 ## Scope & Exceptions
+```
 
-- Clarification of where these principles apply:
-  - Entire repo vs specific services / modules.
-- Acknowledgment of:
-  - Known exceptions or constraints.
-  - How new exceptions are documented and justified.
+The final output MUST:
 
- ## The final output MUST:
-
-Use the headings above in this order.
-Fill each section with project-specific content based on the discovered context.
-Avoid references to prompts, LLMs, or assistants.
-Be written in clear, human-friendly language.
+- Use the headings above in this order.
+- Fill each section with project-specific content based on the discovered context and approved outline.
+- Avoid references to prompts, LLMs, or assistants.
+- Be written in clear, human-friendly language.
 ## Notes
 
 - This constitution is intended to **guide everyday decisions**
