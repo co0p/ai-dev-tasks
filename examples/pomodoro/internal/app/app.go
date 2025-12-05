@@ -27,6 +27,8 @@ const (
 type App interface {
 	StartPomodoro()
 	StartBreak()
+	StartShortBreak()
+	StartLongBreak()
 	Shutdown(ctx context.Context) error
 	OnStateChange(fn func(State))
 	// SubscribeStateChange registers a listener for state changes and returns an
@@ -42,11 +44,12 @@ type timerApp struct {
 	state       State
 	cancelTimer context.CancelFunc
 	// subscribers holds active state-change listeners keyed by id.
-	subscribers      map[int]func(State)
-	nextSubID        int
-	pomodoroDuration time.Duration
-	breakDuration    time.Duration
-	end              time.Time
+	subscribers       map[int]func(State)
+	nextSubID         int
+	pomodoroDuration  time.Duration
+	breakDuration     time.Duration
+	longBreakDuration time.Duration
+	end               time.Time
 }
 
 // New creates a new App instance. Optionally pass two durations: pomodoro, break.
@@ -57,14 +60,16 @@ type timerApp struct {
 func New(durations ...time.Duration) App {
 	pom := 25 * time.Minute
 	brk := 5 * time.Minute
+	longBrk := 25 * time.Minute
 	if len(durations) >= 2 {
 		pom = durations[0]
 		brk = durations[1]
 	}
 	return &timerApp{
-		state:            StateIdle,
-		pomodoroDuration: pom,
-		breakDuration:    brk,
+		state:             StateIdle,
+		pomodoroDuration:  pom,
+		breakDuration:     brk,
+		longBreakDuration: longBrk,
 	}
 }
 
@@ -180,6 +185,13 @@ func (t *timerApp) StartPomodoro() {
 // StartBreak begins a break session. If a break is already running this
 // is a no-op.
 func (t *timerApp) StartBreak() {
+	// Keep compatibility: StartBreak starts a short break by default.
+	t.StartShortBreak()
+}
+
+// StartShortBreak begins a short break using the configured short break
+// duration. If a short break is already running this is a no-op.
+func (t *timerApp) StartShortBreak() {
 	t.mu.Lock()
 	if t.state == StateBreakRunning {
 		t.mu.Unlock()
@@ -197,6 +209,37 @@ func (t *timerApp) StartBreak() {
 	go func() {
 		select {
 		case <-time.After(t.breakDuration):
+			t.mu.Lock()
+			t.cancelTimer = nil
+			t.state = StateIdle
+			t.mu.Unlock()
+			t.notifySubscribers(StateIdle)
+		case <-ctx.Done():
+			return
+		}
+	}()
+}
+
+// StartLongBreak begins a long break using the configured long break
+// duration. If a break is already running this is a no-op.
+func (t *timerApp) StartLongBreak() {
+	t.mu.Lock()
+	if t.state == StateBreakRunning {
+		t.mu.Unlock()
+		return
+	}
+	t.cancelExistingTimer()
+	ctx, cancel := context.WithCancel(context.Background())
+	t.cancelTimer = cancel
+	t.end = time.Now().Add(t.longBreakDuration)
+	t.state = StateBreakRunning
+	t.mu.Unlock()
+
+	t.notifySubscribers(StateBreakRunning)
+
+	go func() {
+		select {
+		case <-time.After(t.longBreakDuration):
 			t.mu.Lock()
 			t.cancelTimer = nil
 			t.state = StateIdle

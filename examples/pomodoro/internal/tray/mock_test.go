@@ -38,3 +38,23 @@ func TestMockTrayTriggersAppActions(t *testing.T) {
 		t.Fatalf("expected idle after quit, got %s", a.State())
 	}
 }
+
+func TestMockTrayShortAndLongBreakTriggers(t *testing.T) {
+	a := app.New(50*time.Millisecond, 10*time.Millisecond)
+	mt := NewMockTray(a)
+
+	// Trigger short break explicitly
+	mt.Trigger("Short Break")
+	if a.State() != app.StateBreakRunning {
+		t.Fatalf("expected short break running, got %s", a.State())
+	}
+
+	// Wait for short break to finish
+	time.Sleep(20 * time.Millisecond)
+
+	// Trigger long break explicitly
+	mt.Trigger("Long Break")
+	if a.State() != app.StateBreakRunning {
+		t.Fatalf("expected long break running, got %s", a.State())
+	}
+}

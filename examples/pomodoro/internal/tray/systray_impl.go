@@ -37,7 +37,8 @@ func (s *systrayImpl) Run(ctx context.Context) error {
 			systray.SetIcon(s.icon)
 		}
 		mPom := systray.AddMenuItem("Pomodoro", "Start Pomodoro")
-		mBreak := systray.AddMenuItem("Break", "Start Break")
+		mShort := systray.AddMenuItem("Short Break", "Start Short Break")
+		mLong := systray.AddMenuItem("Long Break", "Start Long Break")
 		systray.AddSeparator()
 		mQuit := systray.AddMenuItem("Quit", "Quit the app")
 
@@ -49,9 +50,15 @@ func (s *systrayImpl) Run(ctx context.Context) error {
 			}
 		}()
 		go func() {
-			for range mBreak.ClickedCh {
-				log.Println("action=StartBreak")
-				s.app.StartBreak()
+			for range mShort.ClickedCh {
+				log.Println("action=StartShortBreak")
+				s.app.StartShortBreak()
+			}
+		}()
+		go func() {
+			for range mLong.ClickedCh {
+				log.Println("action=StartLongBreak")
+				s.app.StartLongBreak()
 			}
 		}()
 		go func() {

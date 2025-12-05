@@ -16,6 +16,8 @@ type fakeApp struct {
 
 func (f *fakeApp) StartPomodoro()                     {}
 func (f *fakeApp) StartBreak()                        {}
+func (f *fakeApp) StartShortBreak()                   {}
+func (f *fakeApp) StartLongBreak()                    {}
 func (f *fakeApp) Shutdown(ctx context.Context) error { return nil }
 func (f *fakeApp) OnStateChange(fn func(app.State))   { f.cb = fn }
 func (f *fakeApp) SubscribeStateChange(fn func(app.State)) func() {

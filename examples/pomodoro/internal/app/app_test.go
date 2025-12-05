@@ -63,3 +63,35 @@ func TestShutdownCancelsTimer(t *testing.T) {
 		t.Fatalf("expected idle after shutdown, got %s", a.State())
 	}
 }
+
+func TestStartShortAndLongBreaks(t *testing.T) {
+	// use short durations for fast tests
+	a := New(25*time.Millisecond, 5*time.Millisecond)
+	// adjust long break duration directly for test
+	if ta, ok := a.(*timerApp); ok {
+		ta.longBreakDuration = 50 * time.Millisecond
+	}
+
+	// Short break
+	a.StartShortBreak()
+	if a.State() != StateBreakRunning {
+		t.Fatalf("expected short break running, got %s", a.State())
+	}
+	rem := a.Remaining()
+	if rem <= 0 || rem > 5*time.Millisecond+20*time.Millisecond {
+		t.Fatalf("unexpected remaining for short break: %v", rem)
+	}
+
+	// Wait for short break to finish
+	time.Sleep(30 * time.Millisecond)
+
+	// Long break
+	a.StartLongBreak()
+	if a.State() != StateBreakRunning {
+		t.Fatalf("expected long break running, got %s", a.State())
+	}
+	rem = a.Remaining()
+	if rem <= 0 || rem > 50*time.Millisecond+20*time.Millisecond {
+		t.Fatalf("unexpected remaining for long break: %v", rem)
+	}
+}

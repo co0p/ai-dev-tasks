@@ -32,13 +32,18 @@ func (m *MockTray) Close() error {
 }
 
 // Trigger simulates a user clicking a menu item by name.
-// Supported names: "Pomodoro", "Break", "Quit".
+// Supported names: "Pomodoro", "Short Break", "Long Break", "Break", "Quit".
 func (m *MockTray) Trigger(name string) {
 	switch name {
 	case "Pomodoro":
 		m.App.StartPomodoro()
+	case "Short Break":
+		m.App.StartShortBreak()
+	case "Long Break":
+		m.App.StartLongBreak()
 	case "Break":
-		m.App.StartBreak()
+		// kept for compatibility: treat as short break
+		m.App.StartShortBreak()
 	case "Quit":
 		_ = m.App.Shutdown(context.Background())
 	}
