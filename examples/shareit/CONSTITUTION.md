@@ -1,124 +1,67 @@
 # Project Constitution
 
-## Vision
-Enable friends to easily share personal items with trust and transparency.
+constitution-mode: lite
 
-## Mission
-Deliver a mobile-first web app that lets people publish catalogs of items, request to borrow, and track borrow/return status with clear visibility and minimal friction.
+## 1. Purpose and Scope
 
-## Core Values
-- Simplicity over complexity
-- Trust and transparency
-- Reliability and correctness
-- Privacy by default
-- Small, incremental change
+This project is a small, mobile-first demo webapp (Tailwind frontend, Express backend) packaged for simple deployment. This constitution gives short, pragmatic rules for how contributors evolve the app with minimal ceremony.
 
-## Architectural Principles
+## 2. Implementation & Doc Layout
 
-### 1. Small, Frequent Releases _(Pillar: Delivery Velocity)_
-**Statement:** Ship small changes weekly or faster with PRs under 300 lines, each including at least one verification (test or documented manual check).
-**Rationale:** Faster feedback reduces risk and improves flow for a mobile-first product.
-**In Practice:**
-- Work on feature branches; merge to default via reviewed PRs.
-- Target at least weekly releases; hotfix on demand.
-- Each PR includes a unit/smoke test or a manual check note tied to acceptance criteria.
+- **Increment artifacts**
+  - Location: `docs/increments/<slug>/`
+  - Files:
+    - `increment.md` — goal, acceptance criteria (Given/When/Then), small tasks
+    - `design.md` — optional short proposal for non-trivial changes
+    - `implement.md` — implementation checklist, notes, and migration steps
 
-### 2. Protect Borrow/Return Flows _(Pillar: Test Strategy)_
-**Statement:** Cover critical item catalog and borrow/return flows with automated tests; allow smoke/manual checks for UI glue.
-**Rationale:** These flows are core to user value and must not regress.
-**In Practice:**
-- Domain functions for borrow/return have unit tests.
-- One end-to-end smoke path: add item → borrow → return.
-- Error paths log clearly and show actionable messages; manual checks documented when tests aren’t feasible.
+- **Improve artifacts**
+  - Location: `docs/improve/`
+  - Filename pattern: `YYYY-MM-DD-improve-<short-slug>.md`
 
-### 3. Thin Routes, Isolated Domain _(Pillar: Design Integrity)_
-**Statement:** Keep Express routes thin; business rules live in domain modules; data access behind adapters.
-**Rationale:** Maintains testability and flexibility across UI/backends and simplifies change.
-**In Practice:**
-- Route handlers validate/dispatch; domain modules hold business logic.
-- Persistence and external APIs use adapters to enable swap/upgrade.
-- Domain modules avoid framework dependencies where practical.
+- **ADR artifacts**
+  - Location: `docs/adr/`
+  - Filename pattern: `ADR-YYYY-MM-DD-<slug>.md`
 
-### 4. Three-Strikes Before Abstraction _(Pillar: Simplicity First)_
-**Statement:** Duplicate locally up to three occurrences before creating shared abstractions.
-**Rationale:** Avoid premature abstractions that add overhead and slow iteration.
-**In Practice:**
-- Prefer clear duplication over early utility modules.
-- Extract shared code only after the third repetition across modules.
-- Perform refactors in small, focused PRs.
+- **Other docs**
+  - Architecture notes: `docs/architecture/`
+  - Ops / run notes: `docs/ops/`
 
-### 5. Wrap and Pin _(Pillar: Dependency Discipline)_
-**Statement:** Minimize new dependencies; wrap third‑party libraries and pin versions for reproducible builds.
-**Rationale:** Reduces supply‑chain and upgrade risk for Docker/Heroku deployments.
-**In Practice:**
-- Add dependencies only with rationale; prefer platform/standard libs.
-- Provide adapter boundaries around third‑party libs/APIs.
-- Pin versions; update via dedicated, reviewable PRs.
+All human-facing documentation lives under `docs/`. Keep increments lightweight and link relevant increments from `README.md` or `docs/index.md`.
 
-## Pillar Coverage
-- ✓ Delivery Velocity (Principle #1)
-- ✓ Test Strategy (Principle #2)
-- ✓ Design Integrity (Principle #3)
-- ✓ Simplicity First (Principle #4)
-- ✓ Dependency Discipline (Principle #5)
+## 3. Design & Delivery Principles
 
-## Update Process
-- Propose changes via PR referencing this document and affected principles.
-- For principle changes, include rationale, trade‑offs, and expected impact; request at least one reviewer.
-- On approval, update this document and record date under Last Updated.
-- For sweeping changes, prefer incremental PRs gated behind feature branches.
+- **Small, safe steps** (Kent Beck)
+  - Prefer frequent, small, reversible changes over large risky ones.
+  - Example: Split UI and backend changes into separate increments; each increment includes clear acceptance criteria and a rollback path.
 
-## Technical Decisions
-### Languages
-- JavaScript/TypeScript (Node.js) for server‑side logic, chosen for ecosystem, deployment simplicity, and team familiarity.
-### Frameworks
-- Express for HTTP routing; TailwindCSS for UI styling.
-### Deployment
-- Single Docker image; deploy to Heroku via container registry.
-- Pinned dependencies; reproducible builds recommended with SBOM generation.
+- **Refactoring as everyday work** (Fowler, Feathers)
+  - Treat refactoring as part of normal changes; clean up code you touch and add small tests to lock in behavior.
+  - Example: Rename a confusing function and add a focused unit test in the same PR that uses it.
 
-## Increments Location
-- Base directory: `docs/increments/`
-- Per‑increment folder structure: `docs/increments/<increment-folder>/increment.md`
+- **Pragmatic DRY & simplicity** (Thomas & Hunt)
+  - Eliminate clear duplication but avoid speculative abstractions; prefer readable code and explicitness.
+  - Example: Duplicate a tiny helper until two or three call sites justify extraction into a shared module.
 
-## LLM Collaboration & Increment Workflow
-- STOP gates: Clarification → Planned Files Summary confirmation → Drift Alert approval.
-- JSON internal‑only: Structured outputs (questions/proposals/summaries) are for tooling/CI and not user‑facing.
-- Non‑interactive phase: After file plan confirmation, the implementer may proceed autonomously until the next STOP gate or drift alert.
-- Feature branch: Work on `feature/<increment-slug>`; no direct commits to default branch.
-- Commit cadence: One commit per high‑level task; small and revertible.
+## 4. Testing, CI/CD, and Observability
 
-## Scope Drift Management
-- DRIFT ALERT: If work requires files/modules beyond the confirmed Planned Files Summary or increment scope, STOP and announce a drift.
-- Scope update path: Propose a minimal scope change listing files and rationale, or split into a follow‑up increment.
-- Design alignment: If acceptance criteria can’t be met as designed, request a design update before continuing.
+- **Testing**
+  - New increments should include unit tests and, when helpful, a small integration test for any new API endpoints.
 
-## Testing & Verification Policy
-- Cycle: Write Test → Implement → Validate → Commit; allow explicit manual checks when tests aren’t feasible.
-- Critical‑path testing: Unit tests for domain logic; smoke/e2e for primary user flow.
-- Verification mapping: Every task/subtask documents how it verifies acceptance criteria.
+- **CI/CD**
+  - CI should run linting, tests, and build (Docker image) before merging. Keep pipelines short and fast.
 
-## Post‑Implementation Stabilization
-- Documentation: Update README/usage and increment docs (design/implement notes, checkboxes).
-- Hygiene: Add `.gitignore` entries for build outputs; untrack committed artifacts.
-- Reproducibility: Ensure scripts build cleanly from a fresh checkout; document prerequisites.
-- Packaging: Verify bundling/distribution if within acceptance criteria.
-- Formatting/Linting: Run minimally on touched files.
+- **Observability**
+  - For a demo app, basic structured request and error logging is sufficient. Keep logs clear and searchable.
 
-## Merge & Release
-- Merge strategy: Rebase/merge on feature branch; then merge to default and push.
-- Tagging: If release‑worthy, create an annotated tag (e.g., `vX.Y.Z`) with brief notes.
-- Cleanup: Delete local and remote feature branch after merge.
+## 5. ADR and Improve Usage
 
-## Documentation & Traceability
-- Required per‑increment docs: `increment.md`, `design.md`, `implement.md` with verification notes.
-- Decision log: Capture key choices, trade‑offs, and drift alerts in `implement.md`.
-- Traceability: Link tasks and verification to acceptance criteria.
+- **ADRs**
+  - Use ADRs for decisions that will affect future contributors (framework choices, major API contracts, deployment patterns). Keep them short and dated.
 
-## Roles & Decision Gates
-- Sponsor: Confirms scope and Planned Files Summary; approves drift changes.
-- Implementer (LLM/human): Executes plan, raises drift alerts, proposes scope adjustments.
-- Reviewer (optional): Sanity‑checks stabilization steps and merge.
+- **Improve**
+  - Use `docs/improve/` to record technical debt, intermittent issues, and proposals for refactors. Reference relevant increments when scheduling work.
 
 ---
-**Last Updated:** 2025-12-02
+
+This constitution is intentionally short and pragmatic. When the project grows or gains production users, revisit the constitution and consider moving to `medium` mode with stronger CI/observability expectations.

@@ -2,14 +2,14 @@
 
 Follow this process to produce a `design.md` that is aligned with the constitution and the current increment, grounded in the existing codebase, and that keeps a human in the loop.
 
-The `path` argument for this prompt points at an **increment folder** (for example: `.../increments/<slug>`). The increment folder contains `increment.md`. The **project codebase** and other documents (such as `CONSTITUTION.md`, ADRs, and prior designs) live under the project root.
+The `path` argument for this prompt points at an **increment folder**. This is the folder that already contains `increment.md` and, according to the project’s constitution (“Implementation & Doc Layout”), is where `design.md` and `implement.md` for this increment should live. The **project codebase** and other documents (such as `CONSTITUTION.md`, ADRs, and prior designs) live under the project root.
 
 ### Phase 1 – Gather and Summarize (STOP 1)
 
 1. Gather Context
 
    - Read and internalize:
-     - `CONSTITUTION.md` — values, principles, guardrails, delivery expectations.
+     - `CONSTITUTION.md` — values, principles, guardrails, delivery expectations, and (if present) `constitution-mode` (for example: `lite`, `medium`, `heavy`).
      - The current `increment.md` in this folder — context, goal, tasks (WHAT), risks, success criteria.
    - Optionally review, under the project root:
      - Relevant ADRs.
@@ -37,6 +37,7 @@ The `path` argument for this prompt points at an **increment folder** (for examp
      - Your understanding of the problem and scope from the increment.
      - Which parts of the system (components, modules, services, data stores) are likely involved.
      - Any key constraints or assumptions visible from `CONSTITUTION.md`, `increment.md`, existing docs, and the current code.
+     - (Optionally) The detected `constitution-mode` and what that implies for design weight (for example: “mode: lite — keep this design short and focused”).
    - Clearly label this as **STOP 1**.
    - Ask the user to:
      - Confirm whether this summary is broadly correct.
@@ -74,6 +75,9 @@ The `path` argument for this prompt points at an **increment folder** (for examp
      - Implementable in **small, safe steps**.
    - **Do not** turn this into a chronological list of code edits or tasks.  
      Focus on *structure and behavior*, not on “Step 1/Step 2” sequences.
+   - When the constitution is in `lite` mode:
+     - Prefer the simplest design that satisfies the increment and principles.
+     - Avoid over-designing areas that the constitution treats lightly (for example, heavy observability for a demo app).
 
 7. Define Contracts and Interfaces
 
@@ -93,6 +97,9 @@ The `path` argument for this prompt points at an **increment folder** (for examp
      - Any regression tests required for known bugs.
      - Any special test data/fixtures or environments.
    - Note any risks around test flakiness and how to mitigate them.
+   - Adjust depth according to `constitution-mode` and project expectations:
+     - `lite`: focus on a minimal but meaningful safety net.
+     - `medium`/`heavy`: be more explicit and comprehensive.
 
 9. Consider CI/CD and Rollout
 
@@ -119,6 +126,7 @@ The `path` argument for this prompt points at an **increment folder** (for examp
         - Errors and unusual conditions.
     - Mention:
       - Any alerts or dashboards that should be created or updated.
+    - For `lite` mode, this might be as simple as structured request and error logging; for heavier modes, it may involve metrics/SLOs if the constitution calls for them.
 
 11. Summarize Proposed Design Outline → STOP 2
 

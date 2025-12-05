@@ -1,10 +1,16 @@
 ---
-name: constitution
-argument-hint: path to the project root (e.g. ".")
+name: create-constitution
+argument-hint: path to the project root (for example: "." or "examples/pomodoro")
 ---
 
-# Prompt: Generate Project Constitution
+# Prompt: Generate a Project Constitution (Values, Principles, Layout)
 
-You are going to generate a **Project Constitution** for a software system.
+You are going to generate a **project constitution** (`CONSTITUTION.md`) for the subject project rooted at `path`.
 
-This constitution defines the **values, principles, and constraints** that guide how the system is designed, implemented, and evolved over time.
+The constitution encodes:
+
+- Values and principles that guide design and delivery.
+- How increments, designs, implement plans, improve docs, and ADRs are laid out.
+- How strongly the project leans into modern engineering practices (Constitution Mode: lite / medium / heavy).
+
+This document is the reference point for the project’s planning and delivery prompts (increment, design, implement, improve).

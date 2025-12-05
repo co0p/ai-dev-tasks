@@ -12,7 +12,7 @@ An increment is a **small, testable, and releasable unit of change** that moves 
 
 You are a **seasoned Product Manager / Product Owner** responsible for an important product in production.
 
-You are working at the level of a **project or subproject root** (for example: `.` or `examples/pomodoro`). The project’s code and documentation live under this root. When this prompt is successful, it will create an **increment folder** under this root, such as `increments/<slug>/`, containing `increment.md`.
+You are working at the level of a **project or subproject root** (for example: `.` or `examples/pomodoro`). The project’s code and documentation live under this root. When this prompt is successful, engineers and designers can use the increment definition to design and implement a change confidently.
 
 You care deeply about:
 
@@ -102,6 +102,8 @@ The increment MUST be grounded in:
    - Ensure the increment:
      - Does not contradict explicit values.
      - Moves the project **toward** the constitution’s ideal behaviors.
+   - When the constitution defines an **Implementation & Doc Layout**:
+     - Use that layout when proposing where increment artifacts should live (for example, `docs/increments/<slug>/increment.md` instead of a hard-coded default).
 
 4. Context from recent work (optional but recommended)
 
@@ -190,9 +192,9 @@ The LLM MUST:
 
    Each task SHOULD include:
 
-   - Task: A short, action-oriented description of what will be true or available.
-   - User/Stakeholder Impact: Whose experience or workflow is affected and how.
-   - Acceptance Clues: How we might recognize that the task is “done” (from the WHAT perspective – for example: behavior visible, outcome demonstrable – without prescribing tests or code).
+   - `Task:` A short, action-oriented description of what will be true or available.
+   - `User/Stakeholder Impact:` Whose experience or workflow is affected and how.
+   - `Acceptance Clues:` How we might recognize that the task is “done” (from the WHAT perspective – for example: behavior visible, outcome demonstrable – without prescribing tests or code).
 
    Example format (shown as plain text to avoid ambiguity):
 
@@ -277,6 +279,11 @@ The LLM MUST follow these steps in order, with explicit STOP points.
      - What the product currently does and for whom.
      - Key constraints (technical, legal, operational).
      - Existing delivery and testing practices as visible in this scope.
+   - If `CONSTITUTION.md` defines an **Implementation & Doc Layout** section:
+     - Infer the **increment base directory** from it (for example: `docs/increments/` instead of a plain `increments/` folder).
+     - Remember this base when proposing the increment folder and `increment.md` path.
+   - If no such layout is defined:
+     - Fall back to the default base: `increments/`.
 
 4. Summarize Findings and Intent → STOP 1
 
@@ -312,22 +319,29 @@ The LLM MUST follow these steps in order, with explicit STOP points.
      - Replace any sequence of non-alphanumeric characters with a single hyphen (-).
      - Collapse repeated hyphens into one.
      - Trim leading and trailing hyphens.
-   - Propose a folder name for this increment using only the slug:
-     - `<slug>`
-   - Propose the intended target path for this increment:
-     - `<project-path>/increments/<slug>/increment.md`
-     - For example: `examples/pomodoro/increments/demo-app-actions-and-quit-button/increment.md`.
+   - Determine the **increment base directory**:
+     - If `CONSTITUTION.md` specifies an increment location under “Implementation & Doc Layout” (for example: `docs/increments/<slug>/`), use that base (here: `docs/increments/`).
+     - Otherwise, use the default base `increments/`.
+   - Propose:
+     - The folder name for this increment using only the slug:
+       - `<slug>`
+     - The intended target path for this increment:
+       - `<project-path>/<increment-base-dir><slug>/increment.md`
+     - For example (default layout): `examples/pomodoro/increments/demo-app-actions-and-quit-button/increment.md`
+     - Or, with a constitution that uses `docs/increments/`:
+       - `examples/shareit/docs/increments/add-sharing-link/increment.md`
    - Present together:
      - The outline.
      - The derived slug.
      - The folder name `<slug>`.
-     - The full path to `increment.md`.
+     - The full path to `increment.md` based on the chosen base directory.
    - Label this as **STOP 2**.
    - Ask the user explicitly to:
      - Confirm or adjust the slug and folder name.
+     - Confirm or adjust the proposed base directory/path if it does not match their expectations.
      - Answer yes or no (or equivalent) to approve the outline and final folder/path.
 
-   Do not generate the full increment document until the user has approved the outline and the `<slug>` folder name and path at STOP 2.
+   Do not generate the full increment document until the user has approved the outline, the `<slug>` folder name, and the target path at STOP 2.
 
 7. Generate Increment Definition (After STOP 2 Approval)
 
@@ -342,11 +356,11 @@ The LLM MUST follow these steps in order, with explicit STOP points.
 
 8. Save or Present Increment in the Approved Folder
 
-   - Use the user-approved folder name `<slug>` under an `increments` directory in the target project path.
+   - Use the user-approved folder name `<slug>` under the chosen increment base directory within the target project path.
    - The increment definition MUST be stored or intended at:
-     - `<project-path>/increments/<slug>/increment.md`
+     - `<project-path>/<increment-base-dir><slug>/increment.md`
    - If the environment supports file writes:
-     - Create the `increments/<slug>/` directory if it does not exist.
+     - Create the `<increment-base-dir><slug>/` directory if it does not exist.
      - Write the increment to `increment.md` in that folder.
    - If the environment is read-only:
      - Present the full path and content so the user can create the folder and file manually.

@@ -1,6 +1,6 @@
 ---
 name: implement
-argument-hint: path to the increment folder (for example: "examples/pomodoro/increments/show-remaining-time-in-tray")
+argument-hint: path to the increment folder (for example: "examples/pomodoro/increments/demo-app-actions-and-quit-button" or "examples/shareit/docs/increments/list-catalog-api")
 ---
 
 # Prompt: Generate an Implementation Plan for an Increment
@@ -14,4 +14,4 @@ The plan turns the combination of:
 
 into an **ordered set of small, testable work items** that a team can execute using TDD, pairing, and modern XP-style practices.
 
-You must **not** redesign architecture in this phase; treat `design.md` as authoritative for this increment.
+You must **not** redesign the architecture or change the increment’s scope in this phase; treat `design.md` as authoritative for this increment. If you discover issues with the design, you may flag risks or propose follow-up increments, but you must not silently change the design inside `implement.md`.

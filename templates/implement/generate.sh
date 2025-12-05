@@ -24,11 +24,11 @@ generate() {
   echo
   cat "${TEMPLATES_DIR}/01-persona.md"
   echo
-  cat "${TEMPLATES_DIR}/02-inputs.md"
+    cat "${TEMPLATES_DIR}/02-goal.md"
   echo
-  cat "${TEMPLATES_DIR}/03-process.md"
+  cat "${TEMPLATES_DIR}/03-inputs.md"
   echo
-  cat "${TEMPLATES_DIR}/04-acceptance.md"
+  cat "${TEMPLATES_DIR}/04-process.md"
   echo
   cat "${TEMPLATES_DIR}/05-output-and-examples.md"
 }

@@ -1,6 +1,6 @@
 ## Output Structure and Examples
 
-The generated **technical design** MUST be written to a file named `design.md` in the current increment folder (for example: `.../increments/<slug>/design.md`).
+The generated **technical design** MUST be written to a file named `design.md` in the **current increment folder** (the folder pointed to by `path`, which already contains `increment.md` and, per the project’s constitution, will also hold `implement.md` for this increment).
 
 The design document MUST follow this structure:
 
@@ -75,6 +75,7 @@ The design document MUST follow this structure:
 - Notes on:
   - Test data / fixtures and environments.
   - Potential flakiness risks and mitigations.
+- The level of detail should align with the project’s constitution and `constitution-mode` (for example, a lighter test plan for a `lite` demo app, a more formal plan for critical services).
 
 8. CI/CD and Rollout
 
@@ -102,6 +103,7 @@ The design document MUST follow this structure:
   - Dashboards that should be created or updated.
 - Operational considerations:
   - Any known operational risks (for example: increased load, new dependencies).
+- For `lite` mode constitutions, it is acceptable for this section to focus mainly on clear, structured logs and simple checks; for heavier modes, it may be more elaborate if required.
 
 10. Risks, Trade-offs, and Alternatives
 
@@ -149,4 +151,4 @@ They are **short enough to read in minutes**, but detailed enough that an engine
 
 - Plan small, safe implementation steps.
 - Write appropriate tests.
-- Understand risks, trade-offs, and follow-up options, all in the context of the existing codebase.
+- Understand risks, trade-offs, and follow-up options, all in the context of the existing codebase and the project’s constitution.

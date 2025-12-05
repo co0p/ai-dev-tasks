@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Generate the self-contained create-constitution.prompt.md from the template fragments.
+#
+# Usage (from repo root):
+#   ./templates/constitution/generate.sh > create-constitution.prompt.md
+#
+# Or:
+#   ./templates/constitution/generate.sh
+#
+# To force stdout:
+#   WRITE_TO_STDOUT=1 ./templates/constitution/generate.sh
+
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 TEMPLATES_DIR="${ROOT_DIR}/templates/constitution"
 OUT_FILE="${ROOT_DIR}/create-constitution.prompt.md"
@@ -12,17 +23,12 @@ generate() {
   echo
   cat "${TEMPLATES_DIR}/01-persona.md"
   echo
-  cat "${TEMPLATES_DIR}/02-inputs.md"
+  cat "${TEMPLATES_DIR}/02-goal.md"
   echo
-  cat "${TEMPLATES_DIR}/03-goal.md"
+  cat "${TEMPLATES_DIR}/03-process.md"
   echo
-  cat "${TEMPLATES_DIR}/04-acceptance.md"
+  cat "${TEMPLATES_DIR}/04-output.md"
   echo
-  cat "${TEMPLATES_DIR}/05-task.md"
-  echo
-  cat "${TEMPLATES_DIR}/06-output-structure.md"
-  echo
-  cat "${TEMPLATES_DIR}/07-footer.md"
 }
 
 if [ "$WRITE_TO_STDOUT" = "1" ]; then

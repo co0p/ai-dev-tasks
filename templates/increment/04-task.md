@@ -20,9 +20,9 @@ The LLM MUST:
 
    Each task SHOULD include:
 
-   - Task: A short, action-oriented description of what will be true or available.
-   - User/Stakeholder Impact: Whose experience or workflow is affected and how.
-   - Acceptance Clues: How we might recognize that the task is “done” (from the WHAT perspective – for example: behavior visible, outcome demonstrable – without prescribing tests or code).
+   - `Task:` A short, action-oriented description of what will be true or available.
+   - `User/Stakeholder Impact:` Whose experience or workflow is affected and how.
+   - `Acceptance Clues:` How we might recognize that the task is “done” (from the WHAT perspective – for example: behavior visible, outcome demonstrable – without prescribing tests or code).
 
    Example format (shown as plain text to avoid ambiguity):
 

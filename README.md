@@ -1,6 +1,12 @@
-# 4DC — 4-Document, Prompt-Driven Incremental Development
 
-Prompt-driven workflow for incremental, evolutionary software development supported by AI.
+<p align="center">
+	<picture>
+		<source srcset="assets/4dc-logo-traced-dark.svg" media="(prefers-color-scheme: dark)">
+		<img src="assets/4dc-logo-traced.svg" alt="4DC logo" width="96" />
+	</picture>
+</p>
+
+<p align="center"><em>4DC - Prompt-driven workflow for incremental, evolutionary software development supported by AI.</em></p>
 
 4DC is designed to **encode modern software engineering and DORA practices** into your day-to-day workflow:
 

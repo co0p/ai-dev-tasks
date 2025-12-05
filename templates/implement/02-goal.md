@@ -43,3 +43,9 @@ The implementation plan MUST:
    - Where helpful, note:
      - Groupings of tasks that can form a single PR.
      - Suggested points for partial rollouts or feature-flag flips.
+
+5. Adapt to Constitution Mode
+
+   - If `CONSTITUTION.md` defines a `constitution-mode`:
+     - `lite`: Keep the plan as minimal as possible while still making steps clear and testable.
+     - `medium`/`heavy`: Provide more explicit steps around validation, CI, and rollout where appropriate.

@@ -44,6 +44,8 @@ The increment MUST be grounded in:
    - Ensure the increment:
      - Does not contradict explicit values.
      - Moves the project **toward** the constitution’s ideal behaviors.
+   - When the constitution defines an **Implementation & Doc Layout**:
+     - Use that layout when proposing where increment artifacts should live (for example, `docs/increments/<slug>/increment.md` instead of a hard-coded default).
 
 4. Context from recent work (optional but recommended)
 

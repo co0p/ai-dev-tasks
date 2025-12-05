@@ -5,7 +5,7 @@ A generated `design.md` is considered **acceptable** when:
 1. Alignment with Constitution and Increment
 
    - It clearly references and respects:
-     - `CONSTITUTION.md` (values, principles, guardrails).
+     - `CONSTITUTION.md` (values, principles, guardrails, and, if present, `constitution-mode`).
      - The current `increment.md` (goal, scope, non-goals).
    - It stays within the increment’s scope and non-goals.
    - It is clearly grounded in the **current implementation** under the project path:
@@ -25,7 +25,7 @@ A generated `design.md` is considered **acceptable** when:
 
    - The design supports making changes:
      - In **small, incremental steps**.
-     - With a clear **test strategy** and **CI integration**.
+     - With a clear **test strategy** and **CI integration**, scaled appropriately to the project’s constitution.
    - It explicitly covers:
      - How the change will be safely deployed.
      - How it can be rolled back or mitigated.

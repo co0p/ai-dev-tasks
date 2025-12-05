@@ -2,11 +2,11 @@
 
 Turn the current **increment** (product-level WHAT) into a **technical design** (HOW) that:
 
-- Respects the **Project Constitution** (`CONSTITUTION.md`).
+- Respects the **Project Constitution** (`CONSTITUTION.md`), including its **Implementation & Doc Layout** and any `constitution-mode` (for example: `lite`, `medium`, `heavy`).
 - Is **small and incremental**, matching the scope of the increment.
-- Is **testable and verifiable** through automated checks.
+- Is **testable and verifiable** through automated checks (keeping the constitution’s expectations in mind — lighter for `lite` mode, richer for `medium`/`heavy`).
 - Can pass cleanly through **CI/CD** without unusual, risky procedures.
-- Is **observable and operable** when running in real environments.
+- Is **observable and operable** when running in real environments, at the level the constitution expects.
 - Is **grounded in the current code and architecture** under the project path.
 
 The design MUST:
@@ -32,6 +32,7 @@ The design MUST:
    - Highlight any constraints for **safety and compatibility**:
      - Schema changes, migrations, backward compatibility with existing clients.
    - Ensure the design can be implemented and validated in **small, safe steps**.
+   - When `constitution-mode` is `lite`, keep the safety net focused and pragmatic (for example: essential unit tests and a small integration test where it matters most); for `medium`/`heavy`, follow stronger testing expectations.
 
 4. Account for CI/CD and Rollout
 
@@ -48,6 +49,7 @@ The design MUST:
      - Success (expected behavior).
      - Trouble (errors, performance regressions).
    - Ensure that issues related to this increment can be detected and diagnosed.
+   - For `lite` constitutions, this may be as simple as clear, structured request and error logging; for `medium`/`heavy`, it may include metrics and alerts.
 
 6. Stay Within Increment Scope
 
