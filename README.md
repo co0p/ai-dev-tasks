@@ -12,8 +12,6 @@
 
 ## Getting started
 
-### TL;DR
-
 4dc is a set of **LLM‑friendly prompt files** you add to your project so that you and your AI tools work in **small, incremental, evolutionary steps** instead of big risky changes.
 
 You describe **what and why** in an increment, get a **design** for how the system will change, break it down into **concrete implementation steps**, and periodically run **improve passes** that feed back into future increments.
@@ -58,25 +56,19 @@ Point Copilot Chat or your LLM at these prompt files as sources, and you’re re
 4dc keeps four kinds of artifacts separate so humans and tools don’t blur concerns. In practice, the cascade looks like this:
 
 ```text
+          ┌────────────────────────────────────┐
+          │          CONSTITUTION              │
+          │  values, expectations, layout      │
+          └────────────────────────────────────┘
+            ↑        ↑        ↑        ↑
+            │        │        │        │
 [Increment]  →  [Design]  →  [Implement]  →  [Improve]
-   WHAT & WHY     TECH HOW     STEPS          LEARN
+  WHAT & WHY     TECH HOW     STEPS          LEARN
 
-   Small,          How the      Concrete       Codebase-wide
-   outcome         system       changes and    assessment,
-   focused         should       testable       lessons, and
-   change          evolve       tasks          next ideas
-```
-
-And everything is anchored by your **Constitution**:
-
-```text
-               ┌────────────────────────────────────┐
-               │          CONSTITUTION              │
-               │  values, expectations, layout      │
-               └────────────────────────────────────┘
-                  ↑        ↑        ↑        ↑
-                  │        │        │        │
-             Increment   Design  Implement  Improve
+  Small,         How the      Concrete       Codebase-wide
+  outcome        system       changes and    assessment,
+  focused        should       testable       lessons, and
+  change         evolve       tasks          next ideas
 ```
 
 In words:
@@ -100,9 +92,80 @@ Everything is guided by your **Constitution** (`CONSTITUTION.md`), which encodes
 - Dependency and architecture rules.
 - Where docs and artifacts live in the repo.
 
-The loop looks like this:
+### Principles & values
 
-> Real changes → Improve docs → New increments → Fresh designs & implementation plans → Better code & constitution.
+Your constitution is where you make your implicit “this is how we work” rules explicit – for humans and for the LLM. Typical themes:
+
+- **Small, safe steps**  
+  Prefer many small, reversible changes over a few large, risky ones. This echoes incremental and evolutionary design: keep the system always in a working state, learn from each step, and avoid “big bang” rewrites.
+
+- **Refactoring as everyday work**  
+  Don’t treat refactoring as a separate phase. Improving names, extracting functions, clarifying boundaries, and simplifying flows are just part of doing the work. 4dc makes space for this by:
+  - Capturing refactor ideas in Improve docs.
+  - Turning them into future increments instead of “someday/maybe” items.
+  - Letting your tools propose refactors in a controlled way.
+
+- **Clear contracts and boundaries**  
+  Design documents focus on the seams between components: interfaces, data shapes, and invariants. This is aligned with domain‑driven thinking: reflect the domain language in boundaries and make cross‑component communication explicit.
+
+- **Evidence‑friendly delivery**  
+  Testing, observability, and deployment are not afterthoughts:
+  - Increments describe acceptance criteria and what “good” looks like in production.
+  - Designs call out where to add or improve tests, metrics, and logs.
+  - Implementation plans include checks that support fast, confident delivery.
+
+- **Sustainable flow over heroics**  
+  The goal is steady, predictable change: short feedback cycles, low rework, and fewer surprises. The Improve docs help you spot bottlenecks and sources of pain so you can adjust how you work, not just what you build.
+
+When you write `CONSTITUTION.md`, you’re essentially answering:
+
+> “If this codebase had a senior teammate who cared about long‑term health, what rules would they keep repeating to us and to the AI?”
+
+Those principles then drive how each 4dc prompt behaves when it generates increments, designs, implementation plans, and improve passes.
+
+### Lenses (how to look at the codebase)
+
+When you run an Improve pass, you don’t just ask “is the code good?” – you look at it through a set of **lenses**. Each lens is a way to inspect the system, its design, and how it’s delivered:
+
+- **Naming & Clarity**  
+  Are names (types, functions, modules, tests) clear and aligned with the domain language?  
+  Does reading a file feel like reading a coherent explanation, or a puzzle?
+
+- **Modularity & Separation**  
+  Are boundaries between components clear, or are responsibilities tangled?  
+  Can you change one part of the system without touching half the repo?
+
+- **Architecture & Patterns**  
+  Is there a simple, explainable architecture behind the code?  
+  Are patterns (layering, message flows, aggregates, adapters, etc.) applied consistently where they help – and avoided where they would add accidental complexity?
+
+- **Testing & Reliability**  
+  Do tests give fast, meaningful feedback, or are they flaky / slow / rare?  
+  When something breaks, can you find it quickly and with confidence?
+
+- **Duplication & Simplicity**  
+  Is there copy‑pasted logic or repeated patterns that could be clarified or extracted?  
+  Are abstractions justified by real use, or speculative and fragile?
+
+- **Documentation & Communication**  
+  Do readers understand why key decisions were made (design docs, ADRs, comments)?  
+  Are the most important workflows and invariants explained somewhere you can find them?
+
+- **Delivery & Flow**  
+  How easy is it to get a change from “idea” to “running in production”?  
+  Are there manual, brittle steps in build, test, or deployment that could be simplified or automated?
+
+- **Dependencies & Operability**  
+  Are external dependencies (libraries, services, infra) chosen consciously?  
+  When the system misbehaves, do logs, metrics, and traces help you understand what’s going on?
+
+An Improve run uses these lenses to:
+
+1. **Assess** – Give a rough, shared sense of where you are today (often with simple 1–5 star ratings and short rationales per lens).
+2. **Capture lessons** – What’s working well, what keeps hurting, and what patterns are emerging.
+3. **Propose improvements** – Concrete, scoped improvements (refactors, tests, documentation, infrastructure changes) that can become future increments or ADRs.
+
+Because these lenses are written down in your constitution, your LLM can apply them consistently – not just once, but over and over as the system and team evolve.
 
 ### The prompts
 
@@ -139,41 +202,3 @@ All assembled prompt entrypoints live at the repo root (and get copied into `.gi
   - Concrete improvements (refactoring proposals) plus ADR candidates.
 
 You can wire these prompt files into Copilot Chat “Custom Instructions”, or any LLM integration that can load prompts from disk.
-
-### Referenced material
-
-4dc is heavily inspired by:
-
-- **Incremental and evolutionary design**  
-  Many small, reversible changes instead of a few large, risky ones.
-
-- **Extreme Programming (XP)** – Kent Beck  
-  Small safe steps, frequent feedback, and constant refactoring (without requiring you to “buy into” the whole XP label).
-
-- **Refactoring & design** – Martin Fowler, Michael Feathers, Sandi Metz, Robert C. Martin  
-  Clear names, small functions, separation of concerns, “make the change easy, then make the easy change.”
-
-- **Domain‑Driven Design (DDD)** – Eric Evans  
-  Ubiquitous language; aligning code structure with domain concepts.
-
-- **DevOps & delivery** – Jez Humble & David Farley, Michael Nygard, The Pragmatic Programmers  
-  Continuous delivery, fast feedback, operability, resilience, conscious dependency choices.
-
-- **DORA research** – Forsgren, Humble, Kim et al.  
-  Evidence‑based practices for improving software delivery performance and reliability.
-
-- **Dave Farley**  
-  Practical continuous delivery, deployment pipelines, and designing systems for fast, safe change.
-
-These show up as the **lenses** used by the Improve phase, for example:
-
-- Naming & Clarity  
-- Modularity & Separation  
-- Architecture & Patterns  
-- Testing & Reliability  
-- Duplication & Simplicity  
-- Documentation & Communication  
-- Delivery & Flow  
-- Dependencies & Operability  
-
-Your `CONSTITUTION.md` turns those ideas into concrete, project‑specific rules so your AI tools can help you apply them consistently.
