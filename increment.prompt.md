@@ -361,7 +361,7 @@ The LLM MUST follow these steps in order, with explicit STOP points.
      - Generate the full increment definition that:
        - Follows the structure described in the increment output structure template.
        - Implements the agreed outline, incorporating any user adjustments.
-   - Do **not** generate the final `increment.md` content before explicit YES at STOP 2.
+     - Do **not** generate the final `increment.md` content before explicit YES at STOP 2.
    - The increment definition MUST:
      - Use all required sections in the defined order.
      - Stay in WHAT-level language (no technical HOW, no file-level details).

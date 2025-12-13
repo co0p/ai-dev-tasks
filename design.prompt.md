@@ -315,7 +315,7 @@ A generated `design.md` is considered **acceptable** when:
    - Engineers can read the design and understand:
      - Which components must change.
      - Which contracts or data structures are affected.
-     - What tests need to be added or updated. (at the behavior/coverage level, not as lists of test file names or step sequences).
+     - What tests need to be added or updated (at the behavior/coverage level, not as lists of test file names or step sequences).
    - It avoids ambiguous phrases like “just update it” without explanation.
    - It is specific enough that implementation can be broken down into small, safe steps.
    - It does **not** include:
@@ -422,7 +422,8 @@ The design document MUST follow this structure:
     - Which flows or contracts must be exercised.
   - Regression tests:
     - Known bugs that should be prevented from reoccurring.
-- Express testing as **behavior expectations and coverage targets**, not as specific test file names or step-by-step instructions (e.g., say "verify API returns 400 on invalid input" rather than "create test_api_validation.go and add TestInvalidInput").
+- Express testing as **behavior expectations and coverage targets**, not as specific test file names or step-by-step instructions.
+  - Example: say "verify API returns 400 on invalid input" rather than "create test_api_validation.go and add TestInvalidInput".
 - Notes on:
   - Test data / fixtures and environments.
   - Potential flakiness risks and mitigations.
