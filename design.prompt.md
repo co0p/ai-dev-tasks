@@ -125,7 +125,8 @@ The design MUST:
      - Components, modules, and their responsibilities.
      - Interfaces, contracts, and data flows.
      - Test strategies (what behavior/coverage is needed, not which test files to create).
-     - CI/CD and observability as **constraints, targets, and behaviors** (e.g., "must support rollback via feature flag", "must log request IDs"), not as step-by-step directives.
+     - CI/CD and observability as **constraints, targets, and behaviors**, not as step-by-step directives.
+       - Example: "must support rollback via feature flag", "must log request IDs".
    - Leave **concrete work steps, file names, and ordered tasks** to the Implement phase.
 ## Process
 
