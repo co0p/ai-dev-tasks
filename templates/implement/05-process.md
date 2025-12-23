@@ -120,10 +120,7 @@ The `path` argument for this prompt points at an **increment folder** (for examp
 
 9. Produce the Final `implement.md` (After STOP 2 Approval and Self-Critique)
 
-   - Only after the user gives a clear affirmative response at STOP 2, and after performing the constitutional self-critique in Step 8:
-   - **Do NOT write or generate the final `implement.md` until the user has given explicit approval at STOP 2.**
-     - Generate `implement.md` that follows the output structure (see output template).
-     - Implement the agreed outline, with any adjustments from user feedback and the internal self-critique.
+  - Only after the user gives a clear affirmative response at STOP 2, and after performing the constitutional self-critique in Step 8, generate `implement.md` that follows the output structure (see output template) and implements the agreed outline, with any adjustments from user feedback and the internal self-critique.
 
    - While writing:
      - Do **not** introduce new architectural concepts or redesign decisions.

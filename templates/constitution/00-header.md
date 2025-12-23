@@ -2,6 +2,9 @@
 name: create-constitution
 argument-hint: path to the project root (for example: "." or "examples/pomodoro")
 
+title: Create or update a project constitution
+description: Inspect a project at path and generate or refine CONSTITUTION.md (values, principles, and layout for increments/design/implement/improve)
+
 version: {{VERSION}}
 generatedAt: {{GENERATED_AT}}
 source: {{SOURCE_URL}}

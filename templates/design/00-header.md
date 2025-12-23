@@ -2,6 +2,9 @@
 name: design
 argument-hint: path to the increment folder (for example: "examples/pomodoro/increments/demo-app-actions-and-quit-button" or "examples/shareit/docs/increments/list-catalog-api")
 
+title: Design the technical approach for an increment
+description: Run in an increment folder with increment.md present to produce design.md (architecture, contracts, tests, CI/rollout, and machine-readable artifacts) without implementation steps
+
 version: {{VERSION}}
 generatedAt: {{GENERATED_AT}}
 source: {{SOURCE_URL}}

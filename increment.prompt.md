@@ -2,8 +2,11 @@
 name: increment
 argument-hint: path to the project root (for example: "examples/pomodoro") plus a short increment description
 
-version: 155ecf8
-generatedAt: 2025-12-23T11:39:58Z
+title: Define a small, product-level increment
+description: Use at a project root to turn a short idea into increment.md (user story, acceptance criteria, use case, goal, tasks, and PRD entry) without technical HOW
+
+version: b318d7f
+generatedAt: 2025-12-23T11:51:41Z
 source: https://github.com/co0p/4dc
 ---
 
@@ -400,11 +403,9 @@ The LLM MUST follow these steps in order, with explicit STOP points.
 
 10. Generate Increment Definition (After STOP 2 Approval)
 
-   - Only after the user gives a clear affirmative at STOP 2 (for example: “yes”, “go ahead”, “looks good”):
-   - **Do NOT write or generate the final increment document until the user has given explicit approval at STOP 2.**
-     - Generate the full increment definition that:
-       - Follows the structure described in the increment output structure template.
-       - Implements the agreed outline, incorporating any user adjustments.
+   - Only after the user gives a clear affirmative at STOP 2 (for example: “yes”, “go ahead”, “looks good”) generate the full increment definition that:
+     - Follows the structure described in the increment output structure template.
+     - Implements the agreed outline, incorporating any user adjustments.
    - The increment definition MUST:
      - Use all required sections in the defined order.
      - Stay in WHAT-level language (no technical HOW, no file-level details).

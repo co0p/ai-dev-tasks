@@ -10,9 +10,9 @@ The `path` argument for this prompt points at an **increment folder**. This is t
 
    - Read and internalize:
      - `CONSTITUTION.md` — values, principles, guardrails, delivery expectations, and (if present) `constitution-mode` (for example: `lite`, `medium`, `heavy`).
-  - The current `increment.md` in this folder — context, goal, tasks (WHAT), risks, success criteria.
-  - Product requirements relevant to this increment from `docs/PRD.md` (if present), especially the corresponding increment entry, user story, acceptance criteria, and use case.
-  - Architecture documentation such as `ARCHITECTURE.md` (if present), including any Mermaid or other architecture diagrams.
+     - The current `increment.md` in this folder — context, goal, tasks (WHAT), risks, success criteria.
+     - Product requirements relevant to this increment from `docs/PRD.md` (if present), especially the corresponding increment entry, user story, acceptance criteria, and use case.
+     - Architecture documentation such as `ARCHITECTURE.md` (if present), including any Mermaid or other architecture diagrams.
    - Optionally review, under the project root:
      - Relevant ADRs.
      - Existing `design.md` documents for related areas.
@@ -23,8 +23,8 @@ The `path` argument for this prompt points at an **increment folder**. This is t
        - Are upstream or downstream dependencies of those parts.
      - Note obvious constraints and patterns:
        - Frameworks, data models, layering rules, ownership boundaries.
-         - Existing conventions that the design should follow or intentionally refactor.
-         - How the observed structure aligns (or does not align) with the documented architecture and diagrams.
+       - Existing conventions that the design should follow or intentionally refactor.
+       - How the observed structure aligns (or does not align) with the documented architecture and diagrams.
 
 2. Restate Problem and Scope (Briefly)
 
@@ -156,11 +156,9 @@ The `path` argument for this prompt points at an **increment folder**. This is t
 
 12. Produce the Final `design.md` (After STOP 2 Approval)
 
-    - Only after the user gives a clear affirmative response at STOP 2 (for example: “yes”, “go ahead”, “looks good”):
-    - **Do NOT write or generate the final `design.md` until the user has given explicit approval at STOP 2.**
-      - Generate `design.md` that:
-        - Follows the structure defined in the design output structure template.
-        - Implements the agreed outline, including any adjustments from user feedback.
+    - Only after the user gives a clear affirmative response at STOP 2 (for example: “yes”, “go ahead”, “looks good”) generate `design.md` that:
+      - Follows the structure defined in the design output structure template.
+      - Implements the agreed outline, including any adjustments from user feedback.
     - While writing:
       - Do not introduce new, major decisions that were not in the approved outline.
       - Do not introduce step-by-step implementation instructions or task lists.

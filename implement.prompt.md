@@ -2,8 +2,11 @@
 name: implement
 argument-hint: path to the increment folder (for example: "examples/pomodoro/increments/demo-app-actions-and-quit-button" or "examples/shareit/docs/increments/list-catalog-api")
 
-version: 155ecf8
-generatedAt: 2025-12-23T11:39:58Z
+title: Plan TDD-style implementation steps for an increment
+description: Run in an increment folder with increment.md and design.md present to generate implement.md (small, traceable TDD tasks) without changing the agreed design
+
+version: b318d7f
+generatedAt: 2025-12-23T11:51:41Z
 source: https://github.com/co0p/4dc
 ---
 
@@ -323,10 +326,7 @@ The `path` argument for this prompt points at an **increment folder** (for examp
 
 9. Produce the Final `implement.md` (After STOP 2 Approval and Self-Critique)
 
-   - Only after the user gives a clear affirmative response at STOP 2, and after performing the constitutional self-critique in Step 8:
-   - **Do NOT write or generate the final `implement.md` until the user has given explicit approval at STOP 2.**
-     - Generate `implement.md` that follows the output structure (see output template).
-     - Implement the agreed outline, with any adjustments from user feedback and the internal self-critique.
+  - Only after the user gives a clear affirmative response at STOP 2, and after performing the constitutional self-critique in Step 8, generate `implement.md` that follows the output structure (see output template) and implements the agreed outline, with any adjustments from user feedback and the internal self-critique.
 
    - While writing:
      - Do **not** introduce new architectural concepts or redesign decisions.

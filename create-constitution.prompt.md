@@ -2,8 +2,11 @@
 name: create-constitution
 argument-hint: path to the project root (for example: "." or "examples/pomodoro")
 
-version: 155ecf8
-generatedAt: 2025-12-23T11:39:58Z
+title: Create or update a project constitution
+description: Inspect a project at path and generate or refine CONSTITUTION.md (values, principles, and layout for increments/design/implement/improve)
+
+version: b318d7f
+generatedAt: 2025-12-23T11:51:41Z
 source: https://github.com/co0p/4dc
 ---
 
@@ -108,7 +111,6 @@ The constitution itself must:
 - Be **short enough** to read in minutes.
 - Be **specific enough** to influence daily decisions.
 - Be **stable** over time, but easy to extend by humans as the project matures.
-````markdown
 ## Process
 
 Follow this process to produce a `CONSTITUTION.md` that is scaled to the project and grounded in the existing codebase and context.
@@ -282,7 +284,6 @@ The `path` argument points at the **project root**.
    - If anything feels overly heavy for the chosen mode, simplify.
 
 Return the full `CONSTITUTION.md` content as the final output.
-````
 ````markdown
 ## Output Structure
 

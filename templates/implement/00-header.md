@@ -2,6 +2,9 @@
 name: implement
 argument-hint: path to the increment folder (for example: "examples/pomodoro/increments/demo-app-actions-and-quit-button" or "examples/shareit/docs/increments/list-catalog-api")
 
+title: Plan TDD-style implementation steps for an increment
+description: Run in an increment folder with increment.md and design.md present to generate implement.md (small, traceable TDD tasks) without changing the agreed design
+
 version: {{VERSION}}
 generatedAt: {{GENERATED_AT}}
 source: {{SOURCE_URL}}
