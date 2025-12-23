@@ -53,3 +53,21 @@ The implementation plan MUST:
    - If `CONSTITUTION.md` defines a `constitution-mode`:
      - `lite`: Keep the plan as minimal as possible while still making steps clear and testable.
      - `medium`/`heavy`: Provide more explicit steps around validation, CI, and rollout where appropriate.
+
+6. Apply a Constitutional AI Style of Self-Critique
+
+   - Treat the combination of:
+     - `CONSTITUTION.md` (values, principles, testing/observability expectations, dependency rules, doc layout), and
+     - Implementation-specific principles (for this prompt), such as:
+       - **Small, reversible steps** that keep the system in a working or quickly fixable state.
+       - **Explicit TDD loops** for each task (failing test first, then make it pass, then refactor).
+       - **Faithfulness to `design.md` and `increment.md`** (no silent redesigns),
+   - as a **“constitution”** that governs the implementation plan.
+   - When drafting the outline and the final list of steps, the LLM MUST:
+     - Generate an initial version of workstreams and steps.
+     - Internally **critique** these steps against the constitution and the TDD principles:
+       - Are steps small and reversible enough?
+       - Does each step clearly support a TDD loop (red → green → refactor)?
+       - Do any steps conflict with constitutional guardrails (for example, dependency or layering rules)?
+     - **Revise** the steps to better satisfy these principles before presenting `implement.md` to the user.
+   - This self-critique and revision process MUST NOT appear inside `implement.md` itself; the artifact should read as a direct, well-considered plan from the team.

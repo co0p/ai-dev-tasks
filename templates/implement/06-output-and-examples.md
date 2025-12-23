@@ -49,26 +49,31 @@ You MAY use markdown checkboxes to track progress, for example:
 - `- [ ] Step 2: Add DB wrapper and unit tests`  
 - `- [ ] Step 3: Add Express bootstrap and logger`  
 
-For each step, provide details as nested content:
+For each step, provide details as nested content, structured around a **TDD mini-cycle**:
 
 - `### Step 1: [Short actionable task title]`  
   - `Workstream:` [A/B/C/D]  
   - `Based on Design:` [Reference to design section/decision, e.g. "Design §5: Architecture and Boundaries – Catalog list API"]  
   - `Files:` `path/to/file.go`, `another/path/file_test.go`  
-  - `Actions:`  
-    - [Concrete code-level action 1]  
-    - [Concrete code-level action 2]  
-  - `Tests:`  
-    - [Tests to add/update]  
-    - [CI commands to run, e.g. `npm test`, `go test ./...`]  
+  - `TDD Cycle:`  
+    - `Red – Failing test first:`  
+      - [Tests to add or modify so they fail for the new or changed behavior; note how to observe the failure.]  
+    - `Green – Make the test(s) pass:`  
+      - [Minimal implementation or changes needed to make the new/updated tests pass, referencing the files above.]  
+    - `Refactor – Clean up with tests green:`  
+      - [Follow-up refactorings or cleanups that keep all tests passing while improving structure, names, or duplication.]  
+  - `CI / Checks:`  
+    - [Commands to run, e.g. `npm test`, `go test ./...`, and any additional checks such as linters or formatters relevant to this step.]  
 
 - `### Step 2: [Short actionable task title]`  
   - `Workstream:` […]  
   - `Based on Design:` […]  
   - `Files:` […]  
-  - `Actions:`  
-    - […]  
-  - `Tests:`  
+  - `TDD Cycle:`  
+    - `Red – Failing test first:` […]  
+    - `Green – Make the test(s) pass:` […]  
+    - `Refactor – Clean up with tests green:` […]  
+  - `CI / Checks:`  
     - […]  
 
 You MAY group related steps into **phases** if helpful (for example, “Phase 1: Data and domain”, “Phase 2: Route wiring and tests”), but each step must remain small and traceable.
@@ -102,7 +107,7 @@ The implementation plan is “good enough” when:
     - What tests to write or adjust.
 
 - **XP-friendly**
-  - Steps naturally support TDD and pairing.
+  - Steps naturally support TDD and pairing, and each step explicitly encodes a **Red → Green → Refactor** mini-cycle (failing test first, then make it pass, then refactor).
   - The plan can be executed incrementally with CI, leaving the system in a working or quickly recoverable state.
 
 - **Constitution-aware**

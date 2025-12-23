@@ -2,8 +2,8 @@
 name: implement
 argument-hint: path to the increment folder (for example: "examples/pomodoro/increments/demo-app-actions-and-quit-button" or "examples/shareit/docs/increments/list-catalog-api")
 
-version: 7842815
-generatedAt: 2025-12-23T11:29:14Z
+version: 155ecf8
+generatedAt: 2025-12-23T11:39:58Z
 source: https://github.com/co0p/4dc
 ---
 
@@ -125,6 +125,24 @@ The implementation plan MUST:
    - If `CONSTITUTION.md` defines a `constitution-mode`:
      - `lite`: Keep the plan as minimal as possible while still making steps clear and testable.
      - `medium`/`heavy`: Provide more explicit steps around validation, CI, and rollout where appropriate.
+
+6. Apply a Constitutional AI Style of Self-Critique
+
+   - Treat the combination of:
+     - `CONSTITUTION.md` (values, principles, testing/observability expectations, dependency rules, doc layout), and
+     - Implementation-specific principles (for this prompt), such as:
+       - **Small, reversible steps** that keep the system in a working or quickly fixable state.
+       - **Explicit TDD loops** for each task (failing test first, then make it pass, then refactor).
+       - **Faithfulness to `design.md` and `increment.md`** (no silent redesigns),
+   - as a **“constitution”** that governs the implementation plan.
+   - When drafting the outline and the final list of steps, the LLM MUST:
+     - Generate an initial version of workstreams and steps.
+     - Internally **critique** these steps against the constitution and the TDD principles:
+       - Are steps small and reversible enough?
+       - Does each step clearly support a TDD loop (red → green → refactor)?
+       - Do any steps conflict with constitutional guardrails (for example, dependency or layering rules)?
+     - **Revise** the steps to better satisfy these principles before presenting `implement.md` to the user.
+   - This self-critique and revision process MUST NOT appear inside `implement.md` itself; the artifact should read as a direct, well-considered plan from the team.
 ## Inputs
 
 The implementation plan MUST be grounded in:
@@ -243,18 +261,22 @@ The `path` argument for this prompt points at an **increment folder** (for examp
    - When `constitution-mode` is `lite`:
      - Consider keeping the number of workstreams small and focused.
 
-5. Propose Work Items (High-Level)
+5. Propose Work Items (High-Level, TDD-Friendly)
 
-   - For each workstream, propose a list of **small, testable work items**:
+   - For each workstream, propose a list of **small, testable work items** that naturally follow a TDD loop (**failing test first → make it pass → refactor**):
      - Each item should have:
        - A short, actionable title.
        - A reference to the relevant `design.md` section/decision.
        - Target files/modules under the project root.
        - A brief description of the intended change.
-       - A testing/verification angle (tests and checks).
+       - An explicit **TDD angle**, including:
+         - Which tests to add or modify so they **fail first** for the new or changed behavior.
+         - The minimal implementation needed to make those tests **pass**.
+         - Any follow-up **refactorings** to clean up code while keeping tests green.
    - Ensure each work item is:
      - Scoped to be done in a focused session where practical.
      - Independently valuable or at least leaves the system in a coherent state.
+     - Clearly executable as a small TDD cycle rather than a large, multi-step rewrite.
 
 6. Order the Work Items
 
@@ -278,34 +300,54 @@ The `path` argument for this prompt points at an **increment folder** (for examp
 
    **Do not** generate the final `implement.md` until the user has approved this outline.
 
-### Phase 3 – Write the Implementation Plan After YES
+### Phase 3 – Constitutional Self-Critique of the Outline
 
-8. Produce the Final `implement.md` (After STOP 2 Approval)
+8. Critique Draft Workstreams and Steps Against the Constitution and TDD Principles
 
-   - Only after the user gives a clear affirmative response at STOP 2:
+   Before generating the final `implement.md`, the LLM MUST internally perform a **constitutional self-critique** of the proposed workstreams and steps:
+
+   - Use as the evaluation basis:
+     - `CONSTITUTION.md` (values, testing/observability expectations, dependency and layering rules, doc layout, `constitution-mode`).
+     - The increment and design (`increment.md`, `design.md`) as scope and technical guardrails.
+     - Implementation-specific principles for this prompt:
+       - Each step follows a clear TDD loop (**failing test first → make it pass → refactor**).
+       - Steps are small, reversible, and keep the system in a working or quickly fixable state.
+   - For each workstream and step, ask internally:
+     - Does this step respect the project’s constitutional principles (for example, layering, dependencies, testing, observability)?
+     - Is the TDD pattern explicit enough (what fails first, what change makes it pass, what is refactored)?
+     - Is the step small and concrete enough to be executed safely?
+   - Revise the outline and steps **before** writing `implement.md` so they better satisfy these principles.
+   - This critique and revision process is internal to the prompt and MUST NOT appear as a separate section or narrative in `implement.md`.
+
+### Phase 4 – Write the Implementation Plan After YES and Self-Critique
+
+9. Produce the Final `implement.md` (After STOP 2 Approval and Self-Critique)
+
+   - Only after the user gives a clear affirmative response at STOP 2, and after performing the constitutional self-critique in Step 8:
    - **Do NOT write or generate the final `implement.md` until the user has given explicit approval at STOP 2.**
      - Generate `implement.md` that follows the output structure (see output template).
-     - Implement the agreed outline, with any adjustments from user feedback.
+     - Implement the agreed outline, with any adjustments from user feedback and the internal self-critique.
 
    - While writing:
      - Do **not** introduce new architectural concepts or redesign decisions.
      - Do **not** restate the full design; refer to it in a focused way (per-step references).
-     - Do **not** mention prompts, LLMs, or this process.
+     - Do **not** mention prompts, LLMs, self-critiques, or this process.
      - Keep steps **small, testable, and traceable** to `design.md`.
+     - Ensure each step clearly encodes a TDD mini-cycle (fail test → make it pass → refactor).
      - Do **not** invent or extend contracts, interfaces, or data flows beyond what is in `design.md`.
      - If you find gaps or mismatches between the design and code:
        - Note them as risks or clarifications needed.
        - Do not silently create new contracts to work around them.
 
-### Phase 4 – Final Check
+### Phase 5 – Final Check
 
-9. Validate the Plan
+10. Validate the Plan
 
    - Ensure:
      - Each step references:
        - A design decision/section.
        - Target files/modules.
-       - Tests to add/update/run.
+       - Tests to add/update/run, organized as a TDD loop (fail → pass → refactor).
      - The steps are small, concrete, and can be executed independently.
      - The plan can be reasonably executed with XP practices (TDD, pairing, CI).
      - The plan respects any constraints from `CONSTITUTION.md` (mode, layout, testing expectations).
@@ -366,26 +408,31 @@ You MAY use markdown checkboxes to track progress, for example:
 - `- [ ] Step 2: Add DB wrapper and unit tests`  
 - `- [ ] Step 3: Add Express bootstrap and logger`  
 
-For each step, provide details as nested content:
+For each step, provide details as nested content, structured around a **TDD mini-cycle**:
 
 - `### Step 1: [Short actionable task title]`  
   - `Workstream:` [A/B/C/D]  
   - `Based on Design:` [Reference to design section/decision, e.g. "Design §5: Architecture and Boundaries – Catalog list API"]  
   - `Files:` `path/to/file.go`, `another/path/file_test.go`  
-  - `Actions:`  
-    - [Concrete code-level action 1]  
-    - [Concrete code-level action 2]  
-  - `Tests:`  
-    - [Tests to add/update]  
-    - [CI commands to run, e.g. `npm test`, `go test ./...`]  
+  - `TDD Cycle:`  
+    - `Red – Failing test first:`  
+      - [Tests to add or modify so they fail for the new or changed behavior; note how to observe the failure.]  
+    - `Green – Make the test(s) pass:`  
+      - [Minimal implementation or changes needed to make the new/updated tests pass, referencing the files above.]  
+    - `Refactor – Clean up with tests green:`  
+      - [Follow-up refactorings or cleanups that keep all tests passing while improving structure, names, or duplication.]  
+  - `CI / Checks:`  
+    - [Commands to run, e.g. `npm test`, `go test ./...`, and any additional checks such as linters or formatters relevant to this step.]  
 
 - `### Step 2: [Short actionable task title]`  
   - `Workstream:` […]  
   - `Based on Design:` […]  
   - `Files:` […]  
-  - `Actions:`  
-    - […]  
-  - `Tests:`  
+  - `TDD Cycle:`  
+    - `Red – Failing test first:` […]  
+    - `Green – Make the test(s) pass:` […]  
+    - `Refactor – Clean up with tests green:` […]  
+  - `CI / Checks:`  
     - […]  
 
 You MAY group related steps into **phases** if helpful (for example, “Phase 1: Data and domain”, “Phase 2: Route wiring and tests”), but each step must remain small and traceable.
@@ -419,7 +466,7 @@ The implementation plan is “good enough” when:
     - What tests to write or adjust.
 
 - **XP-friendly**
-  - Steps naturally support TDD and pairing.
+  - Steps naturally support TDD and pairing, and each step explicitly encodes a **Red → Green → Refactor** mini-cycle (failing test first, then make it pass, then refactor).
   - The plan can be executed incrementally with CI, leaving the system in a working or quickly recoverable state.
 
 - **Constitution-aware**
@@ -430,3 +477,40 @@ The implementation plan is “good enough” when:
 - **Clarity**
   - The document follows the structure above.
   - It contains no references to prompts, LLMs, or assistants.
+## Constitutional Self-Critique
+
+Treat the combination of:
+
+- The project’s `CONSTITUTION.md` (mode, principles, dependency and layering rules, testing and observability expectations, layout), and
+- The implementation-specific rules in this prompt (small, XP-style steps; explicit TDD loops; faithfulness to `increment.md` and `design.md`)
+
+as a **"constitution"** that governs the implementation plan you generate.
+
+Before finalizing `implement.md`, the LLM MUST apply this self-critique and revision loop:
+
+1. **Draft Workstreams and Steps Based on the Design**
+   - Use `increment.md`, `design.md`, `CONSTITUTION.md`, and the existing code to propose:
+     - Workstreams and high-level steps at STOP 1 and STOP 2.
+     - Detailed steps that identify files/modules and tests.
+
+2. **Internal Self-Critique Against Constitution and TDD Principles**
+   - After STOP 2 is approved and before emitting the final `implement.md`, internally **critique** your draft workstreams and steps against:
+     - The project constitution (mode, layering, dependencies, testing/observability expectations).
+     - The requirement that **each step encodes a TDD mini-cycle** (failing test first → make it pass → refactor).
+     - The need for small, reversible changes that keep the system in a working or quickly fixable state.
+   - Ask yourself (internally):
+     - Does each step clearly say what fails first, what change makes it pass, and what is refactored afterward?
+     - Are any steps too large, too vague, or in conflict with architectural or dependency rules?
+
+3. **Revise to Better Fit the Constitution and TDD Pattern**
+   - Revise workstreams and steps so that they:
+     - Better align with the project’s principles and constraints.
+     - Are small and concrete enough to execute safely.
+     - Maintain a clear Red → Green → Refactor pattern in every step.
+
+4. **Keep Self-Critique Invisible in the Artifact**
+   - This self-critique and revision loop is **internal to the prompt**.
+   - The generated `implement.md` MUST NOT:
+     - Mention prompts, LLMs, or any self-critique process.
+     - Refer to "constitutional AI" explicitly.
+   - It should read as a straightforward implementation plan authored by the team.

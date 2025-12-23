@@ -41,6 +41,8 @@ generate() {
   render < "${TEMPLATES_DIR}/06-process.md"
   echo
   render < "${TEMPLATES_DIR}/07-output-structure.md"
+  echo
+  render < "${TEMPLATES_DIR}/08-constitutional-self-critique.md"
 }
 
 if [ "$WRITE_TO_STDOUT" = "1" ]; then

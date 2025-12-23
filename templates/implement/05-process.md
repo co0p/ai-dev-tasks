@@ -58,18 +58,22 @@ The `path` argument for this prompt points at an **increment folder** (for examp
    - When `constitution-mode` is `lite`:
      - Consider keeping the number of workstreams small and focused.
 
-5. Propose Work Items (High-Level)
+5. Propose Work Items (High-Level, TDD-Friendly)
 
-   - For each workstream, propose a list of **small, testable work items**:
+   - For each workstream, propose a list of **small, testable work items** that naturally follow a TDD loop (**failing test first → make it pass → refactor**):
      - Each item should have:
        - A short, actionable title.
        - A reference to the relevant `design.md` section/decision.
        - Target files/modules under the project root.
        - A brief description of the intended change.
-       - A testing/verification angle (tests and checks).
+       - An explicit **TDD angle**, including:
+         - Which tests to add or modify so they **fail first** for the new or changed behavior.
+         - The minimal implementation needed to make those tests **pass**.
+         - Any follow-up **refactorings** to clean up code while keeping tests green.
    - Ensure each work item is:
      - Scoped to be done in a focused session where practical.
      - Independently valuable or at least leaves the system in a coherent state.
+     - Clearly executable as a small TDD cycle rather than a large, multi-step rewrite.
 
 6. Order the Work Items
 
@@ -93,34 +97,54 @@ The `path` argument for this prompt points at an **increment folder** (for examp
 
    **Do not** generate the final `implement.md` until the user has approved this outline.
 
-### Phase 3 – Write the Implementation Plan After YES
+### Phase 3 – Constitutional Self-Critique of the Outline
 
-8. Produce the Final `implement.md` (After STOP 2 Approval)
+8. Critique Draft Workstreams and Steps Against the Constitution and TDD Principles
 
-   - Only after the user gives a clear affirmative response at STOP 2:
+   Before generating the final `implement.md`, the LLM MUST internally perform a **constitutional self-critique** of the proposed workstreams and steps:
+
+   - Use as the evaluation basis:
+     - `CONSTITUTION.md` (values, testing/observability expectations, dependency and layering rules, doc layout, `constitution-mode`).
+     - The increment and design (`increment.md`, `design.md`) as scope and technical guardrails.
+     - Implementation-specific principles for this prompt:
+       - Each step follows a clear TDD loop (**failing test first → make it pass → refactor**).
+       - Steps are small, reversible, and keep the system in a working or quickly fixable state.
+   - For each workstream and step, ask internally:
+     - Does this step respect the project’s constitutional principles (for example, layering, dependencies, testing, observability)?
+     - Is the TDD pattern explicit enough (what fails first, what change makes it pass, what is refactored)?
+     - Is the step small and concrete enough to be executed safely?
+   - Revise the outline and steps **before** writing `implement.md` so they better satisfy these principles.
+   - This critique and revision process is internal to the prompt and MUST NOT appear as a separate section or narrative in `implement.md`.
+
+### Phase 4 – Write the Implementation Plan After YES and Self-Critique
+
+9. Produce the Final `implement.md` (After STOP 2 Approval and Self-Critique)
+
+   - Only after the user gives a clear affirmative response at STOP 2, and after performing the constitutional self-critique in Step 8:
    - **Do NOT write or generate the final `implement.md` until the user has given explicit approval at STOP 2.**
      - Generate `implement.md` that follows the output structure (see output template).
-     - Implement the agreed outline, with any adjustments from user feedback.
+     - Implement the agreed outline, with any adjustments from user feedback and the internal self-critique.
 
    - While writing:
      - Do **not** introduce new architectural concepts or redesign decisions.
      - Do **not** restate the full design; refer to it in a focused way (per-step references).
-     - Do **not** mention prompts, LLMs, or this process.
+     - Do **not** mention prompts, LLMs, self-critiques, or this process.
      - Keep steps **small, testable, and traceable** to `design.md`.
+     - Ensure each step clearly encodes a TDD mini-cycle (fail test → make it pass → refactor).
      - Do **not** invent or extend contracts, interfaces, or data flows beyond what is in `design.md`.
      - If you find gaps or mismatches between the design and code:
        - Note them as risks or clarifications needed.
        - Do not silently create new contracts to work around them.
 
-### Phase 4 – Final Check
+### Phase 5 – Final Check
 
-9. Validate the Plan
+10. Validate the Plan
 
    - Ensure:
      - Each step references:
        - A design decision/section.
        - Target files/modules.
-       - Tests to add/update/run.
+       - Tests to add/update/run, organized as a TDD loop (fail → pass → refactor).
      - The steps are small, concrete, and can be executed independently.
      - The plan can be reasonably executed with XP practices (TDD, pairing, CI).
      - The plan respects any constraints from `CONSTITUTION.md` (mode, layout, testing expectations).
