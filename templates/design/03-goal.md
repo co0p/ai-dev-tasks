@@ -7,7 +7,8 @@ Turn the current **increment** (product-level WHAT) into a **technical design** 
 - Is **testable and verifiable** through automated checks (keeping the constitution’s expectations in mind — lighter for `lite` mode, richer for `medium`/`heavy`).
 - Can pass cleanly through **CI/CD** without unusual, risky procedures.
 - Is **observable and operable** when running in real environments, at the level the constitution expects.
-- Is **grounded in the current code and architecture** under the project path.
+- Is **grounded in the current code and architecture** under the project root.
+- Includes **machine-readable contracts and architecture diagrams** (for example, OpenAPI/JSON schemas and Mermaid C4 diagrams) when they clarify interfaces and system structure.
 
 The design MUST:
 
@@ -58,18 +59,7 @@ The design MUST:
      - Risks and/or
      - Candidates for **follow-up increments** or separate design work.
 
-7. Stay at the Design Level, Not Implementation Tasks
+7. Provide Machine-Readable Artifacts Where Appropriate
 
-   - The design MUST NOT be an implementation task list.
-   - Do **not** describe step-by-step edit sequences, git operations, or a chronological plan.
-   - Do **not** specify:
-     - Which files to edit in what order.
-     - Per-file actions or changes.
-     - Step sequences or PR groupings.
-     - Deployment commands or rollout scripts.
-   - Focus on:
-     - Components and responsibilities.
-     - Interfaces and data flows.
-     - Test strategy (behaviors and coverage expectations, not test file names or sequences).
-     - CI/CD and observability as constraints and targets (what should be true), not as implementation steps.
-   - Leave **concrete work steps** to the Implement phase.
+  - When the increment introduces or changes **APIs, events, or schemas**, the design MUST include clearly delimited, machine-readable artifacts consistent with the output structure (for example: OpenAPI or JSON/YAML snippets, JSON Schemas, or event payload definitions).
+   - When the increment affects **system structure or architecture**, the design SHOULD include updated **Mermaid-based C4 diagrams** (container and/or component level) that match the narrative in the Architecture and Boundaries and Contracts and Data sections.

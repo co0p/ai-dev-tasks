@@ -35,6 +35,8 @@ generate() {
   echo
   render < "${TEMPLATES_DIR}/02-persona.md"
   echo
+  render < "${ROOT_DIR}/templates/communication-style.md"
+  echo
   render < "${TEMPLATES_DIR}/03-goal.md"
   echo
   render < "${TEMPLATES_DIR}/04-inputs.md"

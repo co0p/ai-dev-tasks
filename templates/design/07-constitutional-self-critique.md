@@ -11,8 +11,8 @@ Before finalizing `design.md`, the LLM MUST apply this self-critique and revisio
 
 1. **Draft Design Based on Increment, Constitution, and Code**
    - Use `increment.md`, `CONSTITUTION.md`, architecture docs (for example `ARCHITECTURE.md`), and the existing code to:
-     - Propose and refine an outline at STOP 1 and STOP 2.
-     - Draft a design that explains components, boundaries, contracts, testing, CI/CD, and observability.
+    - Summarize findings at STOP 1 and propose/refine the outline at STOP 2.
+    - Draft a design that explains components, boundaries, contracts, testing, CI/CD, and observability.
 
 2. **Internal Self-Critique Against the Constitution and Scope**
    - After STOP 2 is approved and before emitting the final `design.md`, internally **critique** your draft against:

@@ -7,8 +7,8 @@ A generated `design.md` is considered **acceptable** when:
    - It clearly references and respects:
      - `CONSTITUTION.md` (values, principles, guardrails, and, if present, `constitution-mode`).
      - The current `increment.md` (goal, scope, non-goals).
-   - It stays within the increment’s scope and non-goals.
-   - It is clearly grounded in the **current implementation** under the project path:
+  - It stays within the increment’s scope and non-goals.
+  - It is clearly grounded in the **current implementation** under the project root:
      - It refers to relevant components, modules, services, and data models as they exist today.
    - It does not introduce scope that contradicts the increment or constitution.
 
